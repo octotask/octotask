@@ -27,7 +27,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "octotask": "^13.0.2"
+    "octotask": "workspace:*"
   },
   "release": {
     "branches": [

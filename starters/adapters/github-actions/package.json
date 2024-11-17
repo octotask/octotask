@@ -1,8 +1,5 @@
 {
   "name": "@octotask/adapter-github-actions",
-  "publishConfig": {
-    "access": "public"
-  },
   "version": "0.0.0-development",
   "description": "Adapter to run a Octotask application function in GitHub Actions",
   "main": "index.js",
@@ -25,7 +22,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "pino": "^8.5.0",
-    "octotask": "workspace:*",
+    "octotask": "^1.1.1",
     "through2": "^4.0.2"
   },
   "type": "module"

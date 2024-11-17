@@ -1,6 +1,6 @@
 {
   "name": "@octotask/adapter-github-actions",
-  "version": "0.0.0-development",
+  "version": "1.0.1",
   "description": "Adapter to run a Octotask application function in GitHub Actions",
   "main": "index.js",
   "scripts": {

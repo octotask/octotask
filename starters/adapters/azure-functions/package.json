@@ -1,6 +1,9 @@
 {
   "name": "@octotask/adapter-azure-functions",
-  "version": "0.0.0-development",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.1.0",
   "description": "Adapter to run a Octotask application function in Azure Functions",
   "main": "index.js",
   "scripts": {

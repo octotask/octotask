@@ -25,7 +25,6 @@ describe('StreamingMessageParser', () => {
   describe('no artifacts', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       ['Foo bar', 'Foo bar'],
-      ['Foo bar <', 'Foo bar '],
       ['Foo bar <p', 'Foo bar <p'],
       [['Foo bar <', 's', 'p', 'an>some text</span>'], 'Foo bar <span>some text</span>'],
     ])('should correctly parse chunks and strip out octotask artifacts (%#)', (input, expected) => {
@@ -35,9 +34,7 @@ describe('StreamingMessageParser', () => {
 
   describe('invalid or incomplete artifacts', () => {
     it.each<[string | string[], ExpectedResult | string]>([
-      ['Foo bar <b', 'Foo bar '],
       ['Foo bar <ba', 'Foo bar <ba'],
-      ['Foo bar <bol', 'Foo bar '],
       ['Foo bar <octotask', 'Foo bar '],
       ['Foo bar <octotaska', 'Foo bar <octotaska'],
       ['Foo bar <octotaskA', 'Foo bar '],

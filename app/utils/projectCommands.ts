@@ -78,3 +78,39 @@ ${commands.setupCommand}
     createdAt: new Date(),
   };
 }
+
+export function escapeOctotaskArtifactTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskArtifact[^>]*>)([\s\S]*?)(<\/octotaskArtifact>)/g;
+
+  return input.replace(regex, (match, openTag, content, closeTag) => {
+    // Escape the opening tag
+    const escapedOpenTag = openTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Escape the closing tag
+    const escapedCloseTag = closeTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Return the escaped version
+    return `${escapedOpenTag}${content}${escapedCloseTag}`;
+  });
+}
+
+export function escapeOctotaskAActionTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskAction[^>]*>)([\s\S]*?)(<\/octotaskAction>)/g;
+
+  return input.replace(regex, (match, openTag, content, closeTag) => {
+    // Escape the opening tag
+    const escapedOpenTag = openTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Escape the closing tag
+    const escapedCloseTag = closeTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Return the escaped version
+    return `${escapedOpenTag}${content}${escapedCloseTag}`;
+  });
+}
+
+export function escapeOctotaskTags(input: string) {
+  return escapeOctotaskArtifactTags(escapeOctotaskAActionTags(input));
+}

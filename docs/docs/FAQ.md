@@ -89,7 +89,7 @@
 ## Get Help & Support
 
 !!! tip "Community Support"
-    [Join the octotask Community](https://octotask.khulansoft.com/c/octotask/17){target=_blank} for discussions and help
+    [Join the octotask Community](https://octotask.khulnasoft.com/c/octotask-diy/17){target=_blank} for discussions and help
 
 !!! bug "Report Issues"
     [Open an Issue](https://github.com/octotask/octotask/issues/19){target=_blank} in our GitHub Repository

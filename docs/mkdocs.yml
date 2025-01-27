@@ -42,10 +42,10 @@ extra:
       link: https://github.com/octotask/octotask
       name: octotask
     - icon: fontawesome/brands/discourse
-      link: https://octotask.khulansoft.com/
+      link: https://octotask.khulnasoft.com/
       name: octotask Discourse
     - icon: fontawesome/brands/x-twitter
-      link: https://x.com/khulonasoft
+      link: https://x.com/octotask_diy
       name: octotask on X
     - icon: fontawesome/brands/bluesky
       link: https://bsky.app/profile/octotask

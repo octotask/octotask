@@ -8,6 +8,15 @@ interface DeployRequestBody {
   chatId: string;
 }
 
+async function sha1(message: string) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+
+  return hashHex;
+}
+
 export async function action({ request }: ActionFunctionArgs) {
   try {
     const { siteId, files, token, chatId } = (await request.json()) as DeployRequestBody & { token: string };
@@ -104,7 +113,7 @@ export async function action({ request }: ActionFunctionArgs) {
     for (const [filePath, content] of Object.entries(files)) {
       // Ensure file path starts with a forward slash
       const normalizedPath = filePath.startsWith('/') ? filePath : '/' + filePath;
-      const hash = crypto.createHash('sha1').update(content).digest('hex');
+      const hash = await sha1(content);
       fileDigests[normalizedPath] = hash;
     }
 

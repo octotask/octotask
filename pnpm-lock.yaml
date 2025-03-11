@@ -234,8 +234,8 @@ importers:
         specifier: ^0.10.3
         version: 0.10.3
       ollama-ai-provider:
-        specifier: ^0.15.2
-        version: 0.15.2(zod@3.24.2)
+        specifier: ^1.2.0
+        version: 1.2.0(zod@3.24.2)
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -5420,8 +5420,8 @@ packages:
   ohash@2.0.11:
     resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
 
-  ollama-ai-provider@0.15.2:
-    resolution: {integrity: sha512-bMDUlYmohulD87Xrv6meuftQdmFTygtrQywy6/gqdf1bTsJFP1VCx3MrisLFBzb4mMOj02NER7yZhiGIlAx30w==}
+  ollama-ai-provider@1.2.0:
+    resolution: {integrity: sha512-jTNFruwe3O/ruJeppI/quoOUxG7NA6blG3ZyQj3lei4+NnJo7bi3eIRWqlVpRlu/mbzbFXeJSBuYQWF6pzGKww==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -13181,10 +13181,10 @@ snapshots:
 
   ohash@2.0.11: {}
 
-  ollama-ai-provider@0.15.2(zod@3.24.2):
+  ollama-ai-provider@1.2.0(zod@3.24.2):
     dependencies:
-      '@ai-sdk/provider': 0.0.24
-      '@ai-sdk/provider-utils': 1.0.20(zod@3.24.2)
+      '@ai-sdk/provider': 1.0.10
+      '@ai-sdk/provider-utils': 2.1.11(zod@3.24.2)
       partial-json: 0.1.7
     optionalDependencies:
       zod: 3.24.2

@@ -1,23 +1,25 @@
+import { Octokit, type RestEndpointMethodTypes } from '@octokit/rest';
+import fileSaver from 'file-saver';
+import Cookies from 'js-cookie';
+import JSZip from 'jszip';
 import { atom, map, type MapStore, type ReadableAtom, type WritableAtom } from 'nanostores';
-import type { EditorDocument, ScrollPosition } from '~/components/editor/codemirror/CodeMirrorEditor';
-import { ActionRunner } from '~/lib/runtime/action-runner';
-import type { ActionCallbackData, ArtifactCallbackData } from '~/lib/runtime/message-parser';
-import { webcontainer } from '~/lib/webcontainer';
-import type { ITerminal } from '~/types/terminal';
-import { unreachable } from '~/utils/unreachable';
 import { EditorStore } from './editor';
 import { FilesStore, type FileMap } from './files';
 import { PreviewsStore } from './previews';
 import { TerminalStore } from './terminal';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
-import { Octokit, type RestEndpointMethodTypes } from '@octokit/rest';
-import * as nodePath from 'node:path';
-import { extractRelativePath } from '~/utils/diff';
+import type { EditorDocument, ScrollPosition } from '~/components/editor/codemirror/CodeMirrorEditor';
 import { description } from '~/lib/persistence';
-import Cookies from 'js-cookie';
-import { createSampler } from '~/utils/sampler';
+import { ActionRunner } from '~/lib/runtime/action-runner';
+import type { ActionCallbackData, ArtifactCallbackData } from '~/lib/runtime/message-parser';
+import { webcontainer } from '~/lib/webcontainer';
 import type { ActionAlert } from '~/types/actions';
+import type { ITerminal } from '~/types/terminal';
+import { extractRelativePath } from '~/utils/diff';
+import { path } from '~/utils/path';
+import { createSampler } from '~/utils/sampler';
+import { unreachable } from '~/utils/unreachable';
+
+const { saveAs } = fileSaver;
 
 export interface ArtifactState {
   id: string;
@@ -31,7 +33,7 @@ export type ArtifactUpdateState = Pick<ArtifactState, 'title' | 'closed'>;
 
 type Artifacts = MapStore<Record<string, ArtifactState>>;
 
-export type WorkbenchViewType = 'code' | 'preview';
+export type WorkbenchViewType = 'code' | 'diff' | 'preview';
 
 export class WorkbenchStore {
   #previewsStore = new PreviewsStore(webcontainer);
@@ -236,6 +238,9 @@ export class WorkbenchStore {
   getFileModifcations() {
     return this.#filesStore.getFileModifications();
   }
+  getModifiedFiles() {
+    return this.#filesStore.getModifiedFiles();
+  }
 
   resetAllFileModifications() {
     this.#filesStore.resetFileModifications();
@@ -329,7 +334,7 @@ export class WorkbenchStore {
 
     if (data.action.type === 'file') {
       const wc = await webcontainer;
-      const fullPath = nodePath.join(wc.workdir, data.action.filePath);
+      const fullPath = path.join(wc.workdir, data.action.filePath);
 
       if (this.selectedFile.value !== fullPath) {
         this.setSelectedFile(fullPath);
@@ -434,7 +439,7 @@ export class WorkbenchStore {
     return syncedFiles;
   }
 
-  async pushToGitHub(repoName: string, githubUsername?: string, ghToken?: string) {
+  async pushToGitHub(repoName: string, commitMessage?: string, githubUsername?: string, ghToken?: string) {
     try {
       // Use cookies if username and token are not provided
       const githubToken = ghToken || Cookies.get('githubToken');
@@ -523,7 +528,7 @@ export class WorkbenchStore {
       const { data: newCommit } = await octokit.git.createCommit({
         owner: repo.owner.login,
         repo: repo.name,
-        message: 'Initial commit from your app',
+        message: commitMessage || 'Initial commit from your app',
         tree: newTree.sha,
         parents: [latestCommitSha],
       });

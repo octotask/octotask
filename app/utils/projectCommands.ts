@@ -3,7 +3,8 @@ import { generateId } from './fileUtils';
 
 export interface ProjectCommands {
   type: string;
-  setupCommand: string;
+  setupCommand?: string;
+  startCommand?: string;
   followupMessage: string;
 }
 
@@ -33,7 +34,8 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
       if (availableCommand) {
         return {
           type: 'Node.js',
-          setupCommand: `npm install && npm run ${availableCommand}`,
+          setupCommand: `npm install`,
+          startCommand: `npm run ${availableCommand}`,
           followupMessage: `Found "${availableCommand}" script in package.json. Running "npm run ${availableCommand}" after installation.`,
         };
       }
@@ -53,7 +55,7 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
   if (hasFile('index.html')) {
     return {
       type: 'Static',
-      setupCommand: 'npx --yes serve',
+      startCommand: 'npx --yes serve',
       followupMessage: '',
     };
   }
@@ -62,19 +64,66 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
 }
 
 export function createCommandsMessage(commands: ProjectCommands): Message | null {
-  if (!commands.setupCommand) {
+  if (!commands.setupCommand && !commands.startCommand) {
     return null;
+  }
+
+  let commandString = '';
+
+  if (commands.setupCommand) {
+    commandString += `
+<octotaskAction type="shell">${commands.setupCommand}</octotaskAction>`;
+  }
+
+  if (commands.startCommand) {
+    commandString += `
+<octotaskAction type="start">${commands.startCommand}</octotaskAction>
+`;
   }
 
   return {
     role: 'assistant',
     content: `
 <octotaskArtifact id="project-setup" title="Project Setup">
-<octotaskAction type="shell">
-${commands.setupCommand}
-</octotaskAction>
+${commandString}
 </octotaskArtifact>${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}`,
     id: generateId(),
     createdAt: new Date(),
   };
+}
+
+export function escapeOctotaskArtifactTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskArtifact[^>]*>)([\s\S]*?)(<\/octotaskArtifact>)/g;
+
+  return input.replace(regex, (match, openTag, content, closeTag) => {
+    // Escape the opening tag
+    const escapedOpenTag = openTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Escape the closing tag
+    const escapedCloseTag = closeTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Return the escaped version
+    return `${escapedOpenTag}${content}${escapedCloseTag}`;
+  });
+}
+
+export function escapeOctotaskAActionTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskAction[^>]*>)([\s\S]*?)(<\/octotaskAction>)/g;
+
+  return input.replace(regex, (match, openTag, content, closeTag) => {
+    // Escape the opening tag
+    const escapedOpenTag = openTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Escape the closing tag
+    const escapedCloseTag = closeTag.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Return the escaped version
+    return `${escapedOpenTag}${content}${escapedCloseTag}`;
+  });
+}
+
+export function escapeOctotaskTags(input: string) {
+  return escapeOctotaskArtifactTags(escapeOctotaskAActionTags(input));
 }

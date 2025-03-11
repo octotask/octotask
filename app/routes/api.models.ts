@@ -1,8 +1,8 @@
 import { json } from '@remix-run/cloudflare';
+import { getApiKeysFromCookie, getProviderSettingsFromCookie } from '~/lib/api/cookies';
 import { LLMManager } from '~/lib/modules/llm/manager';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import type { ProviderInfo } from '~/types/model';
-import { getApiKeysFromCookie, getProviderSettingsFromCookie } from '~/lib/api/cookies';
 
 interface ModelsResponse {
   modelList: ModelInfo[];
@@ -67,11 +67,11 @@ export async function loader({
     const provider = llmManager.getProvider(params.provider);
 
     if (provider) {
-      const staticModels = provider.staticModels;
-      const dynamicModels = provider.getDynamicModels
-        ? await provider.getDynamicModels(apiKeys, providerSettings, context.cloudflare?.env)
-        : [];
-      modelList = [...staticModels, ...dynamicModels];
+      modelList = await llmManager.getModelListFromProvider(provider, {
+        apiKeys,
+        providerSettings,
+        serverEnv: context.cloudflare?.env,
+      });
     }
   } else {
     // Update all models

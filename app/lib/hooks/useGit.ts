@@ -1,10 +1,10 @@
 import type { WebContainer } from '@webcontainer/api';
-import { useCallback, useEffect, useRef, useState, type MutableRefObject } from 'react';
-import { webcontainer as webcontainerPromise } from '~/lib/webcontainer';
 import git, { type GitAuth, type PromiseFsClient } from 'isomorphic-git';
 import http from 'isomorphic-git/http/web';
 import Cookies from 'js-cookie';
+import { useCallback, useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { toast } from 'react-toastify';
+import { webcontainer as webcontainerPromise } from '~/lib/webcontainer';
 
 const lookupSavedPassword = (url: string) => {
   const domain = url.split('/')[2];
@@ -92,6 +92,7 @@ export function useGit() {
           },
           onAuthFailure: (url, _auth) => {
             toast.error(`Error Authenticating with ${url.split('/')[2]}`);
+            throw `Error Authenticating with ${url.split('/')[2]}`;
           },
           onAuthSuccess: (url, auth) => {
             saveGitAuth(url, auth);
@@ -107,6 +108,8 @@ export function useGit() {
         return { workdir: webcontainer.workdir, data };
       } catch (error) {
         console.error('Git clone error:', error);
+
+        // toast.error(`Git clone error ${(error as any).message||""}`);
         throw error;
       }
     },

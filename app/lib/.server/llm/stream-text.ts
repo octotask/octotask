@@ -1,14 +1,14 @@
 import { convertToCoreMessages, streamText as _streamText, type Message } from 'ai';
 import { MAX_TOKENS, type FileMap } from './constants';
-import { getSystemPrompt } from '~/lib/common/prompts/prompts';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODIFICATIONS_TAG_NAME, PROVIDER_LIST, WORK_DIR } from '~/utils/constants';
-import type { IProviderSetting } from '~/types/model';
-import { PromptLibrary } from '~/lib/common/prompt-library';
-import { allowedHTMLElements } from '~/utils/markdown';
-import { LLMManager } from '~/lib/modules/llm/manager';
-import { createScopedLogger } from '~/utils/logger';
-import { createFilesContext, extractPropertiesFromMessage, simplifyOctotaskActions } from './utils';
 import { getFilePaths } from './select-context';
+import { createFilesContext, extractPropertiesFromMessage } from './utils';
+import { PromptLibrary } from '~/lib/common/prompt-library';
+import { getSystemPrompt } from '~/lib/common/prompts/prompts';
+import { LLMManager } from '~/lib/modules/llm/manager';
+import type { IProviderSetting } from '~/types/model';
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODIFICATIONS_TAG_NAME, PROVIDER_LIST, WORK_DIR } from '~/utils/constants';
+import { createScopedLogger } from '~/utils/logger';
+import { allowedHTMLElements } from '~/utils/markdown';
 
 export type Messages = Message[];
 
@@ -27,6 +27,7 @@ export async function streamText(props: {
   contextOptimization?: boolean;
   contextFiles?: FileMap;
   summary?: string;
+  messageSliceId?: number;
 }) {
   const {
     messages,
@@ -51,10 +52,8 @@ export async function streamText(props: {
       return { ...message, content };
     } else if (message.role == 'assistant') {
       let content = message.content;
-
-      if (contextOptimization) {
-        content = simplifyOctotaskActions(content);
-      }
+      content = content.replace(/<div class=\\"__octotaskThought__\\">.*?<\/div>/s, '');
+      content = content.replace(/<think>.*?<\/think>/s, '');
 
       return { ...message, content };
     }
@@ -110,7 +109,7 @@ Below are all the files present in the project:
 ${filePaths.join('\n')}
 ---
 
-Below is the context loaded into context buffer for you to have knowledge of and might need changes to fullfill current user request.
+Below is the artifact containing the context loaded into context buffer for you to have knowledge of and might need changes to fullfill current user request.
 CONTEXT BUFFER:
 ---
 ${codeContext}
@@ -126,10 +125,14 @@ ${props.summary}
 ---
 `;
 
-      const lastMessage = processedMessages.pop();
+      if (props.messageSliceId) {
+        processedMessages = processedMessages.slice(props.messageSliceId);
+      } else {
+        const lastMessage = processedMessages.pop();
 
-      if (lastMessage) {
-        processedMessages = [lastMessage];
+        if (lastMessage) {
+          processedMessages = [lastMessage];
+        }
       }
     }
   }

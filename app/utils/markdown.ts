@@ -1,9 +1,9 @@
+import type { UnistNode, UnistParent } from 'node_modules/unist-util-visit/lib';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema, type Options as RehypeSanitizeOptions } from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import type { PluggableList, Plugin } from 'unified';
-import rehypeSanitize, { defaultSchema, type Options as RehypeSanitizeOptions } from 'rehype-sanitize';
 import { SKIP, visit } from 'unist-util-visit';
-import type { UnistNode, UnistParent } from 'node_modules/unist-util-visit/lib';
 
 export const allowedHTMLElements = [
   'a',
@@ -54,7 +54,27 @@ export const allowedHTMLElements = [
   'tr',
   'ul',
   'var',
+  'think',
 ];
+
+// Add custom rehype plugin
+function remarkThinkRawContent() {
+  return (tree: any) => {
+    visit(tree, (node: any) => {
+      if (node.type === 'html' && node.value && node.value.startsWith('<think>')) {
+        const cleanedContent = node.value.slice(7);
+        node.value = `<div class="__octotaskThought__">${cleanedContent}`;
+
+        return;
+      }
+
+      if (node.type === 'html' && node.value && node.value.startsWith('</think>')) {
+        const cleanedContent = node.value.slice(8);
+        node.value = `</div>${cleanedContent}`;
+      }
+    });
+  };
+}
 
 const rehypeSanitizeOptions: RehypeSanitizeOptions = {
   ...defaultSchema,
@@ -78,6 +98,8 @@ export function remarkPlugins(limitedMarkdown: boolean) {
   if (limitedMarkdown) {
     plugins.unshift(limitedMarkdownPlugin);
   }
+
+  plugins.unshift(remarkThinkRawContent);
 
   return plugins;
 }

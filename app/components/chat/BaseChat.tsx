@@ -2,36 +2,40 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import type { Message } from 'ai';
+import * as Tooltip from '@radix-ui/react-tooltip';
+import type { JSONValue, Message } from 'ai';
+import Cookies from 'js-cookie';
 import React, { type RefCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { ClientOnly } from 'remix-utils/client-only';
+import { APIKeyManager, getApiKeysFromCookies } from './APIKeyManager';
+
+import styles from './BaseChat.module.scss';
+
+import ChatAlert from './ChatAlert';
+import FilePreview from './FilePreview';
+import GitCloneButton from './GitCloneButton';
+import { Messages } from './Messages.client';
+import ProgressCompilation from './ProgressCompilation';
+import { ScreenshotStateManager } from './ScreenshotStateManager';
+import { SendButton } from './SendButton.client';
+import StarterTemplates from './StarterTemplates';
+import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
+import { ModelSelector } from '~/components/chat/ModelSelector';
+import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
+import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
+import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
 import { Menu } from '~/components/sidebar/Menu.client';
 import { IconButton } from '~/components/ui/IconButton';
 import { Workbench } from '~/components/workbench/Workbench.client';
+import type { ModelInfo } from '~/lib/modules/llm/types';
+import type { ActionRunner } from '~/lib/runtime/action-runner';
+import { LOCAL_PROVIDERS } from '~/lib/stores/settings';
+import type { ActionAlert } from '~/types/actions';
+import type { ProgressAnnotation } from '~/types/context';
+import type { ProviderInfo } from '~/types/model';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
-import { Messages } from './Messages.client';
-import { SendButton } from './SendButton.client';
-import { APIKeyManager, getApiKeysFromCookies } from './APIKeyManager';
-import Cookies from 'js-cookie';
-import * as Tooltip from '@radix-ui/react-tooltip';
-
-import styles from './BaseChat.module.scss';
-import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
-import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
-import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
-import GitCloneButton from './GitCloneButton';
-
-import FilePreview from './FilePreview';
-import { ModelSelector } from '~/components/chat/ModelSelector';
-import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
-import type { ProviderInfo } from '~/types/model';
-import { ScreenshotStateManager } from './ScreenshotStateManager';
-import { toast } from 'react-toastify';
-import StarterTemplates from './StarterTemplates';
-import type { ActionAlert } from '~/types/actions';
-import ChatAlert from './ChatAlert';
-import type { ModelInfo } from '~/lib/modules/llm/types';
 
 const TEXTAREA_MIN_HEIGHT = 76;
 
@@ -42,6 +46,7 @@ interface BaseChatProps {
   showChat?: boolean;
   chatStarted?: boolean;
   isStreaming?: boolean;
+  onStreamingChange?: (streaming: boolean) => void;
   messages?: Message[];
   description?: string;
   enhancingPrompt?: boolean;
@@ -64,6 +69,8 @@ interface BaseChatProps {
   setImageDataList?: (dataList: string[]) => void;
   actionAlert?: ActionAlert;
   clearAlert?: () => void;
+  data?: JSONValue[] | undefined;
+  actionRunner?: ActionRunner;
 }
 
 export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
@@ -75,6 +82,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       showChat = true,
       chatStarted = false,
       isStreaming = false,
+      onStreamingChange,
       model,
       setModel,
       provider,
@@ -97,6 +105,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       messages,
       actionAlert,
       clearAlert,
+      data,
+      actionRunner,
     },
     ref,
   ) => {
@@ -108,10 +118,22 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
     const [transcript, setTranscript] = useState('');
     const [isModelLoading, setIsModelLoading] = useState<string | undefined>('all');
-
+    const [progressAnnotations, setProgressAnnotations] = useState<ProgressAnnotation[]>([]);
+    useEffect(() => {
+      if (data) {
+        const progressList = data.filter(
+          (x) => typeof x === 'object' && (x as any).type === 'progress',
+        ) as ProgressAnnotation[];
+        setProgressAnnotations(progressList);
+      }
+    }, [data]);
     useEffect(() => {
       console.log(transcript);
     }, [transcript]);
+
+    useEffect(() => {
+      onStreamingChange?.(isStreaming);
+    }, [isStreaming, onStreamingChange]);
 
     useEffect(() => {
       if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
@@ -307,6 +329,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               className={classNames('pt-6 px-2 sm:px-6', {
                 'h-full flex flex-col': chatStarted,
               })}
+              ref={scrollRef}
             >
               <ClientOnly>
                 {() => {
@@ -337,6 +360,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                     />
                   )}
                 </div>
+                {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
                 <div
                   className={classNames(
                     'bg-octotask-elements-background-depth-2 p-3 rounded-lg border border-octotask-elements-borderColor relative w-full max-w-chat mx-auto z-prompt',
@@ -389,15 +413,17 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                             apiKeys={apiKeys}
                             modelLoading={isModelLoading}
                           />
-                          {(providerList || []).length > 0 && provider && (
-                            <APIKeyManager
-                              provider={provider}
-                              apiKey={apiKeys[provider.name] || ''}
-                              setApiKey={(key) => {
-                                onApiKeysChange(provider.name, key);
-                              }}
-                            />
-                          )}
+                          {(providerList || []).length > 0 &&
+                            provider &&
+                            (!LOCAL_PROVIDERS.includes(provider.name) || 'OpenAILike') && (
+                              <APIKeyManager
+                                provider={provider}
+                                apiKey={apiKeys[provider.name] || ''}
+                                setApiKey={(key) => {
+                                  onApiKeysChange(provider.name, key);
+                                }}
+                              />
+                            )}
                         </div>
                       )}
                     </ClientOnly>
@@ -592,7 +618,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               {!chatStarted && <StarterTemplates />}
             </div>
           </div>
-          <ClientOnly>{() => <Workbench chatStarted={chatStarted} isStreaming={isStreaming} />}</ClientOnly>
+          <ClientOnly>
+            {() => (
+              <Workbench
+                actionRunner={actionRunner ?? ({} as ActionRunner)}
+                chatStarted={chatStarted}
+                isStreaming={isStreaming}
+              />
+            )}
+          </ClientOnly>
         </div>
       </div>
     );

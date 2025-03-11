@@ -1,16 +1,16 @@
 import { generateText, type CoreTool, type GenerateTextResult, type Message } from 'ai';
 import ignore from 'ignore';
-import type { IProviderSetting } from '~/types/model';
 import { IGNORE_PATTERNS, type FileMap } from './constants';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, PROVIDER_LIST } from '~/utils/constants';
 import {
   createFilesContext,
   extractCurrentContext,
   extractPropertiesFromMessage,
   simplifyOctotaskActions,
 } from './utils';
-import { createScopedLogger } from '~/utils/logger';
 import { LLMManager } from '~/lib/modules/llm/manager';
+import type { IProviderSetting } from '~/types/model';
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, PROVIDER_LIST } from '~/utils/constants';
+import { createScopedLogger } from '~/utils/logger';
 
 // Common patterns to ignore, similar to .gitignore
 
@@ -28,7 +28,7 @@ export async function selectContext(props: {
   summary: string;
   onFinish?: (resp: GenerateTextResult<Record<string, CoreTool<any, any>>, never>) => void;
 }) {
-  const { messages, env: serverEnv, apiKeys, files, providerSettings, contextOptimization, summary, onFinish } = props;
+  const { messages, env: serverEnv, apiKeys, files, providerSettings, summary, onFinish } = props;
   let currentModel = DEFAULT_MODEL;
   let currentProvider = DEFAULT_PROVIDER.name;
   const processedMessages = messages.map((message) => {
@@ -41,9 +41,10 @@ export async function selectContext(props: {
     } else if (message.role == 'assistant') {
       let content = message.content;
 
-      if (contextOptimization) {
-        content = simplifyOctotaskActions(content);
-      }
+      content = simplifyOctotaskActions(content);
+
+      content = content.replace(/<div class=\\"__octotaskThought__\\">.*?<\/div>/s, '');
+      content = content.replace(/<think>.*?<\/think>/s, '');
 
       return { ...message, content };
     }
@@ -131,7 +132,7 @@ export async function selectContext(props: {
         ---
         ${filePaths.map((path) => `- ${path}`).join('\n')}
         ---
-        
+
         You have following code loaded in the context buffer that you can refer to:
 
         CURRENT CONTEXT BUFFER
@@ -142,14 +143,14 @@ export async function selectContext(props: {
         Now, you are given a task. You need to select the files that are relevant to the task from the list of files above.
 
         RESPONSE FORMAT:
-        your response shoudl be in following format:
+        your response should be in following format:
 ---
 <updateContextBuffer>
     <includeFile path="path/to/file"/>
     <excludeFile path="path/to/file"/>
 </updateContextBuffer>
 ---
-        * Your should start with <updateContextBuffer> and end with </updateContextBuffer>. 
+        * Your should start with <updateContextBuffer> and end with </updateContextBuffer>.
         * You can include multiple <includeFile> and <excludeFile> tags in the response.
         * You should not include any other text in the response.
         * You should not include any file that is not in the list of files above.
@@ -208,7 +209,10 @@ export async function selectContext(props: {
     }
 
     if (!filePaths.includes(fullPath)) {
-      throw new Error(`File ${path} is not in the list of files above.`);
+      logger.error(`File ${path} is not in the list of files above.`);
+      return;
+
+      // throw new Error(`File ${path} is not in the list of files above.`);
     }
 
     if (currrentFiles.includes(path)) {
@@ -220,6 +224,13 @@ export async function selectContext(props: {
 
   if (onFinish) {
     onFinish(resp);
+  }
+
+  const totalFiles = Object.keys(filteredFiles).length;
+  logger.info(`Total files: ${totalFiles}`);
+
+  if (totalFiles == 0) {
+    throw new Error(`Octotask failed to select files`);
   }
 
   return filteredFiles;

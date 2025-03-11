@@ -1,3 +1,5 @@
+import type { Change } from 'diff';
+
 export type ActionType = 'file' | 'shell';
 
 export interface BaseAction {
@@ -17,7 +19,11 @@ export interface StartAction extends BaseAction {
   type: 'start';
 }
 
-export type OctotaskAction = FileAction | ShellAction | StartAction;
+export interface BuildAction extends BaseAction {
+  type: 'build';
+}
+
+export type OctotaskAction = FileAction | ShellAction | StartAction | BuildAction;
 
 export type OctotaskActionData = OctotaskAction | BaseAction;
 
@@ -27,4 +33,17 @@ export interface ActionAlert {
   description: string;
   content: string;
   source?: 'terminal' | 'preview'; // Add source to differentiate between terminal and preview errors
+}
+
+export interface FileHistory {
+  originalContent: string;
+  lastModified: number;
+  changes: Change[];
+  versions: {
+    timestamp: number;
+    content: string;
+  }[];
+
+  // Novo campo para rastrear a origem das mudanças
+  changeSource?: 'user' | 'auto-save' | 'external';
 }

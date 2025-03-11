@@ -1,6 +1,6 @@
 import type { Message } from 'ai';
 import { generateId } from './fileUtils';
-import { detectProjectCommands, createCommandsMessage } from './projectCommands';
+import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from './projectCommands';
 
 export const createChatFromFolder = async (
   files: File[],
@@ -38,11 +38,11 @@ export const createChatFromFolder = async (
     role: 'assistant',
     content: `I've imported the contents of the "${folderName}" folder.${binaryFilesMessage}
 
-<octotaskArtifact id="imported-files" title="Imported Files">
+<octotaskArtifact id="imported-files" title="Imported Files" type="bundled" >
 ${fileArtifacts
   .map(
     (file) => `<octotaskAction type="file" filePath="${file.path}">
-${file.content}
+${escapeOctotaskTags(file.content)}
 </octotaskAction>`,
   )
   .join('\n\n')}
@@ -61,6 +61,11 @@ ${file.content}
   const messages = [userMessage, filesMessage];
 
   if (commandsMessage) {
+    messages.push({
+      role: 'user',
+      id: generateId(),
+      content: 'Setup the codebase and Start the application',
+    });
     messages.push(commandsMessage);
   }
 

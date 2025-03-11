@@ -8,10 +8,10 @@ const ThoughtBox = ({ title, children }: PropsWithChildren<{ title: string }>) =
       onClick={() => setIsExpanded(!isExpanded)}
       className={`
         bg-octotask-elements-background-depth-2
-        shadow-md 
-        rounded-lg 
-        cursor-pointer 
-        transition-all 
+        shadow-md
+        rounded-lg
+        cursor-pointer
+        transition-all
         duration-300
         ${isExpanded ? 'max-h-96' : 'max-h-13'}
         overflow-auto
@@ -27,10 +27,10 @@ const ThoughtBox = ({ title, children }: PropsWithChildren<{ title: string }>) =
       </div>
       <div
         className={`
-        transition-opacity 
+        transition-opacity
         duration-300
-        p-4 
-        rounded-lg 
+        p-4
+        rounded-lg
         ${isExpanded ? 'opacity-100' : 'opacity-0'}
       `}
       >

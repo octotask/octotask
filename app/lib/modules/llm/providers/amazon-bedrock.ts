@@ -1,8 +1,8 @@
+import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock';
+import type { LanguageModelV1 } from 'ai';
 import { BaseProvider } from '~/lib/modules/llm/base-provider';
 import type { ModelInfo } from '~/lib/modules/llm/types';
-import type { LanguageModelV1 } from 'ai';
 import type { IProviderSetting } from '~/types/model';
-import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock';
 
 interface AWSBedRockConfig {
   region: string;
@@ -20,6 +20,12 @@ export default class AmazonBedrockProvider extends BaseProvider {
   };
 
   staticModels: ModelInfo[] = [
+    {
+      name: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+      label: 'Claude 3.5 Sonnet v2 (Bedrock)',
+      provider: 'AmazonBedrock',
+      maxTokenAllowed: 200000,
+    },
     {
       name: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
       label: 'Claude 3.5 Sonnet (Bedrock)',

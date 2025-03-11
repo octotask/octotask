@@ -1,6 +1,9 @@
 import { useStore } from '@nanostores/react';
 import { memo, useMemo } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { FileBreadcrumb } from './FileBreadcrumb';
+import { FileTree } from './FileTree';
+import { DEFAULT_TERMINAL_SIZE, TerminalTabs } from './terminal/TerminalTabs';
 import {
   CodeMirrorEditor,
   type EditorDocument,
@@ -13,13 +16,11 @@ import { PanelHeader } from '~/components/ui/PanelHeader';
 import { PanelHeaderButton } from '~/components/ui/PanelHeaderButton';
 import type { FileMap } from '~/lib/stores/files';
 import { themeStore } from '~/lib/stores/theme';
+import { workbenchStore } from '~/lib/stores/workbench';
+import type { FileHistory } from '~/types/actions';
 import { WORK_DIR } from '~/utils/constants';
 import { renderLogger } from '~/utils/logger';
 import { isMobile } from '~/utils/mobile';
-import { FileBreadcrumb } from './FileBreadcrumb';
-import { FileTree } from './FileTree';
-import { DEFAULT_TERMINAL_SIZE, TerminalTabs } from './terminal/TerminalTabs';
-import { workbenchStore } from '~/lib/stores/workbench';
 
 interface EditorPanelProps {
   files?: FileMap;
@@ -27,6 +28,7 @@ interface EditorPanelProps {
   editorDocument?: EditorDocument;
   selectedFile?: string | undefined;
   isStreaming?: boolean;
+  fileHistory?: Record<string, FileHistory>;
   onEditorChange?: OnEditorChange;
   onEditorScroll?: OnEditorScroll;
   onFileSelect?: (value?: string) => void;
@@ -45,6 +47,7 @@ export const EditorPanel = memo(
     editorDocument,
     selectedFile,
     isStreaming,
+    fileHistory,
     onFileSelect,
     onEditorChange,
     onEditorScroll,
@@ -83,6 +86,7 @@ export const EditorPanel = memo(
                   files={files}
                   hideRoot
                   unsavedFiles={unsavedFiles}
+                  fileHistory={fileHistory}
                   rootFolder={WORK_DIR}
                   selectedFile={selectedFile}
                   onFileSelect={onFileSelect}

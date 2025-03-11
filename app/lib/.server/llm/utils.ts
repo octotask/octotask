@@ -1,8 +1,8 @@
 import { type Message } from 'ai';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODEL_REGEX, PROVIDER_REGEX } from '~/utils/constants';
-import { IGNORE_PATTERNS, type FileMap } from './constants';
 import ignore from 'ignore';
+import { IGNORE_PATTERNS, type FileMap } from './constants';
 import type { ContextAnnotation } from '~/types/context';
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODEL_REGEX, PROVIDER_REGEX } from '~/utils/constants';
 
 export function extractPropertiesFromMessage(message: Omit<Message, 'id'>): {
   model: string;
@@ -82,10 +82,10 @@ export function createFilesContext(files: FileMap, useRelativePath?: boolean) {
         filePath = path.replace('/home/project/', '');
       }
 
-      return `<file path="${filePath}">\n${codeWithLinesNumbers}\n</file>`;
+      return `<octotaskAction type="file" filePath="${filePath}">${codeWithLinesNumbers}</octotaskAction>`;
     });
 
-  return `<codebase>${fileContexts.join('\n\n')}\n\n</codebase>`;
+  return `<octotaskArtifact id="code-content" title="Code Content" >\n${fileContexts.join('\n')}\n</octotaskArtifact>`;
 }
 
 export function extractCurrentContext(messages: Message[]) {

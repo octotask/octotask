@@ -1,12 +1,27 @@
 version: 2
-
 updates:
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  # Poetry (Python) in the docs directory
+  - package-ecosystem: "pip"
+    directory: "/docs"
     schedule:
-      interval: 'weekly'
-  - package-ecosystem: 'npm'
-    directory: '/'
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # pnpm (JavaScript/Node.js) in the root directory
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-    # This will disable updates, but still create PRs for security updates.
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "javascript"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"

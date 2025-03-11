@@ -35,9 +35,7 @@ describe('StreamingMessageParser', () => {
 
   describe('invalid or incomplete artifacts', () => {
     it.each<[string | string[], ExpectedResult | string]>([
-      ['Foo bar <b', 'Foo bar '],
       ['Foo bar <ba', 'Foo bar <ba'],
-      ['Foo bar <bol', 'Foo bar '],
       ['Foo bar <octotask', 'Foo bar '],
       ['Foo bar <octotaska', 'Foo bar <octotaska'],
       ['Foo bar <octotaskA', 'Foo bar '],

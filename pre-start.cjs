@@ -1,4 +1,4 @@
-const { execSync } =require('child_process');
+const { execSync } = require('child_process');
 
 // Get git hash with fallback
 const getGitHash = () => {
@@ -15,14 +15,11 @@ let commitJson = {
 };
 
 console.log(`
-★═══════════════════════════════════════★
-         O C T Ø T Λ S K
-         ⚡️  Welcome  ⚡️
-★═══════════════════════════════════════★
-         Version: v${commitJson.version}
-         Commit:  ${commitJson.hash}
-★═══════════════════════════════════════★
-`);
+  ★═══════════════════════════════════════★
+          O C T Ø T Λ S K
+          ⚡️  Welcome  ⚡️
+  ★═══════════════════════════════════════★
+  `);
 console.log('📍 Current Version Tag:', `v${commitJson.version}`);
 console.log('📍 Current Commit Version:', commitJson.hash);
 console.log('  Please wait until the URL appears here');

@@ -1,4 +1,4 @@
-site_name: octotask Docs
+site_name: octotask.diy Docs
 site_dir: ../site
 theme:
   name: material
@@ -31,28 +31,25 @@ theme:
     repo: fontawesome/brands/github
   # logo: assets/logo.png
   # favicon: assets/logo.png
-repo_name: octotask
+repo_name: octotask.diy
 repo_url: https://github.com/octotask/octotask
-edit_uri: ""
+edit_uri: ''
 
 extra:
   generator: false
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/octotask/octotask
-      name: octotask
+      name: octotask.diy
     - icon: fontawesome/brands/discourse
-      link: https://octotask.khulansoft.com/
-      name: octotask Discourse
+      link: https://octotask.khulnasoft.com/
+      name: octotask.diy Discourse
     - icon: fontawesome/brands/x-twitter
-      link: https://x.com/khulonasoft
-      name: octotask on X
+      link: https://x.com/octotask_diy
+      name: octotask.diy on X
     - icon: fontawesome/brands/bluesky
       link: https://bsky.app/profile/octotask
-      name: octotask on Bluesky
-
-      
-
+      name: octotask.diy on Bluesky
 
 markdown_extensions:
   - pymdownx.highlight:

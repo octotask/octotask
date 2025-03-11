@@ -1,11 +1,11 @@
-# Project management of octotask
+# Project management of bolt.diy
 
 First off: this sounds funny, we know. "Project management" comes from a world of enterprise stuff and this project is
 far from being enterprisy- it's still anarchy all over the place 😉
 
 But we need to organize ourselves somehow, right?
 
-> tl;dr: We've got a project board with epics and features. We use PRs as change log and as materialized features. Find it [here](https://github.com/orgs/octotask/projects/4).
+> tl;dr: We've got a project board with epics and features. We use PRs as change log and as materialized features. Find it [here](https://github.com/orgs/stackblitz-labs/projects/4).
 
 Here's how we structure long-term vision, mid-term capabilities of the software and short term improvements.
 
@@ -14,7 +14,7 @@ Here's how we structure long-term vision, mid-term capabilities of the software 
 Strategic epics define areas in which the product evolves. Usually, these epics don’t overlap. They shall allow the core
 team to define what they believe is most important and should be worked on with the highest priority.
 
-You can find the [epics as issues](https://github.com/octotask/octotask/labels/epic) which are probably never
+You can find the [epics as issues](https://github.com/stackblitz-labs/bolt.diy/labels/epic) which are probably never
 going to be closed.
 
 What's the benefit / purpose of epics?
@@ -31,7 +31,7 @@ and this way communicate where the focus currently is.
 
 2. Grouping of features
 
-By linking features with epics, we can keep them together and document *why* we invest work into a particular thing.
+By linking features with epics, we can keep them together and document _why_ we invest work into a particular thing.
 
 ## Features (mid-term)
 
@@ -41,13 +41,13 @@ function, you name it).
 However, we intentionally describe features in a more vague manner. Why? Everybody loves crisp, well-defined
 acceptance-criteria, no? Well, every product owner loves it. because he knows what he’ll get once it’s done.
 
-But: **here is no owner of this product**. Therefore, we grant *maximum flexibility to the developer contributing a feature* – so that he can bring in his ideas and have most fun implementing it.
+But: **here is no owner of this product**. Therefore, we grant _maximum flexibility to the developer contributing a feature_ – so that he can bring in his ideas and have most fun implementing it.
 
-The feature therefore tries to describe *what* should be improved but not in detail *how*.
+The feature therefore tries to describe _what_ should be improved but not in detail _how_.
 
 ## PRs as materialized features (short-term)
 
-Once a developer starts working on a feature, a draft-PR *can* be opened asap to share, describe and discuss, how the feature shall be implemented. But: this is not a must. It just helps to get early feedback and get other developers involved. Sometimes, the developer just wants to get started and then open a PR later. 
+Once a developer starts working on a feature, a draft-PR _can_ be opened asap to share, describe and discuss, how the feature shall be implemented. But: this is not a must. It just helps to get early feedback and get other developers involved. Sometimes, the developer just wants to get started and then open a PR later.
 
 In a loosely organized project, it may as well happen that multiple PRs are opened for the same feature. This is no real issue: Usually, peoply being passionate about a solution are willing to join forces and get it done together. And if a second developer was just faster getting the same feature realized: Be happy that it's been done, close the PR and look out for the next feature to implement 🤓
 

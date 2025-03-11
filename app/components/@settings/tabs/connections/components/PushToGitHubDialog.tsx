@@ -1,16 +1,16 @@
+import { Octokit } from '@octokit/rest';
 import * as Dialog from '@radix-ui/react-dialog';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
 import { getLocalStorage } from '~/lib/persistence';
-import { classNames } from '~/utils/classNames';
-import type { GitHubUserResponse } from '~/types/GitHub';
+import type { FileMap, File } from '~/lib/stores/files';
 import { logStore } from '~/lib/stores/logs';
 import { workbenchStore } from '~/lib/stores/workbench';
+import type { GitHubUserResponse } from '~/types/GitHub';
+import { classNames } from '~/utils/classNames';
 import { extractRelativePath } from '~/utils/diff';
 import { formatSize } from '~/utils/formatSize';
-import type { FileMap, File } from '~/lib/stores/files';
-import { Octokit } from '@octokit/rest';
 
 interface PushToGitHubDialogProps {
   isOpen: boolean;

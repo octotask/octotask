@@ -1,6 +1,6 @@
+import type { JSONValue } from 'ai';
 import { memo } from 'react';
 import { Markdown } from './Markdown';
-import type { JSONValue } from 'ai';
 import Popover from '~/components/ui/Popover';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { WORK_DIR } from '~/utils/constants';

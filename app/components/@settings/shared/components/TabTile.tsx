@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { classNames } from '~/utils/classNames';
-import type { TabVisibilityConfig } from '~/components/@settings/core/types';
+import { motion } from 'framer-motion';
 import { TAB_LABELS, TAB_ICONS } from '~/components/@settings/core/constants';
+import type { TabVisibilityConfig } from '~/components/@settings/core/types';
+import { classNames } from '~/utils/classNames';
 
 interface TabTileProps {
   tab: TabVisibilityConfig;

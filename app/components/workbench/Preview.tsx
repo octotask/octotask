@@ -1,9 +1,9 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { IconButton } from '~/components/ui/IconButton';
-import { workbenchStore } from '~/lib/stores/workbench';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { PortDropdown } from './PortDropdown';
 import { ScreenshotSelector } from './ScreenshotSelector';
+import { IconButton } from '~/components/ui/IconButton';
+import { workbenchStore } from '~/lib/stores/workbench';
 
 type ResizeSide = 'left' | 'right' | null;
 

@@ -1,19 +1,19 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Switch } from '~/components/ui/Switch';
-import { useSettings } from '~/lib/hooks/useSettings';
-import { LOCAL_PROVIDERS, URL_CONFIGURABLE_PROVIDERS } from '~/lib/stores/settings';
-import type { IProviderConfig } from '~/types/model';
-import { logStore } from '~/lib/stores/logs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { classNames } from '~/utils/classNames';
-import { BsRobot } from 'react-icons/bs';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { IconType } from 'react-icons';
 import { BiChip } from 'react-icons/bi';
+import { BsRobot } from 'react-icons/bs';
 import { TbBrandOpenai } from 'react-icons/tb';
-import { providerBaseUrlEnvKeys } from '~/utils/constants';
-import { useToast } from '~/components/ui/use-toast';
-import { Progress } from '~/components/ui/Progress';
 import OllamaModelInstaller from './OllamaModelInstaller';
+import { Progress } from '~/components/ui/Progress';
+import { Switch } from '~/components/ui/Switch';
+import { useToast } from '~/components/ui/use-toast';
+import { useSettings } from '~/lib/hooks/useSettings';
+import { logStore } from '~/lib/stores/logs';
+import { LOCAL_PROVIDERS, URL_CONFIGURABLE_PROVIDERS } from '~/lib/stores/settings';
+import type { IProviderConfig } from '~/types/model';
+import { classNames } from '~/utils/classNames';
+import { providerBaseUrlEnvKeys } from '~/utils/constants';
 
 // Add type for provider names to ensure type safety
 type ProviderName = 'Ollama' | 'LMStudio' | 'OpenAILike';

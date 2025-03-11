@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { classNames } from '~/utils/classNames';
-import { Switch } from '~/components/ui/Switch';
 import type { UserProfile } from '~/components/@settings/core/types';
+import { Switch } from '~/components/ui/Switch';
+import { classNames } from '~/utils/classNames';
 import { isMac } from '~/utils/os';
 
 // Helper to get modifier key symbols/text

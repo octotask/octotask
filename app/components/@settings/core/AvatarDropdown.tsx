@@ -1,9 +1,9 @@
+import { useStore } from '@nanostores/react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { motion } from 'framer-motion';
-import { useStore } from '@nanostores/react';
-import { classNames } from '~/utils/classNames';
-import { profileStore } from '~/lib/stores/profile';
 import type { TabType, Profile } from './types';
+import { profileStore } from '~/lib/stores/profile';
+import { classNames } from '~/utils/classNames';
 
 const BetaLabel = () => (
   <span className="px-1.5 py-0.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-[10px] font-medium text-purple-600 dark:text-purple-400 ml-2">

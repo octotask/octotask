@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Cookies from 'js-cookie';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { logStore } from '~/lib/stores/logs';
 import { classNames } from '~/utils/classNames';
-import Cookies from 'js-cookie';
 
 interface GitHubUserResponse {
   login: string;
@@ -66,7 +66,7 @@ interface GitHubConnection {
   stats?: GitHubStats;
 }
 
-export function GithubConnection() {
+export default function GithubConnection() {
   const [connection, setConnection] = useState<GitHubConnection>({
     user: null,
     token: '',

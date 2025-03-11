@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { classNames } from '~/utils/classNames';
-import type { GitHubAuthState } from '~/components/@settings/tabs/connections/types/GitHub';
 import Cookies from 'js-cookie';
+import React, { useEffect } from 'react';
+import type { GitHubAuthState } from '~/components/@settings/tabs/connections/types/GitHub';
 import { getLocalStorage } from '~/lib/persistence';
+import { classNames } from '~/utils/classNames';
 
 const GITHUB_TOKEN_KEY = 'github_token';
 

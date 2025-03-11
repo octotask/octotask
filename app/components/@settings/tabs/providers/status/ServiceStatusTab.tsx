@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { classNames } from '~/utils/classNames';
-import { TbActivityHeartbeat } from 'react-icons/tb';
-import { BsCheckCircleFill, BsXCircleFill, BsExclamationCircleFill } from 'react-icons/bs';
-import { SiAmazon, SiGoogle, SiHuggingface, SiPerplexity, SiOpenai } from 'react-icons/si';
-import { BsRobot, BsCloud } from 'react-icons/bs';
-import { TbBrain } from 'react-icons/tb';
-import { BiChip, BiCodeBlock } from 'react-icons/bi';
-import { FaCloud, FaBrain } from 'react-icons/fa';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { IconType } from 'react-icons';
-import { useSettings } from '~/lib/hooks/useSettings';
+import { BiChip, BiCodeBlock } from 'react-icons/bi';
+import { BsCheckCircleFill, BsXCircleFill, BsExclamationCircleFill } from 'react-icons/bs';
+import { BsRobot, BsCloud } from 'react-icons/bs';
+import { FaCloud, FaBrain } from 'react-icons/fa';
+import { SiAmazon, SiGoogle, SiHuggingface, SiPerplexity, SiOpenai } from 'react-icons/si';
+import { TbBrain } from 'react-icons/tb';
+import { TbActivityHeartbeat } from 'react-icons/tb';
 import { useToast } from '~/components/ui/use-toast';
+import { useSettings } from '~/lib/hooks/useSettings';
+import { classNames } from '~/utils/classNames';
 
 // Types
 type ProviderName =

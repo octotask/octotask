@@ -1,8 +1,8 @@
+import { createOpenAI } from '@ai-sdk/openai';
+import type { LanguageModelV1 } from 'ai';
 import { BaseProvider } from '~/lib/modules/llm/base-provider';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import type { IProviderSetting } from '~/types/model';
-import { createOpenAI } from '@ai-sdk/openai';
-import type { LanguageModelV1 } from 'ai';
 import { logger } from '~/utils/logger';
 
 export default class LMStudioProvider extends BaseProvider {
@@ -75,7 +75,7 @@ export default class LMStudioProvider extends BaseProvider {
       throw new Error('No baseUrl found for LMStudio provider');
     }
 
-    const isDocker = process.env.RUNNING_IN_DOCKER === 'true' || serverEnv?.RUNNING_IN_DOCKER === 'true';
+    const isDocker = process?.env?.RUNNING_IN_DOCKER === 'true' || serverEnv?.RUNNING_IN_DOCKER === 'true';
 
     if (typeof window === 'undefined') {
       baseUrl = isDocker ? baseUrl.replace('localhost', 'host.docker.internal') : baseUrl;

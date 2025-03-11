@@ -1,16 +1,16 @@
+import Cookies from 'js-cookie';
 import { atom, map } from 'nanostores';
-import { PROVIDER_LIST } from '~/utils/constants';
-import type { IProviderConfig } from '~/types/model';
+import { create } from 'zustand';
+import { toggleTheme } from './theme';
+import { DEFAULT_TAB_CONFIG } from '~/components/@settings/core/constants';
 import type {
   TabVisibilityConfig,
   TabWindowConfig,
   UserTabConfig,
   DevTabConfig,
 } from '~/components/@settings/core/types';
-import { DEFAULT_TAB_CONFIG } from '~/components/@settings/core/constants';
-import Cookies from 'js-cookie';
-import { toggleTheme } from './theme';
-import { create } from 'zustand';
+import type { IProviderConfig } from '~/types/model';
+import { PROVIDER_LIST } from '~/utils/constants';
 
 export interface Shortcut {
   key: string;

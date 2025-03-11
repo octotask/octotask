@@ -1,12 +1,12 @@
-import type { GitHubRepoInfo, GitHubContent, RepositoryStats } from '~/types/GitHub';
+import * as Dialog from '@radix-ui/react-dialog';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import * as Dialog from '@radix-ui/react-dialog';
-import { classNames } from '~/utils/classNames';
-import { getLocalStorage } from '~/lib/persistence';
-import { motion } from 'framer-motion';
-import { formatSize } from '~/utils/formatSize';
 import { Input } from '~/components/ui/Input';
+import { getLocalStorage } from '~/lib/persistence';
+import type { GitHubRepoInfo, GitHubContent, RepositoryStats } from '~/types/GitHub';
+import { classNames } from '~/utils/classNames';
+import { formatSize } from '~/utils/formatSize';
 
 interface GitHubTreeResponse {
   tree: Array<{

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { ServiceStatus } from './types';
 import { ProviderStatusCheckerFactory } from './provider-factory';
+import type { ServiceStatus } from './types';
 
 export default function ServiceStatusTab() {
   const [serviceStatuses, setServiceStatuses] = useState<ServiceStatus[]>([]);

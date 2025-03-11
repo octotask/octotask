@@ -1,9 +1,9 @@
-import { useDrag, useDrop } from 'react-dnd';
 import { motion } from 'framer-motion';
-import { classNames } from '~/utils/classNames';
+import { useDrag, useDrop } from 'react-dnd';
 import type { TabVisibilityConfig } from '~/components/@settings/core/types';
 import { TAB_LABELS } from '~/components/@settings/core/types';
 import { Switch } from '~/components/ui/Switch';
+import { classNames } from '~/utils/classNames';
 
 interface DraggableTabListProps {
   tabs: TabVisibilityConfig[];

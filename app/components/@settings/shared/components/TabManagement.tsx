@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useStore } from '@nanostores/react';
-import { Switch } from '~/components/ui/Switch';
-import { classNames } from '~/utils/classNames';
-import { tabConfigurationStore } from '~/lib/stores/settings';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { TbLayoutGrid } from 'react-icons/tb';
+import { toast } from 'react-toastify';
 import { TAB_LABELS } from '~/components/@settings/core/constants';
 import type { TabType } from '~/components/@settings/core/types';
-import { toast } from 'react-toastify';
-import { TbLayoutGrid } from 'react-icons/tb';
+import { Switch } from '~/components/ui/Switch';
+import { tabConfigurationStore } from '~/lib/stores/settings';
 import { useSettingsStore } from '~/lib/stores/settings';
+import { classNames } from '~/utils/classNames';
 
 // Define tab icons mapping
 const TAB_ICONS: Record<TabType, string> = {

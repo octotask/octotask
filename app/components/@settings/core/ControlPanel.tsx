@@ -1,43 +1,43 @@
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
-import { Switch } from '@radix-ui/react-switch';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { classNames } from '~/utils/classNames';
+import { Switch } from '@radix-ui/react-switch';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { AvatarDropdown } from './AvatarDropdown';
+import { TAB_LABELS, DEFAULT_TAB_CONFIG } from './constants';
+import type { TabType, TabVisibilityConfig, Profile } from './types';
 import { TabManagement } from '~/components/@settings/shared/components/TabManagement';
 import { TabTile } from '~/components/@settings/shared/components/TabTile';
-import { useUpdateCheck } from '~/lib/hooks/useUpdateCheck';
-import { useFeatures } from '~/lib/hooks/useFeatures';
-import { useNotifications } from '~/lib/hooks/useNotifications';
+
+// Import all tab components
+import ConnectionsTab from '~/components/@settings/tabs/connections/ConnectionsTab';
+import DataTab from '~/components/@settings/tabs/data/DataTab';
+import DebugTab from '~/components/@settings/tabs/debug/DebugTab';
+import { EventLogsTab } from '~/components/@settings/tabs/event-logs/EventLogsTab';
+import FeaturesTab from '~/components/@settings/tabs/features/FeaturesTab';
+import NotificationsTab from '~/components/@settings/tabs/notifications/NotificationsTab';
+import ProfileTab from '~/components/@settings/tabs/profile/ProfileTab';
+import CloudProvidersTab from '~/components/@settings/tabs/providers/cloud/CloudProvidersTab';
+import LocalProvidersTab from '~/components/@settings/tabs/providers/local/LocalProvidersTab';
+import ServiceStatusTab from '~/components/@settings/tabs/providers/status/ServiceStatusTab';
+import SettingsTab from '~/components/@settings/tabs/settings/SettingsTab';
+import TaskManagerTab from '~/components/@settings/tabs/task-manager/TaskManagerTab';
+import UpdateTab from '~/components/@settings/tabs/update/UpdateTab';
+import BackgroundRays from '~/components/ui/BackgroundRays';
+import { DialogTitle } from '~/components/ui/Dialog';
 import { useConnectionStatus } from '~/lib/hooks/useConnectionStatus';
 import { useDebugStatus } from '~/lib/hooks/useDebugStatus';
+import { useFeatures } from '~/lib/hooks/useFeatures';
+import { useNotifications } from '~/lib/hooks/useNotifications';
+import { useUpdateCheck } from '~/lib/hooks/useUpdateCheck';
+import { profileStore } from '~/lib/stores/profile';
 import {
   tabConfigurationStore,
   developerModeStore,
   setDeveloperMode,
   resetTabConfiguration,
 } from '~/lib/stores/settings';
-import { profileStore } from '~/lib/stores/profile';
-import type { TabType, TabVisibilityConfig, Profile } from './types';
-import { TAB_LABELS, DEFAULT_TAB_CONFIG } from './constants';
-import { DialogTitle } from '~/components/ui/Dialog';
-import { AvatarDropdown } from './AvatarDropdown';
-import BackgroundRays from '~/components/ui/BackgroundRays';
-
-// Import all tab components
-import ProfileTab from '~/components/@settings/tabs/profile/ProfileTab';
-import SettingsTab from '~/components/@settings/tabs/settings/SettingsTab';
-import NotificationsTab from '~/components/@settings/tabs/notifications/NotificationsTab';
-import FeaturesTab from '~/components/@settings/tabs/features/FeaturesTab';
-import DataTab from '~/components/@settings/tabs/data/DataTab';
-import DebugTab from '~/components/@settings/tabs/debug/DebugTab';
-import { EventLogsTab } from '~/components/@settings/tabs/event-logs/EventLogsTab';
-import UpdateTab from '~/components/@settings/tabs/update/UpdateTab';
-import ConnectionsTab from '~/components/@settings/tabs/connections/ConnectionsTab';
-import CloudProvidersTab from '~/components/@settings/tabs/providers/cloud/CloudProvidersTab';
-import ServiceStatusTab from '~/components/@settings/tabs/providers/status/ServiceStatusTab';
-import LocalProvidersTab from '~/components/@settings/tabs/providers/local/LocalProvidersTab';
-import TaskManagerTab from '~/components/@settings/tabs/task-manager/TaskManagerTab';
+import { classNames } from '~/utils/classNames';
 
 interface ControlPanelProps {
   open: boolean;

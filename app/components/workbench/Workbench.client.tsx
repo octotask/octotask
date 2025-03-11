@@ -1,14 +1,14 @@
+import { Popover, Transition } from '@headlessui/react';
 import { useStore } from '@nanostores/react';
+import { diffLines, type Change } from 'diff';
 import { motion, type HTMLMotionProps, type Variants } from 'framer-motion';
 import { computed } from 'nanostores';
 import { memo, useCallback, useEffect, useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { Popover, Transition } from '@headlessui/react';
-import { diffLines, type Change } from 'diff';
-import { ActionRunner } from '~/lib/runtime/action-runner';
-import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
-import type { FileHistory } from '~/types/actions';
 import { DiffView } from './DiffView';
+import { EditorPanel } from './EditorPanel';
+import { Preview } from './Preview';
+import { PushToGitHubDialog } from '~/components/@settings/tabs/connections/components/PushToGitHubDialog';
 import {
   type OnChangeCallback as OnEditorChange,
   type OnScrollCallback as OnEditorScroll,
@@ -16,14 +16,14 @@ import {
 import { IconButton } from '~/components/ui/IconButton';
 import { PanelHeaderButton } from '~/components/ui/PanelHeaderButton';
 import { Slider, type SliderOptions } from '~/components/ui/Slider';
+import useViewport from '~/lib/hooks';
+import { ActionRunner } from '~/lib/runtime/action-runner';
 import { workbenchStore, type WorkbenchViewType } from '~/lib/stores/workbench';
+import type { FileHistory } from '~/types/actions';
 import { classNames } from '~/utils/classNames';
 import { cubicEasingFn } from '~/utils/easings';
+import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
 import { renderLogger } from '~/utils/logger';
-import { EditorPanel } from './EditorPanel';
-import { Preview } from './Preview';
-import useViewport from '~/lib/hooks';
-import { PushToGitHubDialog } from '~/components/@settings/tabs/connections/components/PushToGitHubDialog';
 
 interface WorkspaceProps {
   chatStarted?: boolean;

@@ -1,4 +1,3 @@
-import type { ProviderName, ProviderConfig, StatusCheckResult } from './types';
 import { BaseProviderChecker } from './base-provider';
 
 import { AmazonBedrockStatusChecker } from './providers/amazon-bedrock';
@@ -13,6 +12,7 @@ import { OpenRouterStatusChecker } from './providers/openrouter';
 import { PerplexityStatusChecker } from './providers/perplexity';
 import { TogetherStatusChecker } from './providers/together';
 import { XAIStatusChecker } from './providers/xai';
+import type { ProviderName, ProviderConfig, StatusCheckResult } from './types';
 
 export class ProviderStatusCheckerFactory {
   private static _providerConfigs: Record<ProviderName, ProviderConfig> = {

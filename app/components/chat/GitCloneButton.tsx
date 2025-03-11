@@ -1,15 +1,15 @@
-import ignore from 'ignore';
-import { useGit } from '~/lib/hooks/useGit';
 import type { Message } from 'ai';
-import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
-import { generateId } from '~/utils/fileUtils';
+import ignore from 'ignore';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
 import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
-import { classNames } from '~/utils/classNames';
 import { Button } from '~/components/ui/Button';
+import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
+import { useGit } from '~/lib/hooks/useGit';
 import type { IChatMetadata } from '~/lib/persistence/db';
+import { classNames } from '~/utils/classNames';
+import { generateId } from '~/utils/fileUtils';
+import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
 
 const IGNORE_PATTERNS = [
   'node_modules/**',

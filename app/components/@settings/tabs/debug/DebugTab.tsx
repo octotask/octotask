@@ -1,15 +1,15 @@
+import { useStore } from '@nanostores/react';
+import { jsPDF } from 'jspdf';
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { toast } from 'react-toastify';
-import { classNames } from '~/utils/classNames';
-import { logStore, type LogEntry } from '~/lib/stores/logs';
-import { useStore } from '@nanostores/react';
+import { Badge } from '~/components/ui/Badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/Collapsible';
+import { Dialog, DialogRoot, DialogTitle } from '~/components/ui/Dialog';
 import { Progress } from '~/components/ui/Progress';
 import { ScrollArea } from '~/components/ui/ScrollArea';
-import { Badge } from '~/components/ui/Badge';
-import { Dialog, DialogRoot, DialogTitle } from '~/components/ui/Dialog';
-import { jsPDF } from 'jspdf';
 import { useSettings } from '~/lib/hooks/useSettings';
+import { logStore, type LogEntry } from '~/lib/stores/logs';
+import { classNames } from '~/utils/classNames';
 
 interface SystemInfo {
   os: string;

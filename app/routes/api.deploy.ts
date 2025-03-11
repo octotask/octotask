@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { type ActionFunctionArgs, json } from '@remix-run/cloudflare';
 import type { NetlifySiteInfo } from '~/types/netlify';
 
@@ -5,15 +6,6 @@ interface DeployRequestBody {
   siteId?: string;
   files: Record<string, string>;
   chatId: string;
-}
-
-async function sha1(message: string) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-
-  return hashHex;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -112,7 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
     for (const [filePath, content] of Object.entries(files)) {
       // Ensure file path starts with a forward slash
       const normalizedPath = filePath.startsWith('/') ? filePath : '/' + filePath;
-      const hash = await sha1(content);
+      const hash = crypto.createHash('sha1').update(content).digest('hex');
       fileDigests[normalizedPath] = hash;
     }
 

@@ -7,7 +7,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
 import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
-import { useGit } from '~/lib/hooks/useGit';
+import { useGit } from '~/lib/git';
 import { useChatHistory } from '~/lib/persistence';
 import { createCommandsMessage, detectProjectCommands, escapeOctotaskTags } from '~/utils/projectCommands';
 

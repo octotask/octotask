@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
 import { Button } from '~/components/ui/Button';
 import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
-import { useGit } from '~/lib/hooks/useGit';
+import { useGit } from '~/lib/git';
 import type { IChatMetadata } from '~/lib/persistence/db';
 import { classNames } from '~/utils/classNames';
 import { generateId } from '~/utils/fileUtils';

@@ -91,7 +91,7 @@ importers:
         version: 1.2.1
       '@nanostores/react':
         specifier: ^0.7.3
-        version: 0.7.3(nanostores@0.10.3)(react@18.3.1)
+        version: 0.7.3(nanostores@0.11.4)(react@18.3.1)
       '@octokit/rest':
         specifier: ^21.0.2
         version: 21.1.1
@@ -231,8 +231,8 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1
       nanostores:
-        specifier: ^0.10.3
-        version: 0.10.3
+        specifier: ^0.11.4
+        version: 0.11.4
       ollama-ai-provider:
         specifier: ^1.2.0
         version: 1.2.0(zod@3.24.2)
@@ -5430,8 +5430,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanostores@0.10.3:
-    resolution: {integrity: sha512-Nii8O1XqmawqSCf9o2aWqVxhKRN01+iue9/VEd1TiJCr9VT5XxgPFbF1Edl1XN6pwJcZRsl8Ki+z01yb/T/C2g==}
+  nanostores@0.11.4:
+    resolution: {integrity: sha512-k1oiVNN4hDK8NcNERSZLQiMfRzEGtfnvZvdBvey3SQbgn8Dcrk0h1I6vpxApjb10PFUflZrgJ2WEZyJQ+5v7YQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
 
   natural-compare@1.4.0:
@@ -8865,9 +8865,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nanostores/react@0.7.3(nanostores@0.10.3)(react@18.3.1)':
+  '@nanostores/react@0.7.3(nanostores@0.11.4)(react@18.3.1)':
     dependencies:
-      nanostores: 0.10.3
+      nanostores: 0.11.4
       react: 18.3.1
 
   '@nodelib/fs.scandir@2.1.5':
@@ -13326,7 +13326,7 @@ snapshots:
 
   nanoid@3.3.9: {}
 
-  nanostores@0.10.3: {}
+  nanostores@0.11.4: {}
 
   natural-compare@1.4.0: {}
 

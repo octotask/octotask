@@ -1,17 +1,17 @@
 import { useStore } from '@nanostores/react';
-import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { NetlifyDeploymentLink } from '~/components/chat/NetlifyDeploymentLink.client';
 import useViewport from '~/lib/hooks';
-import { chatId } from '~/lib/persistence/useChatHistory'; // Add this import
-import type { ActionCallbackData } from '~/lib/runtime/message-parser';
 import { chatStore } from '~/lib/stores/chat';
 import { netlifyConnection } from '~/lib/stores/netlify';
-import { streamingState } from '~/lib/stores/streaming';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { webcontainer } from '~/lib/webcontainer';
 import { classNames } from '~/utils/classNames';
 import { path } from '~/utils/path';
+import { useEffect, useRef, useState } from 'react';
+import type { ActionCallbackData } from '~/lib/runtime/message-parser';
+import { chatId } from '~/lib/persistence/useChatHistory'; // Add this import
+import { streamingState } from '~/lib/stores/streaming';
+import { NetlifyDeploymentLink } from '~/components/chat/NetlifyDeploymentLink.client';
 
 interface HeaderActionButtonsProps {}
 

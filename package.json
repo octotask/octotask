@@ -6,6 +6,10 @@
   "sideEffects": false,
   "type": "module",
   "version": "0.0.7",
+  "author": {
+    "name": "octotask team",
+    "email": "admin@khulnasoft.com"
+  },
   "scripts": {
     "deploy": "npm run build && wrangler pages deploy",
     "build": "remix vite:build",

@@ -1,5 +1,5 @@
-import * as SwitchPrimitive from '@radix-ui/react-switch';
 import { memo } from 'react';
+import * as SwitchPrimitive from '@radix-ui/react-switch';
 import { classNames } from '~/utils/classNames';
 
 interface SwitchProps {

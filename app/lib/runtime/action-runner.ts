@@ -1,11 +1,11 @@
 import type { WebContainer } from '@webcontainer/api';
+import { path as nodePath } from '~/utils/path';
 import { atom, map, type MapStore } from 'nanostores';
-import type { ActionCallbackData } from './message-parser';
 import type { ActionAlert, OctotaskAction, FileHistory } from '~/types/actions';
 import { createScopedLogger } from '~/utils/logger';
-import { path as nodePath } from '~/utils/path';
-import type { OctotaskShell } from '~/utils/shell';
 import { unreachable } from '~/utils/unreachable';
+import type { ActionCallbackData } from './message-parser';
+import type { OctotaskShell } from '~/utils/shell';
 
 const logger = createScopedLogger('ActionRunner');
 

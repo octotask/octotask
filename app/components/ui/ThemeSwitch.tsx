@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react';
 import { memo, useEffect, useState } from 'react';
-import { IconButton } from './IconButton';
 import { themeStore, toggleTheme } from '~/lib/stores/theme';
+import { IconButton } from './IconButton';
 
 interface ThemeSwitchProps {
   className?: string;

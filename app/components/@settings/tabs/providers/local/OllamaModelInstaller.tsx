@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { classNames } from '~/utils/classNames';
 import { Progress } from '~/components/ui/Progress';
 import { useToast } from '~/components/ui/use-toast';
 import { useSettings } from '~/lib/hooks/useSettings';
-import { classNames } from '~/utils/classNames';
 
 interface OllamaModelInstallerProps {
   onModelInstalled: () => void;

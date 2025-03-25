@@ -3,29 +3,29 @@
  * Preventing TS checks with files presented in the video for a better presentation.
  */
 import { useStore } from '@nanostores/react';
-import { useSearchParams } from '@remix-run/react';
 import type { Message } from 'ai';
 import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
-import Cookies from 'js-cookie';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
-import { BaseChat } from './BaseChat';
 import { useMessageParser, usePromptEnhancer, useShortcuts, useSnapScroll } from '~/lib/hooks';
-import { useSettings } from '~/lib/hooks/useSettings';
 import { description, useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
-import { logStore } from '~/lib/stores/logs';
-import { streamingState } from '~/lib/stores/streaming';
 import { workbenchStore } from '~/lib/stores/workbench';
-import type { ProviderInfo } from '~/types/model';
 import { DEFAULT_MODEL, DEFAULT_PROVIDER, PROMPT_COOKIE_KEY, PROVIDER_LIST } from '~/utils/constants';
-import { debounce } from '~/utils/debounce';
 import { cubicEasingFn } from '~/utils/easings';
-import { filesToArtifacts } from '~/utils/fileUtils';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
+import { BaseChat } from './BaseChat';
+import Cookies from 'js-cookie';
+import { debounce } from '~/utils/debounce';
+import { useSettings } from '~/lib/hooks/useSettings';
+import type { ProviderInfo } from '~/types/model';
+import { useSearchParams } from '@remix-run/react';
 import { createSampler } from '~/utils/sampler';
 import { getTemplates, selectStarterTemplate } from '~/utils/selectStarterTemplate';
+import { logStore } from '~/lib/stores/logs';
+import { streamingState } from '~/lib/stores/streaming';
+import { filesToArtifacts } from '~/utils/fileUtils';
 
 const toastAnimation = cssTransition({
   enter: 'animated fadeInRight',
@@ -323,7 +323,16 @@ export const ChatImpl = memo(
                 {
                   id: `1-${new Date().getTime()}`,
                   role: 'user',
-                  content: messageContent,
+                  content: [
+                    {
+                      type: 'text',
+                      text: `[Model: ${model}]\n\n[Provider: ${provider.name}]\n\n${messageContent}`,
+                    },
+                    ...imageDataList.map((imageData) => ({
+                      type: 'image',
+                      image: imageData,
+                    })),
+                  ] as any,
                 },
                 {
                   id: `2-${new Date().getTime()}`,
@@ -338,6 +347,15 @@ export const ChatImpl = memo(
                 },
               ]);
               reload();
+              setInput('');
+              Cookies.remove(PROMPT_COOKIE_KEY);
+
+              setUploadedFiles([]);
+              setImageDataList([]);
+
+              resetEnhancer();
+
+              textareaRef.current?.blur();
               setFakeLoading(false);
 
               return;
@@ -364,6 +382,15 @@ export const ChatImpl = memo(
         ]);
         reload();
         setFakeLoading(false);
+        setInput('');
+        Cookies.remove(PROMPT_COOKIE_KEY);
+
+        setUploadedFiles([]);
+        setImageDataList([]);
+
+        resetEnhancer();
+
+        textareaRef.current?.blur();
 
         return;
       }

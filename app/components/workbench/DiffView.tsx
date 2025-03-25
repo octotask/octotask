@@ -1,16 +1,16 @@
-import { useStore } from '@nanostores/react';
-import { diffLines, type Change } from 'diff';
 import { memo, useMemo, useState, useEffect, useCallback } from 'react';
-import { getHighlighter } from 'shiki';
+import { useStore } from '@nanostores/react';
+import { workbenchStore } from '~/lib/stores/workbench';
+import type { FileMap } from '~/lib/stores/files';
 import type { EditorDocument } from '~/components/editor/codemirror/CodeMirrorEditor';
-import { ActionRunner } from '~/lib/runtime/action-runner'; // Keep ActionRunner here
-import type { FileMap } from '~/lib/stores/files'; // Move FileMap import after ActionRunner import
-import { themeStore } from '~/lib/stores/theme'; // Move themeStore import here
-import { workbenchStore } from '~/lib/stores/workbench'; // Keep workbenchStore here
+import { diffLines, type Change } from 'diff';
+import { getHighlighter } from 'shiki';
 import '~/styles/diff-view.css';
-import type { FileHistory } from '~/types/actions';
 import { diffFiles, extractRelativePath } from '~/utils/diff';
+import { ActionRunner } from '~/lib/runtime/action-runner';
+import type { FileHistory } from '~/types/actions';
 import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
+import { themeStore } from '~/lib/stores/theme';
 
 interface CodeComparisonProps {
   beforeCode: string;
@@ -556,7 +556,25 @@ const InlineDiffComparison = memo(({ beforeCode, afterCode, filename, language }
   useEffect(() => {
     getHighlighter({
       themes: ['github-dark', 'github-light'],
-      langs: ['typescript', 'javascript', 'json', 'html', 'css', 'jsx', 'tsx'],
+      langs: [
+        'typescript',
+        'javascript',
+        'json',
+        'html',
+        'css',
+        'jsx',
+        'tsx',
+        'python',
+        'php',
+        'java',
+        'c',
+        'cpp',
+        'csharp',
+        'go',
+        'ruby',
+        'rust',
+        'plaintext',
+      ],
     }).then(setHighlighter);
   }, []);
 

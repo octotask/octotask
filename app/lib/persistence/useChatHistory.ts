@@ -1,8 +1,10 @@
 import { useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
-import { generateId, type JSONValue, type Message } from 'ai';
-import { atom } from 'nanostores';
 import { useState, useEffect, useCallback } from 'react';
+import { atom } from 'nanostores';
+import { generateId, type JSONValue, type Message } from 'ai';
 import { toast } from 'react-toastify';
+import { workbenchStore } from '~/lib/stores/workbench';
+import { logStore } from '~/lib/stores/logs'; // Import logStore
 import {
   getMessages,
   getNextId,
@@ -13,13 +15,11 @@ import {
   createChatFromMessages,
   type IChatMetadata,
 } from './db';
-import type { Snapshot } from './types';
 import type { FileMap } from '~/lib/stores/files';
-import { logStore } from '~/lib/stores/logs'; // Import logStore
-import { workbenchStore } from '~/lib/stores/workbench';
+import type { Snapshot } from './types';
 import { webcontainer } from '~/lib/webcontainer';
-import type { ContextAnnotation } from '~/types/context';
 import { createCommandsMessage, detectProjectCommands } from '~/utils/projectCommands';
+import type { ContextAnnotation } from '~/types/context';
 
 export interface ChatHistoryItem {
   id: string;

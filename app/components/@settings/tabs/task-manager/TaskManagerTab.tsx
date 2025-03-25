@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { classNames } from '~/utils/classNames';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,14 +12,10 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import * as React from 'react';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { Line } from 'react-chartjs-2';
 import { toast } from 'react-toastify'; // Import toast
-import { useStore } from 'zustand';
 import { useUpdateCheck } from '~/lib/hooks/useUpdateCheck';
 import { tabConfigurationStore, type TabConfig } from '~/lib/stores/tabConfigurationStore';
-import { classNames } from '~/utils/classNames';
+import { useStore } from 'zustand';
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);

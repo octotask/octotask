@@ -1,4 +1,4 @@
-appId: com.khulnasoft.octotask
+appId: com.stackblitz.octotask
 productName: Octotask Local
 directories:
   buildResources: build

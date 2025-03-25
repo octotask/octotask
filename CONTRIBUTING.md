@@ -41,8 +41,6 @@ This project is governed by our **Code of Conduct**. By participating, you agree
 
 ### 3️⃣ Join as a Core Contributor
 
-Interested in maintaining and growing the project? Fill out our [Contributor Application Form](https://forms.gle/TBSteXSDCtBDwr5m7).
-
 ---
 
 ## ✅ Pull Request Guidelines
@@ -153,7 +151,7 @@ npm run dockerbuild
 **Option 2: Direct Docker Build Command**
 
 ```bash
-docker build . --target octotask-ai-development
+docker build . --target bolt-ai-development
 ```
 
 **Option 3: Docker Compose Profile**
@@ -165,7 +163,7 @@ docker compose --profile development up
 #### Running the Development Container
 
 ```bash
-docker run -p 5173:5173 --env-file .env.local octotask-ai:development
+docker run -p 5173:5173 --env-file .env.local bolt-ai:development
 ```
 
 ---
@@ -184,7 +182,7 @@ npm run dockerbuild:prod
 **Option 2: Direct Docker Build Command**
 
 ```bash
-docker build . --target octotask-ai-production
+docker build . --target bolt-ai-production
 ```
 
 **Option 3: Docker Compose Profile**
@@ -196,7 +194,7 @@ docker compose --profile production up
 #### Running the Production Container
 
 ```bash
-docker run -p 5173:5173 --env-file .env.local octotask-ai:production
+docker run -p 5173:5173 --env-file .env.local bolt-ai:production
 ```
 
 ---

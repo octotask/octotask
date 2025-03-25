@@ -1,16 +1,18 @@
 # octotask
 
-[![octotask: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://octotask.khulnasoft.com)
+[![octotask: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://octotask)
 
-Welcome to octotask, the official open source version of Bolt.new (previously known as KhulnaSoft and octotask ANY LLM), which allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, or Groq models - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
+Welcome to octotask, the official open source version of Bolt.new, which allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, or Groq models - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
 
 -----
 Check the [octotask Docs](https://octotask.github.io/octotask/) for more offical installation instructions and more informations.
 
 -----
-Also [this pinned post in our community](https://octotask.khulnasoft.com/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
+Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
 
-We have also launched an experimental agent called the "octotask Expert" that can answer common questions about octotask. Find it here on the [KhulnaSoft Live Agent Studio](https://studio.khulnasoft.com/).
+We have also launched an experimental agent called the "octotask Expert" that can answer common questions about octotask. Find it here on the [oTTomator Live Agent Studio](https://studio.ottomator.ai/).
+
+octotask was originally started by [Cole Medin](https://www.youtube.com/@ColeMedin) but has quickly grown into a massive community effort to build the BEST open source AI coding assistant!
 
 ## Table of Contents
 
@@ -26,15 +28,72 @@ We have also launched an experimental agent called the "octotask Expert" that ca
 
 ## Join the community
 
-[Join the octotask community here, in the KhulnaSoft Think Tank!](https://octotask.khulnasoft.com)
+[Join the octotask community here, in the oTTomator Think Tank!](https://thinktank.ottomator.ai)
 
 ## Project management
 
-OctoTask is a community effort! Still, the core team of contributors aims at organizing the project in way that allows
+Bolt.diy is a community effort! Still, the core team of contributors aims at organizing the project in way that allows
 you to understand where the current areas of focus are.
 
 If you want to know what we are working on, what we are planning to work on, or if you want to contribute to the
 project, please check the [project management guide](./PROJECT.md) to get started easily.
+
+## Requested Additions
+
+- ✅ OpenRouter Integration (@coleam00)
+- ✅ Gemini Integration (@jonathands)
+- ✅ Autogenerate Ollama models from what is downloaded (@yunatamos)
+- ✅ Filter models by provider (@jasonm23)
+- ✅ Download project as ZIP (@fabwaseem)
+- ✅ Improvements to the main bolt.new prompt in `app\lib\.server\llm\prompts.ts` (@kofi-bhr)
+- ✅ DeepSeek API Integration (@zenith110)
+- ✅ Mistral API Integration (@ArulGandhi)
+- ✅ "Open AI Like" API Integration (@ZerxZ)
+- ✅ Ability to sync files (one way sync) to local folder (@muzafferkadir)
+- ✅ Containerize the application with Docker for easy installation (@aaronbolton)
+- ✅ Publish projects directly to GitHub (@goncaloalves)
+- ✅ Ability to enter API keys in the UI (@ali00209)
+- ✅ xAI Grok Beta Integration (@milutinke)
+- ✅ LM Studio Integration (@karrot0)
+- ✅ HuggingFace Integration (@ahsan3219)
+- ✅ Bolt terminal to see the output of LLM run commands (@thecodacus)
+- ✅ Streaming of code output (@thecodacus)
+- ✅ Ability to revert code to earlier version (@wonderwhy-er)
+- ✅ Chat history backup and restore functionality (@sidbetatester)
+- ✅ Cohere Integration (@hasanraiyan)
+- ✅ Dynamic model max token length (@hasanraiyan)
+- ✅ Better prompt enhancing (@SujalXplores)
+- ✅ Prompt caching (@SujalXplores)
+- ✅ Load local projects into the app (@wonderwhy-er)
+- ✅ Together Integration (@mouimet-infinisoft)
+- ✅ Mobile friendly (@qwikode)
+- ✅ Better prompt enhancing (@SujalXplores)
+- ✅ Attach images to prompts (@atrokhym)(@stijnus)
+- ✅ Added Git Clone button (@thecodacus)
+- ✅ Git Import from url (@thecodacus)
+- ✅ PromptLibrary to have different variations of prompts for different use cases (@thecodacus)
+- ✅ Detect package.json and commands to auto install & run preview for folder and git import (@wonderwhy-er)
+- ✅ Selection tool to target changes visually (@emcconnell)
+- ✅ Detect terminal Errors and ask bolt to fix it (@thecodacus)
+- ✅ Detect preview Errors and ask bolt to fix it (@wonderwhy-er)
+- ✅ Add Starter Template Options (@thecodacus)
+- ✅ Perplexity Integration (@meetpateltech)
+- ✅ AWS Bedrock Integration (@kunjabijukchhe)
+- ✅ Add a "Diff View" to see the changes (@toddyclipsgg)
+- ⬜ **HIGH PRIORITY** - Prevent bolt from rewriting files as often (file locking and diffs)
+- ⬜ **HIGH PRIORITY** - Better prompting for smaller LLMs (code window sometimes doesn't start)
+- ⬜ **HIGH PRIORITY** - Run agents in the backend as opposed to a single model call
+- ✅ Deploy directly to Netlify (@xKevIsDev)
+- ⬜ Supabase Integration
+- ⬜ Have LLM plan the project in a MD file for better results/transparency
+- ⬜ VSCode Integration with git-like confirmations
+- ⬜ Upload documents for knowledge - UI design templates, a code base to reference coding style, etc.
+- ⬜ Voice prompting
+- ⬜ Azure Open AI API Integration
+- ⬜ Vertex AI Integration
+- ⬜ Granite Integration
+- ✅ Popout Window for Web Container(@stijnus)
+- ✅ Ability to change Popout window size (@stijnus)
 
 ## Features
 
@@ -43,14 +102,15 @@ project, please check the [project management guide](./PROJECT.md) to get starte
 - **Attach images to prompts** for better contextual understanding.
 - **Integrated terminal** to view output of LLM-run commands.
 - **Revert code to earlier versions** for easier debugging and quicker changes.
-- **Download projects as ZIP** for easy portability.
+- **Download projects as ZIP** for easy portability Sync to a folder on the host.
 - **Integration-ready Docker support** for a hassle-free setup.
+- **Deploy** directly to **Netlify**
 
 ## Setup
 
 If you're new to installing software from GitHub, don't worry! If you encounter any issues, feel free to submit an "issue" using the provided links or improve this documentation by forking the repository, editing the instructions, and submitting a pull request. The following instruction will help you get the stable branch up and running on your local machine in no time.
 
-Let's get you up and running with the stable version of OctoTASK!
+Let's get you up and running with the stable version of Bolt.DIY!
 
 ## Quick Download
 
@@ -85,7 +145,7 @@ Node.js is required to run the application.
 
 ## Running the Application
 
-You have two options for running OctoTASK: directly on your machine or using Docker.
+You have two options for running Bolt.DIY: directly on your machine or using Docker.
 
 ### Option 1: Direct Installation (Recommended for Beginners)
 
@@ -136,7 +196,7 @@ This option requires some familiarity with Docker but provides a more isolated e
 
 ### Adding Your API Keys
 
-Setting up your API keys in OctoTASK is straightforward:
+Setting up your API keys in Bolt.DIY is straightforward:
 
 1. Open the home page (main interface)
 2. Select your desired provider from the dropdown menu
@@ -183,8 +243,7 @@ This method is recommended for developers who want to:
 1. **Clone the Repository**:
 
    ```bash
-   # Using HTTPS
-   git clone https://github.com/octotask/octotask.git
+   git clone -b stable https://github.com/octotask/octotask.git
    ```
 
 2. **Navigate to Project Directory**:
@@ -193,20 +252,30 @@ This method is recommended for developers who want to:
    cd octotask
    ```
 
-3. **Switch to the Main Branch**:
-   ```bash
-   git checkout main
-   ```
-4. **Install Dependencies**:
+3. **Install Dependencies**:
 
    ```bash
    pnpm install
    ```
 
-5. **Start the Development Server**:
+4. **Start the Development Server**:
    ```bash
    pnpm run dev
    ```
+
+5. **(OPTIONAL)** Switch to the Main Branch if you want to use pre-release/testbranch:
+   ```bash
+   git checkout main
+   pnpm install
+   pnpm run dev
+   ```
+  Hint: Be aware that this can have beta-features and more likely got bugs than the stable release
+
+>**Open the WebUI to test (Default: http://localhost:5173)**
+>   - Beginngers: 
+>     - Try to use a sophisticated Provider/Model like Anthropic with Claude Sonnet 3.x Models to get best results
+>     - Explanation: The System Prompt currently implemented in octotask cant cover the best performance for all providers and models out there. So it works better with some models, then other, even if the models itself are perfect for >programming
+>     - Future: Planned is a Plugin/Extentions-Library so there can be different System Prompts for different Models, which will help to get better results
 
 #### Staying Updated
 
@@ -221,7 +290,7 @@ To get the latest changes from the repository:
 2. **Pull Latest Updates**:
 
    ```bash
-   git pull origin main
+   git pull 
    ```
 
 3. **Update Dependencies**:
@@ -291,3 +360,9 @@ Explore upcoming features and priorities on our [Roadmap](https://roadmap.sh/r/o
 ## FAQ
 
 For answers to common questions, issues, and to see a list of recommended models, visit our [FAQ Page](FAQ.md).
+
+
+# Licensing
+**Who needs a commercial WebContainer API license?**
+
+octotask source code is distributed as MIT, but it uses WebContainers API that [requires licensing](https://webcontainers.io/enterprise) for production usage in a commercial, for-profit setting. (Prototypes or POCs do not require a commercial license.) If you're using the API to meet the needs of your customers, prospective customers, and/or employees, you need a license to ensure compliance with our Terms of Service. Usage of the API in violation of these terms may result in your access being revoked.

@@ -1,10 +1,10 @@
-import * as ContextMenu from '@radix-ui/react-context-menu';
-import { diffLines, type Change } from 'diff';
 import { memo, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { FileMap } from '~/lib/stores/files';
-import type { FileHistory } from '~/types/actions';
 import { classNames } from '~/utils/classNames';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
+import * as ContextMenu from '@radix-ui/react-context-menu';
+import type { FileHistory } from '~/types/actions';
+import { diffLines, type Change } from 'diff';
 
 const logger = createScopedLogger('FileTree');
 

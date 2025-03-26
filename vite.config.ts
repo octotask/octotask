@@ -58,7 +58,7 @@ const getPackageJson = () => {
   } catch {
     return {
       name: 'octotask',
-      description: 'A DIY LLM interface',
+      description: 'A LLM interface',
       license: 'MIT',
       dependencies: {},
       devDependencies: {},

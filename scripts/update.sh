@@ -3,7 +3,7 @@
 # Exit on any error
 set -e
 
-echo "Starting Octotask.DIY update process..."
+echo "Starting Octotask update process..."
 
 # Get the current directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

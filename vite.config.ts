@@ -11,7 +11,6 @@ import { join } from 'path';
 
 dotenv.config();
 
-// Get detailed git info with fallbacks
 const getGitInfo = () => {
   try {
     return {
@@ -40,7 +39,6 @@ const getGitInfo = () => {
   }
 };
 
-// Read package.json with detailed dependency info
 const getPackageJson = () => {
   try {
     const pkgPath = join(process.cwd(), 'package.json');
@@ -58,7 +56,7 @@ const getPackageJson = () => {
   } catch {
     return {
       name: 'octotask',
-      description: 'A LLM interface',
+      description: 'A OctoTask LLM interface',
       license: 'MIT',
       dependencies: {},
       devDependencies: {},
@@ -89,7 +87,6 @@ export default defineConfig((config) => {
       __PKG_DEV_DEPENDENCIES: JSON.stringify(pkg.devDependencies),
       __PKG_PEER_DEPENDENCIES: JSON.stringify(pkg.peerDependencies),
       __PKG_OPTIONAL_DEPENDENCIES: JSON.stringify(pkg.optionalDependencies),
-      // Define global values
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
     build: {
@@ -113,18 +110,19 @@ export default defineConfig((config) => {
     resolve: {
       alias: {
         buffer: 'vite-plugin-node-polyfills/polyfills/buffer',
+        crypto: 'crypto-browserify',
+        stream: 'stream-browserify',
       },
     },
     plugins: [
       nodePolyfills({
-        include: ['buffer', 'process', 'util', 'stream'],
+        include: ['buffer', 'process', 'util', 'stream', 'crypto'],
         globals: {
           Buffer: true,
           process: true,
           global: true,
         },
         protocolImports: true,
-        // Exclude Node.js modules that shouldn't be polyfilled in Cloudflare
         exclude: ['child_process', 'fs', 'path'],
       }),
       {
@@ -136,6 +134,8 @@ export default defineConfig((config) => {
               map: null,
             };
           }
+
+          return null;
         },
       },
       config.mode !== 'test' && remixCloudflareDevProxy(),
@@ -182,7 +182,7 @@ function chrome129IssuePlugin() {
           if (version === 129) {
             res.setHeader('content-type', 'text/html');
             res.end(
-              '<body><h1>Please use Chrome Canary for testing.</h1><p>Chrome 129 has an issue with JavaScript modules & Vite local development, see <a href="https://github.com/stackblitz/octotask.new/issues/86#issuecomment-2395519258">for more information.</a></p><p><b>Note:</b> This only impacts <u>local development</u>. `pnpm run build` and `pnpm run start` will work fine in this browser.</p></body>',
+              '<body><h1>Please use Chrome Canary for testing.</h1><p>Chrome 129 has an issue with JavaScript modules & Vite local development, see <a href="https://github.com/octotask/octotask/issues/86#issuecomment-2395519258">for more information.</a></p><p><b>Note:</b> This only impacts <u>local development</u>. `pnpm run build` and `pnpm run start` will work fine in this browser.</p></body>',
             );
 
             return;

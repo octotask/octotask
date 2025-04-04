@@ -23,14 +23,6 @@ octotask allows you to choose the LLM that you use for each prompt! Currently, y
 
 ---
 
-## Join the community!
-
-[Join the community!](https://thinktank.ottomator.ai)
-
-Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
-
----
-
 ## Features
 
 - **AI-powered full-stack web development** directly in your browser.
@@ -251,10 +243,10 @@ This will start the Remix Vite development server. You will need Google Chrome C
 
 Here are some tips to get the most out of octotask:
 
-- **Be specific about your stack**: If you want to use specific frameworks or libraries (like Astro, Tailwind, ShadCN, or any other popular JavaScript framework), mention them in your initial prompt to ensure Bolt scaffolds the project accordingly.
+- **Be specific about your stack**: If you want to use specific frameworks or libraries (like Astro, Tailwind, ShadCN, or any other popular JavaScript framework), mention them in your initial prompt to ensure Octotask scaffolds the project accordingly.
 
 - **Use the enhance prompt icon**: Before sending your prompt, try clicking the 'enhance' icon to have the AI model help you refine your prompt, then edit the results before submitting.
 
-- **Scaffold the basics first, then add features**: Make sure the basic structure of your application is in place before diving into more advanced functionality. This helps Bolt understand the foundation of your project and ensure everything is wired up right before building out more advanced functionality.
+- **Scaffold the basics first, then add features**: Make sure the basic structure of your application is in place before diving into more advanced functionality. This helps Octotask understand the foundation of your project and ensure everything is wired up right before building out more advanced functionality.
 
-- **Batch simple instructions**: Save time by combining simple instructions into one message. For example, you can ask Bolt to change the color scheme, add mobile responsiveness, and restart the dev server, all in one go saving you time and reducing API credit consumption significantly.
+- **Batch simple instructions**: Save time by combining simple instructions into one message. For example, you can ask Octotask to change the color scheme, add mobile responsiveness, and restart the dev server, all in one go saving you time and reducing API credit consumption significantly.

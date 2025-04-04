@@ -1,8 +1,8 @@
-import { GitBranch } from '@phosphor-icons/react';
-import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import type { GitHubRepoInfo } from '~/components/@settings/tabs/connections/types/GitHub';
+import * as Dialog from '@radix-ui/react-dialog';
 import { classNames } from '~/utils/classNames';
+import type { GitHubRepoInfo } from '~/components/@settings/tabs/connections/types/GitHub';
+import { GitBranch } from '@phosphor-icons/react';
 
 interface GitHubBranch {
   name: string;

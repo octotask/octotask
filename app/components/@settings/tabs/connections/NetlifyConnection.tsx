@@ -1,8 +1,9 @@
-import { useStore } from '@nanostores/react';
-import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { useStore } from '@nanostores/react';
 import { logStore } from '~/lib/stores/logs';
+import { classNames } from '~/utils/classNames';
 import {
   netlifyConnection,
   isConnecting,
@@ -11,7 +12,6 @@ import {
   fetchNetlifyStats,
 } from '~/lib/stores/netlify';
 import type { NetlifyUser } from '~/types/netlify';
-import { classNames } from '~/utils/classNames';
 
 export default function NetlifyConnection() {
   const connection = useStore(netlifyConnection);

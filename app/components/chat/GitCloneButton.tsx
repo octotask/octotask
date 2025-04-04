@@ -1,15 +1,15 @@
-import type { Message } from 'ai';
 import ignore from 'ignore';
+import { useGit } from '~/lib/hooks/useGit';
+import type { Message } from 'ai';
+import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
+import { generateId } from '~/utils/fileUtils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
-import { Button } from '~/components/ui/Button';
 import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
-import { useGit } from '~/lib/hooks/useGit';
-import type { IChatMetadata } from '~/lib/persistence/db';
+import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
 import { classNames } from '~/utils/classNames';
-import { generateId } from '~/utils/fileUtils';
-import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
+import { Button } from '~/components/ui/Button';
+import type { IChatMetadata } from '~/lib/persistence/db';
 
 const IGNORE_PATTERNS = [
   'node_modules/**',

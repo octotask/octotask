@@ -5,7 +5,7 @@ far from being enterprisy- it's still anarchy all over the place 😉
 
 But we need to organize ourselves somehow, right?
 
-> tl;dr: We've got a project board with epics and features. We use PRs as change log and as materialized features. Find it [here](https://github.com/orgs/octotask/projects/1).
+> tl;dr: We've got a project board with epics and features. We use PRs as change log and as materialized features. Find it [here](https://github.com/orgs/stackblitz-labs/projects/4).
 
 Here's how we structure long-term vision, mid-term capabilities of the software and short term improvements.
 

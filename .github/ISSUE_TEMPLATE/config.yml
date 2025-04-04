@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Octotask.new related issues
-    url: https://github.com/octotask/octotask.new/issues/new/choose
+    url: https://github.com/stackblitz/octotask.new/issues/new/choose
     about: Report issues related to Octotask.new (not Octotask)
   - name: Chat
-    url: https://octotask.khulnasoft.com
+    url: https://thinktank.ottomator.ai
     about: Ask questions and discuss with other Octotask users.

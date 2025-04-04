@@ -64,7 +64,7 @@ FROM base AS octotask-ai-development
 
 # Define the same environment variables for development
 ARG GROQ_API_KEY
-ARG HuggingFace
+ARG HuggingFace 
 ARG OPENAI_API_KEY
 ARG ANTHROPIC_API_KEY
 ARG OPEN_ROUTER_API_KEY

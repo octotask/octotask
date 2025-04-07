@@ -3,7 +3,7 @@
 ## Models and Setup
 
 ??? question "What are the best models for octotask?"
-For the best experience with octotask, we recommend using the following models:
+For the best experience with octotask.diy, we recommend using the following models:
 
     - **Claude 3.5 Sonnet (old)**: Best overall coder, providing excellent results across all use cases
     - **Gemini 2.0 Flash**: Exceptional speed while maintaining good performance
@@ -13,18 +13,18 @@ For the best experience with octotask, we recommend using the following models:
     - **Qwen 2.5 Coder 32b**: Best model for self-hosting with reasonable hardware requirements
 
     !!! warning
-        Models with less than 7b parameters typically lack the capability to properly interact with octotask!
+        Models with less than 7b parameters typically lack the capability to properly interact with bolt!
 
 ## Best Practices
 
-??? question "How do I get the best results with octotask?" - **Be specific about your stack**:  
- Mention the frameworks or libraries you want to use (e.g., Astro, Tailwind, ShadCN) in your initial prompt. This ensures that octotask scaffolds the project according to your preferences.
+??? question "How do I get the best results with octotask.diy?" - **Be specific about your stack**:  
+ Mention the frameworks or libraries you want to use (e.g., Astro, Tailwind, ShadCN) in your initial prompt. This ensures that octotask.diy scaffolds the project according to your preferences.
 
     - **Use the enhance prompt icon**:
       Before sending your prompt, click the *enhance* icon to let the AI refine your prompt. You can edit the suggested improvements before submitting.
 
     - **Scaffold the basics first, then add features**:
-      Ensure the foundational structure of your application is in place before introducing advanced functionality. This helps octotask establish a solid base to build on.
+      Ensure the foundational structure of your application is in place before introducing advanced functionality. This helps octotask.diy establish a solid base to build on.
 
     - **Batch simple instructions**:
       Combine simple tasks into a single prompt to save time and reduce API credit consumption. For example:
@@ -35,9 +35,6 @@ For the best experience with octotask, we recommend using the following models:
 ??? question "How do I contribute to octotask?"
 Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to get involved!
 
-??? question "What are the future plans for octotask?"
-Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
- New features and improvements are on the way!
 
 ??? question "Why are there so many open issues/pull requests?"
 octotask began as a small showcase project on @ColeMedin's YouTube channel to explore editing open-source projects with local LLMs. However, it quickly grew into a massive community effort!
@@ -83,12 +80,3 @@ If you are getting this, you are probably on Windows. The fix is generally to up
 ??? error "Miniflare or Wrangler errors in Windows"
 You will need to make sure you have the latest version of Visual Studio C++ installed (14.40.33816), more information here <a href="https://github.com/octotask/octotask/issues/19">Github Issues</a>
 
----
-
-## Get Help & Support
-
-!!! tip "Community Support"
-[Join the octotask Community](https://thinktank.ottomator.ai/c/octotask/17){target=\_blank} for discussions and help
-
-!!! bug "Report Issues"
-[Open an Issue](https://github.com/octotask/octotask/issues/19){target=\_blank} in our GitHub Repository

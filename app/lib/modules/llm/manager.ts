@@ -1,7 +1,7 @@
-import { BaseProvider } from './base-provider';
-import * as providers from './registry';
-import type { ModelInfo, ProviderInfo } from './types';
 import type { IProviderSetting } from '~/types/model';
+import { BaseProvider } from './base-provider';
+import type { ModelInfo, ProviderInfo } from './types';
+import * as providers from './registry';
 import { createScopedLogger } from '~/utils/logger';
 
 const logger = createScopedLogger('LLMManager');

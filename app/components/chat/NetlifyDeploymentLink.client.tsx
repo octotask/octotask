@@ -1,8 +1,8 @@
 import { useStore } from '@nanostores/react';
+import { netlifyConnection, fetchNetlifyStats } from '~/lib/stores/netlify';
+import { chatId } from '~/lib/persistence/useChatHistory';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useEffect } from 'react';
-import { chatId } from '~/lib/persistence/useChatHistory';
-import { netlifyConnection, fetchNetlifyStats } from '~/lib/stores/netlify';
 
 export function NetlifyDeploymentLink() {
   const connection = useStore(netlifyConnection);
@@ -14,7 +14,7 @@ export function NetlifyDeploymentLink() {
     }
   }, [connection.token, currentChatId]);
 
-  const deployedSite = connection.stats?.sites?.find((site) => site.name.includes(`octotask-diy-${currentChatId}`));
+  const deployedSite = connection.stats?.sites?.find((site) => site.name.includes(`octotask-${currentChatId}`));
 
   if (!deployedSite) {
     return null;

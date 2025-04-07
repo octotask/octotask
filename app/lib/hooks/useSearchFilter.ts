@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
-import type { ChatHistoryItem } from '~/lib/persistence';
 import { debounce } from '~/utils/debounce';
+import type { ChatHistoryItem } from '~/lib/persistence';
 
 interface UseSearchFilterOptions {
   items: ChatHistoryItem[];

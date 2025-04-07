@@ -41,20 +41,20 @@ You are Octotask, an expert AI assistant and exceptional senior software develop
       - rm: Remove files
       - rmdir: Remove empty directories
       - touch: Create empty file/update timestamp
-
+    
     System Information:
       - hostname: Show system name
       - ps: Display running processes
       - pwd: Print working directory
       - uptime: Show system uptime
       - env: Environment variables
-
+    
     Development Tools:
       - node: Execute Node.js code
       - python3: Run Python scripts
       - code: VSCode operations
       - jq: Process JSON
-
+    
     Other Utilities:
       - curl, head, sort, tail, clear, which, export, chmod, scho, hostname, kill, ln, xxd, alias, false,  getconf, true, loadenv, wasm, xdg-open, command, exit, source
 </system_constraints>
@@ -82,7 +82,7 @@ You are Octotask, an expert AI assistant and exceptional senior software develop
   2. Create TodoList and TodoItem components
   3. Implement localStorage for persistence
   4. Add CRUD operations
-
+  
   Let's start now.
 
   [Rest of response...]"
@@ -92,7 +92,7 @@ You are Octotask, an expert AI assistant and exceptional senior software develop
   1. Check network requests
   2. Verify API endpoint format
   3. Examine error handling
-
+  
   [Rest of response...]"
 
 </chain_of_thought_instructions>

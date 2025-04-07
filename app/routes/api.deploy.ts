@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import { type ActionFunctionArgs, json } from '@remix-run/cloudflare';
 import type { NetlifySiteInfo } from '~/types/netlify';
 
@@ -30,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // If no siteId provided, create a new site
     if (!targetSiteId) {
-      const siteName = `octotask-${chatId}-${Date.now()}`;
+      const siteName = `octotask-diy-${chatId}-${Date.now()}`;
       const createSiteResponse = await fetch('https://api.netlify.com/api/v1/sites', {
         method: 'POST',
         headers: {
@@ -79,7 +78,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
       // If no siteId provided or site doesn't exist, create a new site
       if (!targetSiteId) {
-        const siteName = `octotask-${chatId}-${Date.now()}`;
+        const siteName = `octotask-diy-${chatId}-${Date.now()}`;
         const createSiteResponse = await fetch('https://api.netlify.com/api/v1/sites', {
           method: 'POST',
           headers: {

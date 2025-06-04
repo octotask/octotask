@@ -5,6 +5,8 @@ import Popover from '~/components/ui/Popover';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { WORK_DIR } from '~/utils/constants';
 import WithTooltip from '~/components/ui/Tooltip';
+import type { Message } from 'ai';
+import type { ProviderInfo } from '~/types/model';
 
 interface AssistantMessageProps {
   content: string;
@@ -12,6 +14,11 @@ interface AssistantMessageProps {
   messageId?: string;
   onRewind?: (messageId: string) => void;
   onFork?: (messageId: string) => void;
+  append?: (message: Message) => void;
+  chatMode?: 'discuss' | 'build';
+  setChatMode?: (mode: 'discuss' | 'build') => void;
+  model?: string;
+  provider?: ProviderInfo;
 }
 
 function openArtifactInWorkbench(filePath: string) {
@@ -38,32 +45,44 @@ function normalizedFilePath(path: string) {
   return normalizedPath;
 }
 
-export const AssistantMessage = memo(({ content, annotations, messageId, onRewind, onFork }: AssistantMessageProps) => {
-  const filteredAnnotations = (annotations?.filter(
-    (annotation: JSONValue) => annotation && typeof annotation === 'object' && Object.keys(annotation).includes('type'),
-  ) || []) as { type: string; value: any } & { [key: string]: any }[];
+export const AssistantMessage = memo(
+  ({
+    content,
+    annotations,
+    messageId,
+    onRewind,
+    onFork,
+    append,
+    chatMode,
+    setChatMode,
+    model,
+    provider,
+  }: AssistantMessageProps) => {
+    const filteredAnnotations = (annotations?.filter(
+      (annotation: JSONValue) =>
+        annotation && typeof annotation === 'object' && Object.keys(annotation).includes('type'),
+    ) || []) as { type: string; value: any } & { [key: string]: any }[];
 
-  let chatSummary: string | undefined = undefined;
+    let chatSummary: string | undefined = undefined;
 
-  if (filteredAnnotations.find((annotation) => annotation.type === 'chatSummary')) {
-    chatSummary = filteredAnnotations.find((annotation) => annotation.type === 'chatSummary')?.summary;
-  }
+    if (filteredAnnotations.find((annotation) => annotation.type === 'chatSummary')) {
+      chatSummary = filteredAnnotations.find((annotation) => annotation.type === 'chatSummary')?.summary;
+    }
 
-  let codeContext: string[] | undefined = undefined;
+    let codeContext: string[] | undefined = undefined;
 
-  if (filteredAnnotations.find((annotation) => annotation.type === 'codeContext')) {
-    codeContext = filteredAnnotations.find((annotation) => annotation.type === 'codeContext')?.files;
-  }
+    if (filteredAnnotations.find((annotation) => annotation.type === 'codeContext')) {
+      codeContext = filteredAnnotations.find((annotation) => annotation.type === 'codeContext')?.files;
+    }
 
-  const usage: {
-    completionTokens: number;
-    promptTokens: number;
-    totalTokens: number;
-  } = filteredAnnotations.find((annotation) => annotation.type === 'usage')?.value;
+    const usage: {
+      completionTokens: number;
+      promptTokens: number;
+      totalTokens: number;
+    } = filteredAnnotations.find((annotation) => annotation.type === 'usage')?.value;
 
-  return (
-    <div className="overflow-hidden w-full">
-      <>
+    return (
+      <div className="overflow-hidden w-full">
         <div className=" flex gap-2 items-center text-sm text-octotask-elements-textSecondary mb-2">
           {(codeContext || chatSummary) && (
             <Popover side="right" align="start" trigger={<div className="i-ph:info" />}>
@@ -134,8 +153,10 @@ export const AssistantMessage = memo(({ content, annotations, messageId, onRewin
             )}
           </div>
         </div>
-      </>
-      <Markdown html>{content}</Markdown>
-    </div>
-  );
-});
+        <Markdown append={append} chatMode={chatMode} setChatMode={setChatMode} model={model} provider={provider} html>
+          {content}
+        </Markdown>
+      </div>
+    );
+  },
+);

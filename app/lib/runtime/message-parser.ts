@@ -1,11 +1,4 @@
-import type {
-  ActionType,
-  OctotaskAction,
-  OctotaskActionData,
-  FileAction,
-  ShellAction,
-  SupabaseAction,
-} from '~/types/actions';
+import type { ActionType, OctotaskAction, OctotaskActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
 import type { OctotaskArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
@@ -14,6 +7,8 @@ const ARTIFACT_TAG_OPEN = '<octotaskArtifact';
 const ARTIFACT_TAG_CLOSE = '</octotaskArtifact>';
 const ARTIFACT_ACTION_TAG_OPEN = '<octotaskAction';
 const ARTIFACT_ACTION_TAG_CLOSE = '</octotaskAction>';
+const OCTOTASK_QUICK_ACTIONS_OPEN = '<octotask-quick-actions>';
+const OCTOTASK_QUICK_ACTIONS_CLOSE = '</octotask-quick-actions>';
 
 const logger = createScopedLogger('MessageParser');
 
@@ -100,6 +95,39 @@ export class StreamingMessageParser {
     let earlyBreak = false;
 
     while (i < input.length) {
+      if (input.startsWith(OCTOTASK_QUICK_ACTIONS_OPEN, i)) {
+        console.log('input:', input.slice(i));
+
+        const actionsBlockEnd = input.indexOf(OCTOTASK_QUICK_ACTIONS_CLOSE, i);
+
+        if (actionsBlockEnd !== -1) {
+          const actionsBlockContent = input.slice(i + OCTOTASK_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
+
+          // Find all <octotask-quick-action ...>label</octotask-quick-action> inside
+          const quickActionRegex = /<octotask-quick-action([^>]*)>([\s\S]*?)<\/octotask-quick-action>/g;
+          let match;
+          const buttons = [];
+
+          while ((match = quickActionRegex.exec(actionsBlockContent)) !== null) {
+            const tagAttrs = match[1];
+            const label = match[2];
+            const type = this.#extractAttribute(tagAttrs, 'type');
+            const message = this.#extractAttribute(tagAttrs, 'message');
+            const path = this.#extractAttribute(tagAttrs, 'path');
+            const href = this.#extractAttribute(tagAttrs, 'href');
+            buttons.push(
+              createQuickActionElement(
+                { type: type || '', message: message || '', path: path || '', href: href || '' },
+                label,
+              ),
+            );
+          }
+          output += createQuickActionGroup(buttons);
+          i = actionsBlockEnd + OCTOTASK_QUICK_ACTIONS_CLOSE.length;
+          continue;
+        }
+      }
+
       if (state.insideArtifact) {
         const currentArtifact = state.currentArtifact;
 
@@ -354,4 +382,20 @@ const createArtifactElement: ElementFactory = (props) => {
 
 function camelToDashCase(input: string) {
   return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function createQuickActionElement(props: Record<string, string>, label: string) {
+  const elementProps = [
+    'class="__octotaskQuickAction__"',
+    'data-octotask-quick-action="true"',
+    ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
+  ];
+
+  console.log('elementProps', `<button ${elementProps.join(' ')}>${label}</button>`);
+
+  return `<button ${elementProps.join(' ')}>${label}</button>`;
+}
+
+function createQuickActionGroup(buttons: string[]) {
+  return `<div class=\"__octotaskQuickAction__\" data-octotask-quick-action=\"true\">${buttons.join('')}</div>`;
 }

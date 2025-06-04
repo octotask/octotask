@@ -234,23 +234,18 @@ export class StreamingMessageParser {
         }
       } else if (input[i] === '<' && input[i + 1] !== '/') {
         let j = i;
+        let tagStart = i;
         let potentialTag = '';
+        let processedTag = false;
 
-        while (j < input.length && potentialTag.length < ARTIFACT_TAG_OPEN.length) {
-          potentialTag += input[j];
-
-          if (potentialTag === ARTIFACT_TAG_OPEN) {
-            const nextChar = input[j + 1];
-
-            if (nextChar && nextChar !== '>' && nextChar !== ' ') {
-              output += input.slice(i, j + 1);
-              i = j + 1;
-              break;
-            }
-
-            const openTagEnd = input.indexOf('>', j);
-
-            if (openTagEnd !== -1) {
+        // Check for potential artifact tag start
+        if (input.startsWith(ARTIFACT_TAG_OPEN, i)) {
+          let k = i + ARTIFACT_TAG_OPEN.length;
+          // Scan for the end of the opening artifact tag
+          while (k < input.length) {
+            if (input[k] === '>') {
+              // Found the end of the opening artifact tag
+              const openTagEnd = k;
               const artifactTag = input.slice(i, openTagEnd + 1);
 
               const artifactTitle = this.#extractAttribute(artifactTag, 'title') as string;
@@ -282,23 +277,35 @@ export class StreamingMessageParser {
               output += artifactFactory({ messageId });
 
               i = openTagEnd + 1;
-            } else {
-              earlyBreak = true;
+              processedTag = true;
+              break; // Processed a valid artifact tag, continue outer loop from after the tag
             }
-
-            break;
-          } else if (!ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
-            output += input.slice(i, j + 1);
-            i = j + 1;
-            break;
+            k++;
           }
-
-          j++;
+          // If loop finishes without finding '<', it's an incomplete tag at the end of input
+          if (!processedTag) {
+             // It was an incomplete artifact tag, discard it.
+             i = input.length;
+             processedTag = true;
+          }
+        } else {
+          // Not an artifact tag start, treat the '<' and following characters as plain text
+          // Find the end of the potential tag (until the next '<' or end of input)
+          while (j < input.length && input[j] !== '<') {
+            j++;
+          }
+          output += input.slice(i, j);
+          i = j;
+          processedTag = true;
         }
 
-        if (j === input.length && ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
-          break;
+        if (!processedTag) {
+           // This case should ideally not be reached with the current logic, but as a fallback:
+           // Output the single '<' character as plain text and move to the next character.
+           output += input[i];
+           i++;
         }
+
       } else {
         output += input[i];
         i++;

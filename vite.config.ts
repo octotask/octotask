@@ -8,6 +8,7 @@ import * as dotenv from 'dotenv';
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { installGlobals } from '@remix-run/node';
 
 dotenv.config();
 

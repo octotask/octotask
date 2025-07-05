@@ -7,12 +7,12 @@
   "type": "module",
   "version": "1.0.0",
   "author": {
-    "name": "KhulnaSoft Team",
+    "name": "KhulnaSoft, Team",
     "email": "dev.sulaiman@icloud.com"
   },
   "scripts": {
     "deploy": "npm run build && wrangler pages deploy",
-    "build": "remix vite:build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "dev": "node pre-start.cjs  && remix vite:dev",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -86,7 +86,7 @@
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.5",
     "@radix-ui/react-progress": "^1.0.3",
-    "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-scroll-area": "^1.2.9",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
@@ -128,7 +128,6 @@
     "mime": "^4.0.4",
     "nanostores": "^0.10.3",
     "ollama-ai-provider": "^0.15.2",
-    "path-browserify": "^1.0.1",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-chartjs-2": "^5.3.0",
@@ -158,9 +157,10 @@
   },
   "devDependencies": {
     "@blitz/eslint-plugin": "0.1.0",
-    "@cloudflare/workers-types": "^4.20241127.0",
+    "@cloudflare/workers-types": "^4.20250617.0",
     "@electron/notarize": "^2.5.0",
     "@iconify-json/ph": "^1.2.1",
+    "@iconify-json/simple-icons": "^1.2.41",
     "@iconify/types": "^2.0.0",
     "@remix-run/dev": "^2.15.2",
     "@remix-run/serve": "^2.15.2",
@@ -176,6 +176,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/react-window": "^1.8.8",
     "@vitejs/plugin-react": "^4.3.4",
+    "buffer": "^6.0.3",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "crypto-browserify": "^3.12.1",
@@ -188,23 +189,28 @@
     "is-ci": "^3.0.1",
     "jsdom": "^26.0.0",
     "node-fetch": "^3.3.2",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "pnpm": "^9.14.4",
     "prettier": "^3.5.3",
+    "process": "^0.11.10",
     "rimraf": "^4.4.1",
+    "sass": "^1.89.2",
     "sass-embedded": "^1.81.0",
     "stream-browserify": "^3.0.0",
     "typescript": "^5.7.2",
     "unified": "^11.0.5",
     "unocss": "^0.61.9",
+    "util": "^0.12.5",
     "vite": "^5.4.11",
     "vite-plugin-copy": "^0.1.6",
     "vite-plugin-optimize-css-modules": "^1.1.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.1.7",
-    "wrangler": "^4.5.1"
+    "wrangler": "^3.28.2"
   },
+  "packageManager": "pnpm@9.4.0",
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
-  },
-  "packageManager": "pnpm@9.4.0"
+  }
 }

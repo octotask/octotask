@@ -1,0 +1,8 @@
+[build]
+  command = "NODE_OPTIONS='--max-old-space-size=4096' pnpm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[[edge_functions]]
+function = "octotest"
+path = "/test"

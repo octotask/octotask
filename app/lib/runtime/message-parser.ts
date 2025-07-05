@@ -1,4 +1,11 @@
-import type { ActionType, OctotaskAction, OctotaskActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
+import type {
+  ActionType,
+  OctotaskAction,
+  OctotaskActionData,
+  FileAction,
+  ShellAction,
+  SupabaseAction,
+} from '~/types/actions';
 import type { OctotaskArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
@@ -58,18 +65,13 @@ function cleanoutMarkdownSyntax(content: string) {
   const codeBlockRegex = /^\s*```\w*\n([\s\S]*?)\n\s*```\s*$/;
   const match = content.match(codeBlockRegex);
 
-  // console.log('matching', !!match, content);
-
-  if (match) {
-    return match[1]; // Remove common leading 4-space indent
-  } else {
-    return content;
-  }
+  return match ? match[1] : content;
 }
 
 function cleanEscapedTags(content: string) {
   return content.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
+
 export class StreamingMessageParser {
   #messages = new Map<string, MessageState>();
 
@@ -86,24 +88,18 @@ export class StreamingMessageParser {
         currentAction: { content: '' },
         actionId: 0,
       };
-
       this.#messages.set(messageId, state);
     }
 
     let output = '';
     let i = state.position;
-    let earlyBreak = false;
 
     while (i < input.length) {
       if (input.startsWith(OCTOTASK_QUICK_ACTIONS_OPEN, i)) {
-        console.log('input:', input.slice(i));
-
         const actionsBlockEnd = input.indexOf(OCTOTASK_QUICK_ACTIONS_CLOSE, i);
 
         if (actionsBlockEnd !== -1) {
           const actionsBlockContent = input.slice(i + OCTOTASK_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
-
-          // Find all <octotask-quick-action ...>label</octotask-quick-action> inside
           const quickActionRegex = /<octotask-quick-action([^>]*)>([\s\S]*?)<\/octotask-quick-action>/g;
           let match;
           const buttons = [];
@@ -122,6 +118,7 @@ export class StreamingMessageParser {
               ),
             );
           }
+
           output += createQuickActionGroup(buttons);
           i = actionsBlockEnd + OCTOTASK_QUICK_ACTIONS_CLOSE.length;
           continue;
@@ -131,49 +128,35 @@ export class StreamingMessageParser {
       if (state.insideArtifact) {
         const currentArtifact = state.currentArtifact;
 
-        if (currentArtifact === undefined) {
+        if (!currentArtifact) {
           unreachable('Artifact not initialized');
         }
 
         if (state.insideAction) {
           const closeIndex = input.indexOf(ARTIFACT_ACTION_TAG_CLOSE, i);
-
           const currentAction = state.currentAction;
 
           if (closeIndex !== -1) {
-            currentAction.content += input.slice(i, closeIndex);
-
-            let content = currentAction.content.trim();
+            currentAction.content += input.slice(i, closeIndex).trim();
 
             if ('type' in currentAction && currentAction.type === 'file') {
-              // Remove markdown code block syntax if present and file is not markdown
               if (!currentAction.filePath.endsWith('.md')) {
-                content = cleanoutMarkdownSyntax(content);
-                content = cleanEscapedTags(content);
+                currentAction.content = cleanoutMarkdownSyntax(currentAction.content);
+                currentAction.content = cleanEscapedTags(currentAction.content);
               }
 
-              content += '\n';
+              currentAction.content += '\n';
             }
-
-            currentAction.content = content;
 
             this._options.callbacks?.onActionClose?.({
               artifactId: currentArtifact.id,
               messageId,
-
-              /**
-               * We decrement the id because it's been incremented already
-               * when `onActionOpen` was emitted to make sure the ids are
-               * the same.
-               */
               actionId: String(state.actionId - 1),
-
               action: currentAction as OctotaskAction,
             });
 
             state.insideAction = false;
             state.currentAction = { content: '' };
-
             i = closeIndex + ARTIFACT_ACTION_TAG_CLOSE.length;
           } else {
             if ('type' in currentAction && currentAction.type === 'file') {
@@ -188,11 +171,7 @@ export class StreamingMessageParser {
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId - 1),
-                action: {
-                  ...(currentAction as FileAction),
-                  content,
-                  filePath: currentAction.filePath,
-                },
+                action: { ...(currentAction as FileAction), content, filePath: currentAction.filePath },
               });
             }
 
@@ -207,26 +186,21 @@ export class StreamingMessageParser {
 
             if (actionEndIndex !== -1) {
               state.insideAction = true;
-
               state.currentAction = this.#parseActionTag(input, actionOpenIndex, actionEndIndex);
-
               this._options.callbacks?.onActionOpen?.({
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId++),
                 action: state.currentAction as OctotaskAction,
               });
-
               i = actionEndIndex + 1;
             } else {
               break;
             }
           } else if (artifactCloseIndex !== -1) {
             this._options.callbacks?.onArtifactClose?.({ messageId, ...currentArtifact });
-
             state.insideArtifact = false;
             state.currentArtifact = undefined;
-
             i = artifactCloseIndex + ARTIFACT_TAG_CLOSE.length;
           } else {
             break;
@@ -234,23 +208,17 @@ export class StreamingMessageParser {
         }
       } else if (input[i] === '<' && input[i + 1] !== '/') {
         let j = i;
-        let tagStart = i;
-        let potentialTag = '';
         let processedTag = false;
 
-        // Check for potential artifact tag start
         if (input.startsWith(ARTIFACT_TAG_OPEN, i)) {
           let k = i + ARTIFACT_TAG_OPEN.length;
-          // Scan for the end of the opening artifact tag
+
           while (k < input.length) {
             if (input[k] === '>') {
-              // Found the end of the opening artifact tag
-              const openTagEnd = k;
-              const artifactTag = input.slice(i, openTagEnd + 1);
-
-              const artifactTitle = this.#extractAttribute(artifactTag, 'title') as string;
-              const type = this.#extractAttribute(artifactTag, 'type') as string;
-              const artifactId = this.#extractAttribute(artifactTag, 'id') as string;
+              const artifactTag = input.slice(i, k + 1);
+              const artifactTitle = this.#extractAttribute(artifactTag, 'title') || '';
+              const type = this.#extractAttribute(artifactTag, 'type') || '';
+              const artifactId = this.#extractAttribute(artifactTag, 'id') || '';
 
               if (!artifactTitle) {
                 logger.warn('Artifact title missing');
@@ -262,35 +230,24 @@ export class StreamingMessageParser {
 
               state.insideArtifact = true;
 
-              const currentArtifact = {
-                id: artifactId,
-                title: artifactTitle,
-                type,
-              } satisfies OctotaskArtifactData;
-
+              const currentArtifact = { id: artifactId, title: artifactTitle, type } satisfies OctotaskArtifactData;
               state.currentArtifact = currentArtifact;
-
               this._options.callbacks?.onArtifactOpen?.({ messageId, ...currentArtifact });
 
               const artifactFactory = this._options.artifactElement ?? createArtifactElement;
-
               output += artifactFactory({ messageId });
-
-              i = openTagEnd + 1;
+              i = k + 1;
               processedTag = true;
-              break; // Processed a valid artifact tag, continue outer loop from after the tag
+              break;
             }
+
             k++;
           }
-          // If loop finishes without finding '<', it's an incomplete tag at the end of input
+
           if (!processedTag) {
-             // It was an incomplete artifact tag, discard it.
-             i = input.length;
-             processedTag = true;
+            i = input.length;
           }
         } else {
-          // Not an artifact tag start, treat the '<' and following characters as plain text
-          // Find the end of the potential tag (until the next '<' or end of input)
           while (j < input.length && input[j] !== '<') {
             j++;
           }
@@ -300,19 +257,12 @@ export class StreamingMessageParser {
         }
 
         if (!processedTag) {
-           // This case should ideally not be reached with the current logic, but as a fallback:
-           // Output the single '<' character as plain text and move to the next character.
-           output += input[i];
-           i++;
+          output += input[i];
+          i++;
         }
-
       } else {
         output += input[i];
         i++;
-      }
-
-      if (earlyBreak) {
-        break;
       }
     }
 
@@ -327,13 +277,8 @@ export class StreamingMessageParser {
 
   #parseActionTag(input: string, actionOpenIndex: number, actionEndIndex: number) {
     const actionTag = input.slice(actionOpenIndex, actionEndIndex + 1);
-
     const actionType = this.#extractAttribute(actionTag, 'type') as ActionType;
-
-    const actionAttributes = {
-      type: actionType,
-      content: '',
-    };
+    const actionAttributes = { type: actionType, content: '' };
 
     if (actionType === 'supabase') {
       const operation = this.#extractAttribute(actionTag, 'operation');
@@ -379,11 +324,8 @@ export class StreamingMessageParser {
 const createArtifactElement: ElementFactory = (props) => {
   const elementProps = [
     'class="__octotaskArtifact__"',
-    ...Object.entries(props).map(([key, value]) => {
-      return `data-${camelToDashCase(key)}=${JSON.stringify(value)}`;
-    }),
+    ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
   ];
-
   return `<div ${elementProps.join(' ')}></div>`;
 };
 
@@ -397,12 +339,9 @@ function createQuickActionElement(props: Record<string, string>, label: string) 
     'data-octotask-quick-action="true"',
     ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
   ];
-
-  console.log('elementProps', `<button ${elementProps.join(' ')}>${label}</button>`);
-
   return `<button ${elementProps.join(' ')}>${label}</button>`;
 }
 
 function createQuickActionGroup(buttons: string[]) {
-  return `<div class=\"__octotaskQuickAction__\" data-octotask-quick-action=\"true\">${buttons.join('')}</div>`;
+  return `<div class="__octotaskQuickAction__" data-octotask-quick-action="true">${buttons.join('')}</div>`;
 }

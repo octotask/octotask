@@ -460,7 +460,7 @@ const UpdateTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p>
-                  Updates are fetched from: <span className="font-mono">stackblitz-labs/octotask.diy</span> (
+                  Updates are fetched from: <span className="font-mono">octotask/octotask.diy</span> (
                   {isLatestBranch ? 'main' : 'stable'} branch)
                 </p>
                 <p className="mt-1">
@@ -558,7 +558,7 @@ const UpdateTab = () => {
           <DialogDescription>
             <div className="mt-4">
               <p className="text-sm text-octotask-elements-textSecondary mb-4">
-                A new version is available from <span className="font-mono">stackblitz-labs/octotask.diy</span> (
+                A new version is available from <span className="font-mono">octotask/octotask.diy</span> (
                 {isLatestBranch ? 'main' : 'stable'} branch)
               </p>
 

@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { Markdown } from '~/components/chat/Markdown';
-import { Dialog, DialogRoot, DialogTitle, DialogDescription, DialogButton } from '~/components/ui/Dialog';
+import { motion } from 'framer-motion';
 import { useSettings } from '~/lib/hooks/useSettings';
 import { logStore } from '~/lib/stores/logs';
+import { toast } from 'react-toastify';
+import { Dialog, DialogRoot, DialogTitle, DialogDescription, DialogButton } from '~/components/ui/Dialog';
 import { classNames } from '~/utils/classNames';
+import { Markdown } from '~/components/chat/Markdown';
 
 interface UpdateProgress {
   stage: 'fetch' | 'pull' | 'install' | 'build' | 'complete';
@@ -460,7 +460,7 @@ const UpdateTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p>
-                  Updates are fetched from: <span className="font-mono">octotask/octotask</span> (
+                  Updates are fetched from: <span className="font-mono">octotask/octotask.diy</span> (
                   {isLatestBranch ? 'main' : 'stable'} branch)
                 </p>
                 <p className="mt-1">
@@ -558,7 +558,7 @@ const UpdateTab = () => {
           <DialogDescription>
             <div className="mt-4">
               <p className="text-sm text-octotask-elements-textSecondary mb-4">
-                A new version is available from <span className="font-mono">octotask/octotask</span> (
+                A new version is available from <span className="font-mono">octotask/octotask.diy</span> (
                 {isLatestBranch ? 'main' : 'stable'} branch)
               </p>
 

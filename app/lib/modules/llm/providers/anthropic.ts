@@ -1,8 +1,8 @@
-import { createAnthropic } from '@ai-sdk/anthropic';
-import type { LanguageModelV1 } from 'ai';
 import { BaseProvider } from '~/lib/modules/llm/base-provider';
 import type { ModelInfo } from '~/lib/modules/llm/types';
+import type { LanguageModelV1 } from 'ai';
 import type { IProviderSetting } from '~/types/model';
+import { createAnthropic } from '@ai-sdk/anthropic';
 
 export default class AnthropicProvider extends BaseProvider {
   name = 'Anthropic';
@@ -17,7 +17,7 @@ export default class AnthropicProvider extends BaseProvider {
       name: 'claude-3-7-sonnet-20250219',
       label: 'Claude 3.7 Sonnet',
       provider: 'Anthropic',
-      maxTokenAllowed: 8000,
+      maxTokenAllowed: 128000,
     },
     {
       name: 'claude-3-5-sonnet-latest',
@@ -95,6 +95,7 @@ export default class AnthropicProvider extends BaseProvider {
     });
     const anthropic = createAnthropic({
       apiKey,
+      headers: { 'anthropic-beta': 'output-128k-2025-02-19' },
     });
 
     return anthropic(model);

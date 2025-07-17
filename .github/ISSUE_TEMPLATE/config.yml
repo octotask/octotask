@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Octotask.new related issues
-    url: https://github.com/octotask/octotask.new/issues/new/choose
-    about: Report issues related to Octotask.new (not Octotask)
+  - name: octotask.vercel.app related issues
+    url: https://github.com/octotask/octotask.vercel.app/issues/new/choose
+    about: Report issues related to octotask.vercel.app (not Octotask)
   - name: Chat
-    url: https://octotask.khulnasoft.com
+    url: https://khulnasoft.com
     about: Ask questions and discuss with other Octotask users.

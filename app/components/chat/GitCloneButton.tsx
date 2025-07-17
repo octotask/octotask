@@ -1,15 +1,15 @@
-import type { Message } from 'ai';
 import ignore from 'ignore';
+import { useGit } from '~/lib/hooks/useGit';
+import type { Message } from 'ai';
+import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
+import { generateId } from '~/utils/fileUtils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
-import { Button } from '~/components/ui/Button';
 import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
-import { useGit } from '~/lib/hooks/useGit';
-import type { IChatMetadata } from '~/lib/persistence/db';
+import { RepositorySelectionDialog } from '~/components/@settings/tabs/connections/components/RepositorySelectionDialog';
 import { classNames } from '~/utils/classNames';
-import { generateId } from '~/utils/fileUtils';
-import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
+import { Button } from '~/components/ui/Button';
+import type { IChatMetadata } from '~/lib/persistence/db';
 
 const IGNORE_PATTERNS = [
   'node_modules/**',
@@ -27,7 +27,8 @@ const IGNORE_PATTERNS = [
   '**/npm-debug.log*',
   '**/yarn-debug.log*',
   '**/yarn-error.log*',
-  '**/*lock.json',
+
+  // Include this so npm install runs much faster '**/*lock.json',
   '**/*lock.yaml',
 ];
 
@@ -70,7 +71,7 @@ export default function GitCloneButton({ importChat, className }: GitCloneButton
           // Skip binary files
           if (
             content instanceof Uint8Array &&
-            !filePath.match(/\.(txt|md|astro|mjs|js|jsx|ts|tsx|json|html|css|scss|less|yml|yaml|xml|svg)$/i)
+            !filePath.match(/\.(txt|md|astro|mjs|js|jsx|ts|tsx|json|html|css|scss|less|yml|yaml|xml|svg|vue|svelte)$/i)
           ) {
             skippedFiles.push(filePath);
             continue;
@@ -156,13 +157,13 @@ ${escapeOctotaskTags(file.content)}
       <Button
         onClick={() => setIsDialogOpen(true)}
         title="Clone a Git Repo"
-        variant="outline"
+        variant="default"
         size="lg"
         className={classNames(
-          'gap-2 bg-[#F5F5F5] dark:bg-[#252525]',
-          'text-octotask-elements-textPrimary dark:text-white',
-          'hover:bg-[#E5E5E5] dark:hover:bg-[#333333]',
-          'border-[#E5E5E5] dark:border-[#333333]',
+          'gap-2 bg-octotask-elements-background-depth-1',
+          'text-octotask-elements-textPrimary',
+          'hover:bg-octotask-elements-background-depth-2',
+          'border border-octotask-elements-borderColor',
           'h-10 px-4 py-2 min-w-[120px] justify-center',
           'transition-all duration-200 ease-in-out',
           className,

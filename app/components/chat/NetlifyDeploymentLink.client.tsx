@@ -1,8 +1,8 @@
 import { useStore } from '@nanostores/react';
+import { netlifyConnection, fetchNetlifyStats } from '~/lib/stores/netlify';
+import { chatId } from '~/lib/persistence/useChatHistory';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useEffect } from 'react';
-import { chatId } from '~/lib/persistence/useChatHistory';
-import { netlifyConnection, fetchNetlifyStats } from '~/lib/stores/netlify';
 
 export function NetlifyDeploymentLink() {
   const connection = useStore(netlifyConnection);
@@ -30,10 +30,10 @@ export function NetlifyDeploymentLink() {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-octotask-elements-item-backgroundActive text-octotask-elements-textSecondary hover:text-[#00AD9F] z-50"
             onClick={(e) => {
-              e.stopPropagation(); // Add this to prevent click from bubbling up
+              e.stopPropagation(); // This is to prevent click from bubbling up
             }}
           >
-            <div className="i-ph:rocket-launch w-5 h-5" />
+            <div className="i-ph:link w-4 h-4 hover:text-blue-400" />
           </a>
         </Tooltip.Trigger>
         <Tooltip.Portal>

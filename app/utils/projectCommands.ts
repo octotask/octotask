@@ -84,9 +84,10 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
   return {
     role: 'assistant',
     content: `
+${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}
 <octotaskArtifact id="project-setup" title="Project Setup">
 ${commandString}
-</octotaskArtifact>${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}`,
+</octotaskArtifact>`,
     id: generateId(),
     createdAt: new Date(),
   };
@@ -126,4 +127,27 @@ export function escapeOctotaskAActionTags(input: string) {
 
 export function escapeOctotaskTags(input: string) {
   return escapeOctotaskArtifactTags(escapeOctotaskAActionTags(input));
+}
+
+// We have this seperate function to simplify the restore snapshot process in to one single artifact.
+export function createCommandActionsString(commands: ProjectCommands): string {
+  if (!commands.setupCommand && !commands.startCommand) {
+    // Return empty string if no commands
+    return '';
+  }
+
+  let commandString = '';
+
+  if (commands.setupCommand) {
+    commandString += `
+<octotaskAction type="shell">${commands.setupCommand}</octotaskAction>`;
+  }
+
+  if (commands.startCommand) {
+    commandString += `
+<octotaskAction type="start">${commands.startCommand}</octotaskAction>
+`;
+  }
+
+  return commandString;
 }

@@ -1,16 +1,17 @@
 import { type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { createDataStream, generateId } from 'ai';
 import { MAX_RESPONSE_SEGMENTS, MAX_TOKENS, type FileMap } from '~/lib/.server/llm/constants';
-import { createSummary } from '~/lib/.server/llm/create-summary';
-import { getFilePaths, selectContext } from '~/lib/.server/llm/select-context';
+import { CONTINUE_PROMPT } from '~/lib/common/prompts/prompts';
 import { streamText, type Messages, type StreamingOptions } from '~/lib/.server/llm/stream-text';
 import SwitchableStream from '~/lib/.server/llm/switchable-stream';
-import { extractPropertiesFromMessage } from '~/lib/.server/llm/utils';
-import { CONTINUE_PROMPT } from '~/lib/common/prompts/prompts';
-import type { ContextAnnotation, ProgressAnnotation } from '~/types/context';
 import type { IProviderSetting } from '~/types/model';
-import { WORK_DIR } from '~/utils/constants';
 import { createScopedLogger } from '~/utils/logger';
+import { getFilePaths, selectContext } from '~/lib/.server/llm/select-context';
+import type { ContextAnnotation, ProgressAnnotation } from '~/types/context';
+import { WORK_DIR } from '~/utils/constants';
+import { createSummary } from '~/lib/.server/llm/create-summary';
+import { extractPropertiesFromMessage } from '~/lib/.server/llm/utils';
+import type { DesignScheme } from '~/types/design-scheme';
 
 export async function action(args: ActionFunctionArgs) {
   return chatAction(args);
@@ -37,11 +38,21 @@ function parseCookies(cookieHeader: string): Record<string, string> {
 }
 
 async function chatAction({ context, request }: ActionFunctionArgs) {
-  const { messages, files, promptId, contextOptimization } = await request.json<{
+  const { messages, files, promptId, contextOptimization, supabase, chatMode, designScheme } = await request.json<{
     messages: Messages;
     files: any;
     promptId?: string;
     contextOptimization: boolean;
+    chatMode: 'discuss' | 'build';
+    designScheme?: DesignScheme;
+    supabase?: {
+      isConnected: boolean;
+      hasSelectedProject: boolean;
+      credentials?: {
+        anonKey?: string;
+        supabaseUrl?: string;
+      };
+    };
   }>();
 
   const cookieHeader = request.headers.get('Cookie');
@@ -179,8 +190,8 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           // logger.debug('Code Files Selected');
         }
 
-        // Stream the text
         const options: StreamingOptions = {
+          supabaseConnection: supabase,
           toolChoice: 'none',
           onFinish: async ({ text: content, finishReason, usage }) => {
             logger.debug('usage', JSON.stringify(usage));
@@ -240,6 +251,8 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
               promptId,
               contextOptimization,
               contextFiles: filteredFiles,
+              chatMode,
+              designScheme,
               summary,
               messageSliceId,
             });
@@ -279,6 +292,8 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           promptId,
           contextOptimization,
           contextFiles: filteredFiles,
+          chatMode,
+          designScheme,
           summary,
           messageSliceId,
         });

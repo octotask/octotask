@@ -11,6 +11,7 @@ export const SettingsButton = memo(({ onClick }: SettingsButtonProps) => {
       icon="i-ph:gear"
       size="xl"
       title="Settings"
+      data-testid="settings-button"
       className="text-[#666] hover:text-octotask-elements-textPrimary hover:bg-octotask-elements-item-backgroundActive/10 transition-colors"
     />
   );

@@ -1,4 +1,4 @@
-# Welcome to octotask
+# Welcome to bolt diy
 
 octotask allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, or Groq models - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
 
@@ -25,9 +25,9 @@ octotask allows you to choose the LLM that you use for each prompt! Currently, y
 
 ## Join the community!
 
-[Join the community!](https://thinktank.ottomator.ai)
+[Join the community!](https://khulnasoft.com)
 
-Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
+Also [this pinned post in our community](https://khulnasoft.com/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
 
 ---
 
@@ -157,7 +157,7 @@ Once you've configured your keys, the application will be ready to use the selec
    Alternatively, use Docker commands directly:
 
    ```bash
-   docker build . --target octotask-ai-development
+   docker build . --target bolt-ai-development
    ```
 
 2. **Run the Container**:  

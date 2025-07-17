@@ -1,5 +1,5 @@
-import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { classNames } from '~/utils/classNames';
 
 const buttonVariants = cva(
@@ -11,7 +11,7 @@ const buttonVariants = cva(
           'bg-octotask-elements-background text-octotask-elements-textPrimary hover:bg-octotask-elements-background-depth-2',
         destructive: 'bg-red-500 text-white hover:bg-red-600',
         outline:
-          'border border-input bg-transparent hover:bg-octotask-elements-background-depth-2 hover:text-octotask-elements-textPrimary',
+          'border border-octotask-elements-borderColor bg-transparent hover:bg-octotask-elements-background-depth-2 hover:text-octotask-elements-textPrimary text-octotask-elements-textPrimary dark:border-octotask-elements-borderColorActive',
         secondary:
           'bg-octotask-elements-background-depth-1 text-octotask-elements-textPrimary hover:bg-octotask-elements-background-depth-2',
         ghost: 'hover:bg-octotask-elements-background-depth-1 hover:text-octotask-elements-textPrimary',

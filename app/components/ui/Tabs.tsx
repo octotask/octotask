@@ -1,5 +1,5 @@
-import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as React from 'react';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { classNames } from '~/utils/classNames';
 
 const Tabs = TabsPrimitive.Root;
@@ -11,7 +11,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={classNames(
-      'inline-flex h-10 items-center justify-center rounded-md bg-octotask-elements-background p-1 text-octotask-elements-textSecondary',
+      'inline-flex h-10 items-center justify-center rounded-md bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-3-dark p-1 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
       className,
     )}
     {...props}
@@ -26,7 +26,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={classNames(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-octotask-elements-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octotask-elements-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-octotask-elements-background data-[state=active]:text-octotask-elements-textPrimary data-[state=active]:shadow-sm',
+      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-octotask-elements-background dark:ring-offset-octotask-elements-background-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octotask-elements-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-octotask-elements-background-depth-0 dark:data-[state=active]:bg-octotask-elements-background-depth-2-dark data-[state=active]:text-octotask-elements-textPrimary dark:data-[state=active]:text-octotask-elements-textPrimary-dark data-[state=active]:shadow-sm',
       className,
     )}
     {...props}

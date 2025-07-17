@@ -13,7 +13,7 @@ For the best experience with octotask, we recommend using the following models:
     - **Qwen 2.5 Coder 32b**: Best model for self-hosting with reasonable hardware requirements
 
     !!! warning
-        Models with less than 7b parameters typically lack the capability to properly interact with octotask!
+        Models with less than 7b parameters typically lack the capability to properly interact with bolt!
 
 ## Best Practices
 
@@ -36,11 +36,11 @@ For the best experience with octotask, we recommend using the following models:
 Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to get involved!
 
 ??? question "What are the future plans for octotask?"
-Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
+updates.  
  New features and improvements are on the way!
 
 ??? question "Why are there so many open issues/pull requests?"
-octotask began as a small showcase project on @ColeMedin's YouTube channel to explore editing open-source projects with local LLMs. However, it quickly grew into a massive community effort!
+octotask began as a small showcase project on @octotsk explore editing open-source projects with local LLMs. However, it quickly grew into a massive community effort!
 
     We're forming a team of maintainers to manage demand and streamline issue resolution. The maintainers are rockstars, and we're also exploring partnerships to help the project thrive.
 
@@ -88,7 +88,7 @@ You will need to make sure you have the latest version of Visual Studio C++ inst
 ## Get Help & Support
 
 !!! tip "Community Support"
-[Join the octotask Community](https://thinktank.ottomator.ai/c/octotask/17){target=\_blank} for discussions and help
+[Join the octotask Community](https://thinktank.ottomator.ai/c/bolt-diy/17){target=\_blank} for discussions and help
 
 !!! bug "Report Issues"
 [Open an Issue](https://github.com/octotask/octotask/issues/19){target=\_blank} in our GitHub Repository

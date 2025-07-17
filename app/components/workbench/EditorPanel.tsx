@@ -1,9 +1,7 @@
 import { useStore } from '@nanostores/react';
 import { memo, useMemo } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { FileBreadcrumb } from './FileBreadcrumb';
-import { FileTree } from './FileTree';
-import { DEFAULT_TERMINAL_SIZE, TerminalTabs } from './terminal/TerminalTabs';
+import * as Tabs from '@radix-ui/react-tabs';
 import {
   CodeMirrorEditor,
   type EditorDocument,
@@ -15,12 +13,18 @@ import {
 import { PanelHeader } from '~/components/ui/PanelHeader';
 import { PanelHeaderButton } from '~/components/ui/PanelHeaderButton';
 import type { FileMap } from '~/lib/stores/files';
-import { themeStore } from '~/lib/stores/theme';
-import { workbenchStore } from '~/lib/stores/workbench';
 import type { FileHistory } from '~/types/actions';
+import { themeStore } from '~/lib/stores/theme';
 import { WORK_DIR } from '~/utils/constants';
 import { renderLogger } from '~/utils/logger';
 import { isMobile } from '~/utils/mobile';
+import { FileBreadcrumb } from './FileBreadcrumb';
+import { FileTree } from './FileTree';
+import { DEFAULT_TERMINAL_SIZE, TerminalTabs } from './terminal/TerminalTabs';
+import { workbenchStore } from '~/lib/stores/workbench';
+import { Search } from './Search'; // <-- Ensure Search is imported
+import { classNames } from '~/utils/classNames'; // <-- Import classNames if not already present
+import { LockManager } from './LockManager'; // <-- Import LockManager
 
 interface EditorPanelProps {
   files?: FileMap;
@@ -68,31 +72,76 @@ export const EditorPanel = memo(
     }, [editorDocument]);
 
     const activeFileUnsaved = useMemo(() => {
-      return editorDocument !== undefined && unsavedFiles?.has(editorDocument.filePath);
+      if (!editorDocument || !unsavedFiles) {
+        return false;
+      }
+
+      // Make sure unsavedFiles is a Set before calling has()
+      return unsavedFiles instanceof Set && unsavedFiles.has(editorDocument.filePath);
     }, [editorDocument, unsavedFiles]);
 
     return (
       <PanelGroup direction="vertical">
         <Panel defaultSize={showTerminal ? DEFAULT_EDITOR_SIZE : 100} minSize={20}>
           <PanelGroup direction="horizontal">
-            <Panel defaultSize={20} minSize={10} collapsible>
-              <div className="flex flex-col border-r border-octotask-elements-borderColor h-full">
-                <PanelHeader>
-                  <div className="i-ph:tree-structure-duotone shrink-0" />
-                  Files
-                </PanelHeader>
-                <FileTree
-                  className="h-full"
-                  files={files}
-                  hideRoot
-                  unsavedFiles={unsavedFiles}
-                  fileHistory={fileHistory}
-                  rootFolder={WORK_DIR}
-                  selectedFile={selectedFile}
-                  onFileSelect={onFileSelect}
-                />
+            <Panel defaultSize={20} minSize={15} collapsible className="border-r border-octotask-elements-borderColor">
+              <div className="h-full">
+                <Tabs.Root defaultValue="files" className="flex flex-col h-full">
+                  <PanelHeader className="w-full text-sm font-medium text-octotask-elements-textSecondary px-1">
+                    <div className="h-full flex-shrink-0 flex items-center justify-between w-full">
+                      <Tabs.List className="h-full flex-shrink-0 flex items-center">
+                        <Tabs.Trigger
+                          value="files"
+                          className={classNames(
+                            'h-full bg-transparent hover:bg-octotask-elements-background-depth-3 py-0.5 px-2 rounded-lg text-sm font-medium text-octotask-elements-textTertiary hover:text-octotask-elements-textPrimary data-[state=active]:text-octotask-elements-textPrimary',
+                          )}
+                        >
+                          Files
+                        </Tabs.Trigger>
+                        <Tabs.Trigger
+                          value="search"
+                          className={classNames(
+                            'h-full bg-transparent hover:bg-octotask-elements-background-depth-3 py-0.5 px-2 rounded-lg text-sm font-medium text-octotask-elements-textTertiary hover:text-octotask-elements-textPrimary data-[state=active]:text-octotask-elements-textPrimary',
+                          )}
+                        >
+                          Search
+                        </Tabs.Trigger>
+                        <Tabs.Trigger
+                          value="locks"
+                          className={classNames(
+                            'h-full bg-transparent hover:bg-octotask-elements-background-depth-3 py-0.5 px-2 rounded-lg text-sm font-medium text-octotask-elements-textTertiary hover:text-octotask-elements-textPrimary data-[state=active]:text-octotask-elements-textPrimary',
+                          )}
+                        >
+                          Locks
+                        </Tabs.Trigger>
+                      </Tabs.List>
+                    </div>
+                  </PanelHeader>
+
+                  <Tabs.Content value="files" className="flex-grow overflow-auto focus-visible:outline-none">
+                    <FileTree
+                      className="h-full"
+                      files={files}
+                      hideRoot
+                      unsavedFiles={unsavedFiles}
+                      fileHistory={fileHistory}
+                      rootFolder={WORK_DIR}
+                      selectedFile={selectedFile}
+                      onFileSelect={onFileSelect}
+                    />
+                  </Tabs.Content>
+
+                  <Tabs.Content value="search" className="flex-grow overflow-auto focus-visible:outline-none">
+                    <Search />
+                  </Tabs.Content>
+
+                  <Tabs.Content value="locks" className="flex-grow overflow-auto focus-visible:outline-none">
+                    <LockManager />
+                  </Tabs.Content>
+                </Tabs.Root>
               </div>
             </Panel>
+
             <PanelResizeHandle />
             <Panel className="flex flex-col" defaultSize={80} minSize={20}>
               <PanelHeader className="overflow-x-auto">
@@ -114,7 +163,7 @@ export const EditorPanel = memo(
                   </div>
                 )}
               </PanelHeader>
-              <div className="h-full flex-1 overflow-hidden">
+              <div className="h-full flex-1 overflow-hidden modern-scrollbar">
                 <CodeMirrorEditor
                   theme={theme}
                   editable={!isStreaming && editorDocument !== undefined}

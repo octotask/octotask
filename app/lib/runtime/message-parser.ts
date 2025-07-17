@@ -1,4 +1,11 @@
-import type { ActionType, OctotaskAction, OctotaskActionData, FileAction, ShellAction } from '~/types/actions';
+import type {
+  ActionType,
+  OctotaskAction,
+  OctotaskActionData,
+  FileAction,
+  ShellAction,
+  SupabaseAction,
+} from '~/types/actions';
 import type { OctotaskArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
@@ -7,6 +14,8 @@ const ARTIFACT_TAG_OPEN = '<octotaskArtifact';
 const ARTIFACT_TAG_CLOSE = '</octotaskArtifact>';
 const ARTIFACT_ACTION_TAG_OPEN = '<octotaskAction';
 const ARTIFACT_ACTION_TAG_CLOSE = '</octotaskAction>';
+const OCTOTASK_QUICK_ACTIONS_OPEN = '<octotask-quick-actions>';
+const OCTOTASK_QUICK_ACTIONS_CLOSE = '</octotask-quick-actions>';
 
 const logger = createScopedLogger('MessageParser');
 
@@ -56,18 +65,13 @@ function cleanoutMarkdownSyntax(content: string) {
   const codeBlockRegex = /^\s*```\w*\n([\s\S]*?)\n\s*```\s*$/;
   const match = content.match(codeBlockRegex);
 
-  // console.log('matching', !!match, content);
-
-  if (match) {
-    return match[1]; // Remove common leading 4-space indent
-  } else {
-    return content;
-  }
+  return match ? match[1] : content;
 }
 
 function cleanEscapedTags(content: string) {
   return content.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
+
 export class StreamingMessageParser {
   #messages = new Map<string, MessageState>();
 
@@ -84,61 +88,75 @@ export class StreamingMessageParser {
         currentAction: { content: '' },
         actionId: 0,
       };
-
       this.#messages.set(messageId, state);
     }
 
     let output = '';
     let i = state.position;
-    let earlyBreak = false;
 
     while (i < input.length) {
+      if (input.startsWith(OCTOTASK_QUICK_ACTIONS_OPEN, i)) {
+        const actionsBlockEnd = input.indexOf(OCTOTASK_QUICK_ACTIONS_CLOSE, i);
+
+        if (actionsBlockEnd !== -1) {
+          const actionsBlockContent = input.slice(i + OCTOTASK_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
+          const quickActionRegex = /<octotask-quick-action([^>]*)>([\s\S]*?)<\/octotask-quick-action>/g;
+          let match;
+          const buttons = [];
+
+          while ((match = quickActionRegex.exec(actionsBlockContent)) !== null) {
+            const tagAttrs = match[1];
+            const label = match[2];
+            const type = this.#extractAttribute(tagAttrs, 'type');
+            const message = this.#extractAttribute(tagAttrs, 'message');
+            const path = this.#extractAttribute(tagAttrs, 'path');
+            const href = this.#extractAttribute(tagAttrs, 'href');
+            buttons.push(
+              createQuickActionElement(
+                { type: type || '', message: message || '', path: path || '', href: href || '' },
+                label,
+              ),
+            );
+          }
+
+          output += createQuickActionGroup(buttons);
+          i = actionsBlockEnd + OCTOTASK_QUICK_ACTIONS_CLOSE.length;
+          continue;
+        }
+      }
+
       if (state.insideArtifact) {
         const currentArtifact = state.currentArtifact;
 
-        if (currentArtifact === undefined) {
+        if (!currentArtifact) {
           unreachable('Artifact not initialized');
         }
 
         if (state.insideAction) {
           const closeIndex = input.indexOf(ARTIFACT_ACTION_TAG_CLOSE, i);
-
           const currentAction = state.currentAction;
 
           if (closeIndex !== -1) {
-            currentAction.content += input.slice(i, closeIndex);
-
-            let content = currentAction.content.trim();
+            currentAction.content += input.slice(i, closeIndex).trim();
 
             if ('type' in currentAction && currentAction.type === 'file') {
-              // Remove markdown code block syntax if present and file is not markdown
               if (!currentAction.filePath.endsWith('.md')) {
-                content = cleanoutMarkdownSyntax(content);
-                content = cleanEscapedTags(content);
+                currentAction.content = cleanoutMarkdownSyntax(currentAction.content);
+                currentAction.content = cleanEscapedTags(currentAction.content);
               }
 
-              content += '\n';
+              currentAction.content += '\n';
             }
-
-            currentAction.content = content;
 
             this._options.callbacks?.onActionClose?.({
               artifactId: currentArtifact.id,
               messageId,
-
-              /**
-               * We decrement the id because it's been incremented already
-               * when `onActionOpen` was emitted to make sure the ids are
-               * the same.
-               */
               actionId: String(state.actionId - 1),
-
               action: currentAction as OctotaskAction,
             });
 
             state.insideAction = false;
             state.currentAction = { content: '' };
-
             i = closeIndex + ARTIFACT_ACTION_TAG_CLOSE.length;
           } else {
             if ('type' in currentAction && currentAction.type === 'file') {
@@ -153,11 +171,7 @@ export class StreamingMessageParser {
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId - 1),
-                action: {
-                  ...(currentAction as FileAction),
-                  content,
-                  filePath: currentAction.filePath,
-                },
+                action: { ...(currentAction as FileAction), content, filePath: currentAction.filePath },
               });
             }
 
@@ -172,26 +186,21 @@ export class StreamingMessageParser {
 
             if (actionEndIndex !== -1) {
               state.insideAction = true;
-
               state.currentAction = this.#parseActionTag(input, actionOpenIndex, actionEndIndex);
-
               this._options.callbacks?.onActionOpen?.({
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId++),
                 action: state.currentAction as OctotaskAction,
               });
-
               i = actionEndIndex + 1;
             } else {
               break;
             }
           } else if (artifactCloseIndex !== -1) {
             this._options.callbacks?.onArtifactClose?.({ messageId, ...currentArtifact });
-
             state.insideArtifact = false;
             state.currentArtifact = undefined;
-
             i = artifactCloseIndex + ARTIFACT_TAG_CLOSE.length;
           } else {
             break;
@@ -199,28 +208,17 @@ export class StreamingMessageParser {
         }
       } else if (input[i] === '<' && input[i + 1] !== '/') {
         let j = i;
-        let potentialTag = '';
+        let processedTag = false;
 
-        while (j < input.length && potentialTag.length < ARTIFACT_TAG_OPEN.length) {
-          potentialTag += input[j];
+        if (input.startsWith(ARTIFACT_TAG_OPEN, i)) {
+          let k = i + ARTIFACT_TAG_OPEN.length;
 
-          if (potentialTag === ARTIFACT_TAG_OPEN) {
-            const nextChar = input[j + 1];
-
-            if (nextChar && nextChar !== '>' && nextChar !== ' ') {
-              output += input.slice(i, j + 1);
-              i = j + 1;
-              break;
-            }
-
-            const openTagEnd = input.indexOf('>', j);
-
-            if (openTagEnd !== -1) {
-              const artifactTag = input.slice(i, openTagEnd + 1);
-
-              const artifactTitle = this.#extractAttribute(artifactTag, 'title') as string;
-              const type = this.#extractAttribute(artifactTag, 'type') as string;
-              const artifactId = this.#extractAttribute(artifactTag, 'id') as string;
+          while (k < input.length) {
+            if (input[k] === '>') {
+              const artifactTag = input.slice(i, k + 1);
+              const artifactTitle = this.#extractAttribute(artifactTag, 'title') || '';
+              const type = this.#extractAttribute(artifactTag, 'type') || '';
+              const artifactId = this.#extractAttribute(artifactTag, 'id') || '';
 
               if (!artifactTitle) {
                 logger.warn('Artifact title missing');
@@ -232,45 +230,39 @@ export class StreamingMessageParser {
 
               state.insideArtifact = true;
 
-              const currentArtifact = {
-                id: artifactId,
-                title: artifactTitle,
-                type,
-              } satisfies OctotaskArtifactData;
-
+              const currentArtifact = { id: artifactId, title: artifactTitle, type } satisfies OctotaskArtifactData;
               state.currentArtifact = currentArtifact;
-
               this._options.callbacks?.onArtifactOpen?.({ messageId, ...currentArtifact });
 
               const artifactFactory = this._options.artifactElement ?? createArtifactElement;
-
               output += artifactFactory({ messageId });
-
-              i = openTagEnd + 1;
-            } else {
-              earlyBreak = true;
+              i = k + 1;
+              processedTag = true;
+              break;
             }
 
-            break;
-          } else if (!ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
-            output += input.slice(i, j + 1);
-            i = j + 1;
-            break;
+            k++;
           }
 
-          j++;
+          if (!processedTag) {
+            i = input.length;
+          }
+        } else {
+          while (j < input.length && input[j] !== '<') {
+            j++;
+          }
+          output += input.slice(i, j);
+          i = j;
+          processedTag = true;
         }
 
-        if (j === input.length && ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
-          break;
+        if (!processedTag) {
+          output += input[i];
+          i++;
         }
       } else {
         output += input[i];
         i++;
-      }
-
-      if (earlyBreak) {
-        break;
       }
     }
 
@@ -285,15 +277,30 @@ export class StreamingMessageParser {
 
   #parseActionTag(input: string, actionOpenIndex: number, actionEndIndex: number) {
     const actionTag = input.slice(actionOpenIndex, actionEndIndex + 1);
-
     const actionType = this.#extractAttribute(actionTag, 'type') as ActionType;
+    const actionAttributes = { type: actionType, content: '' };
 
-    const actionAttributes = {
-      type: actionType,
-      content: '',
-    };
+    if (actionType === 'supabase') {
+      const operation = this.#extractAttribute(actionTag, 'operation');
 
-    if (actionType === 'file') {
+      if (!operation || !['migration', 'query'].includes(operation)) {
+        logger.warn(`Invalid or missing operation for Supabase action: ${operation}`);
+        throw new Error(`Invalid Supabase operation: ${operation}`);
+      }
+
+      (actionAttributes as SupabaseAction).operation = operation as 'migration' | 'query';
+
+      if (operation === 'migration') {
+        const filePath = this.#extractAttribute(actionTag, 'filePath');
+
+        if (!filePath) {
+          logger.warn('Migration requires a filePath');
+          throw new Error('Migration requires a filePath');
+        }
+
+        (actionAttributes as SupabaseAction).filePath = filePath;
+      }
+    } else if (actionType === 'file') {
       const filePath = this.#extractAttribute(actionTag, 'filePath') as string;
 
       if (!filePath) {
@@ -317,14 +324,24 @@ export class StreamingMessageParser {
 const createArtifactElement: ElementFactory = (props) => {
   const elementProps = [
     'class="__octotaskArtifact__"',
-    ...Object.entries(props).map(([key, value]) => {
-      return `data-${camelToDashCase(key)}=${JSON.stringify(value)}`;
-    }),
+    ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
   ];
-
   return `<div ${elementProps.join(' ')}></div>`;
 };
 
 function camelToDashCase(input: string) {
   return input.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+function createQuickActionElement(props: Record<string, string>, label: string) {
+  const elementProps = [
+    'class="__octotaskQuickAction__"',
+    'data-octotask-quick-action="true"',
+    ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
+  ];
+  return `<button ${elementProps.join(' ')}>${label}</button>`;
+}
+
+function createQuickActionGroup(buttons: string[]) {
+  return `<div class="__octotaskQuickAction__" data-octotask-quick-action="true">${buttons.join('')}</div>`;
 }

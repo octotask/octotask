@@ -1,13 +1,14 @@
-import type { UnistNode, UnistParent } from 'node_modules/unist-util-visit/lib';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize, { defaultSchema, type Options as RehypeSanitizeOptions } from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import type { PluggableList, Plugin } from 'unified';
+import rehypeSanitize, { defaultSchema, type Options as RehypeSanitizeOptions } from 'rehype-sanitize';
 import { SKIP, visit } from 'unist-util-visit';
+import type { UnistNode, UnistParent } from 'node_modules/unist-util-visit/lib';
 
 export const allowedHTMLElements = [
   'a',
   'b',
+  'button',
   'blockquote',
   'br',
   'code',
@@ -55,6 +56,7 @@ export const allowedHTMLElements = [
   'ul',
   'var',
   'think',
+  'header',
 ];
 
 // Add custom rehype plugin
@@ -84,9 +86,24 @@ const rehypeSanitizeOptions: RehypeSanitizeOptions = {
     div: [
       ...(defaultSchema.attributes?.div ?? []),
       'data*',
-      ['className', '__octotaskArtifact__', '__octotaskThought__'],
+      [
+        'className',
+        '__octotaskArtifact__',
+        '__octotaskThought__',
+        '__octotaskQuickAction',
+        '__octotaskSelectedElement__',
+      ],
 
       // ['className', '__octotaskThought__']
+    ],
+    button: [
+      ...(defaultSchema.attributes?.button ?? []),
+      'data*',
+      'type',
+      'disabled',
+      'name',
+      'value',
+      ['className', '__octotaskArtifact__', '__octotaskThought__', '__octotaskQuickAction'],
     ],
   },
   strip: [],

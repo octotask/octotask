@@ -14,7 +14,7 @@ export class FileSystemTools {
       {
         name: 'read_file',
         description: 'Read the contents of a file. Provide the relative path.',
-        schema: {
+        parameters: {
           type: 'object',
           properties: {
             path: { type: 'string', description: 'Relative path to the file' },
@@ -28,7 +28,7 @@ export class FileSystemTools {
       {
         name: 'write_file',
         description: 'Write content to a file. Provide the relative path and content.',
-        schema: {
+        parameters: {
           type: 'object',
           properties: {
             path: { type: 'string', description: 'Relative path to the file' },
@@ -43,7 +43,7 @@ export class FileSystemTools {
       {
         name: 'list_files',
         description: 'List files in a directory. Provide the relative path.',
-        schema: {
+        parameters: {
           type: 'object',
           properties: {
             path: { type: 'string', description: 'Relative path to the directory (optional, defaults to root)' },

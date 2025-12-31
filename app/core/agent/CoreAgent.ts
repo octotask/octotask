@@ -46,7 +46,7 @@ export abstract class CoreAgent extends EventEmitter {
     this.toolRouter.registerTool({
       name: 'search_workspace',
       description: 'Search the codebase using semantic search.',
-      schema: {
+      parameters: {
         type: 'object',
         properties: {
           query: { type: 'string', description: 'Search query' },
@@ -144,71 +144,69 @@ export abstract class CoreAgent extends EventEmitter {
       }
 
       const llmService = new LLMService();
+      let response;
       let resultText = '';
 
       try {
-        const response = await llmService.generate({
+        response = await llmService.generate({
           system: systemPrompt,
           message: userPrompt,
           model: modelName,
           provider: { name: providerName } as any,
           apiKeys,
           serverEnv: {},
+          tools: this.toolRouter.getToolsForSDK(),
         });
         resultText = response.text;
-        console.log('LLM Response:', resultText);
+        console.log('LLM Response Text:', resultText);
       } catch (error: any) {
         console.error('LLM Generation Error:', error);
         this.memory.add({ role: 'system', content: `Error: ${error.message}` });
         break;
       }
 
-      // 4. Parse Action
-      let plan;
-
-      try {
-        const jsonMatch = resultText.match(/```json\n([\s\S]*?)\n```/) || resultText.match(/{[\s\S]*}/);
-
-        if (jsonMatch) {
-          plan = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-        } else {
-          console.log('CoreAgent: Could not parse JSON plan. Raw:', resultText);
-          plan = { action: 'observe', args: { note: resultText } };
-        }
-      } catch (e) {
-        console.error('CoreAgent: JSON Parse Error:', e);
-        plan = { action: 'observe', args: { error: 'Failed to parse plan from LLM' } };
-      }
-
-      // 5. Act
+      // 4. Act
       this.status = 'acting';
       this.emit('status', this.status);
 
-      let actionResult;
-      console.log('CoreAgent: Plan execution:', plan);
+      const toolResults: any[] = [];
 
-      if (plan.action && plan.action !== 'observe' && plan.action !== 'finish') {
-        try {
-          actionResult = await this.act(plan);
-        } catch (e: any) {
-          actionResult = `Error executing ${plan.action}: ${e.message}`;
+      if (response.toolCalls && response.toolCalls.length > 0) {
+        for (const toolCall of response.toolCalls) {
+          try {
+            console.log(`CoreAgent: Executing tool call: ${toolCall.toolName}`, toolCall.args);
+
+            const result = await this.toolRouter.executeTool(toolCall.toolName, toolCall.args);
+            toolResults.push({ toolCallId: toolCall.toolCallId, result });
+          } catch (e: any) {
+            toolResults.push({ toolCallId: toolCall.toolCallId, error: e.message });
+          }
         }
-      } else if (plan.action === 'finish') {
-        actionResult = 'Finished.';
-        running = false;
-      } else {
-        actionResult = 'Observation: ' + (plan.args?.note || 'No action taken.');
       }
 
-      // 6. Observe / Memorize
+      // 5. Observe / Memorize
       this.status = 'observing';
       this.emit('status', this.status);
 
       this.memory.add({ role: 'user', content: userPrompt });
       this.memory.add({ role: 'assistant', content: resultText });
-      this.memory.add({ role: 'system', content: `Tool Output: ${JSON.stringify(actionResult)}` });
 
-      if (plan.action === 'finish' || iterations >= MAX_ITERATIONS) {
+      if (toolResults.length > 0) {
+        this.memory.add({ role: 'system', content: `Tool Results: ${JSON.stringify(toolResults)}` });
+      }
+
+      /*
+       * Detect "finish" if LLM just gave text without tools and it looks like it's done
+       * Or if iterations reach max.
+       * In professional apps, we'd have a specific "finish" tool.
+       */
+      if (!response.toolCalls || response.toolCalls.length === 0) {
+        if (resultText.toLowerCase().includes('task complete') || resultText.toLowerCase().includes('finished')) {
+          running = false;
+        }
+      }
+
+      if (iterations >= MAX_ITERATIONS) {
         running = false;
       }
     }

@@ -16,7 +16,7 @@ export class ShellTools {
       {
         name: 'run_command',
         description: 'Run a shell command. Use with caution.',
-        schema: {
+        parameters: {
           type: 'object',
           properties: {
             command: { type: 'string', description: 'Shell command to execute' },

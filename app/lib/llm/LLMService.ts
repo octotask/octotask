@@ -14,11 +14,12 @@ interface GenerateOptions {
   apiKeys: Record<string, string>;
   providerSettings?: Record<string, IProviderSetting>;
   serverEnv?: any;
+  tools?: Record<string, any>;
 }
 
 export class LLMService {
   async generate(options: GenerateOptions) {
-    const { system, message, model, provider, apiKeys, providerSettings, serverEnv } = options;
+    const { system, message, model, provider, apiKeys, providerSettings, serverEnv, tools } = options;
 
     const models = await this._getModelList({ apiKeys, providerSettings, serverEnv });
     const modelDetails = models.find((m: ModelInfo) => m.name === model);
@@ -53,7 +54,8 @@ export class LLMService {
         providerSettings,
       }),
       ...tokenParams,
-      toolChoice: 'none' as const,
+      tools,
+      toolChoice: tools ? ('auto' as const) : ('none' as const),
     };
 
     const finalParams = isReasoning ? { ...baseParams, temperature: 1 } : { ...baseParams, temperature: 0 };

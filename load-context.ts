@@ -5,5 +5,8 @@ type Cloudflare = Omit<PlatformProxy<Env>, 'dispose'>;
 declare module '@remix-run/cloudflare' {
   interface AppLoadContext {
     cloudflare: Cloudflare;
+    vault: {
+      getSecret: (key: string) => Promise<string | null>;
+    };
   }
 }

@@ -77,6 +77,11 @@ declare global {
 
   const serverBuild = await loadServerBuild();
 
+  // Initialize Vault dependencies
+  const safeStorage = await import('./utils/safeStorage');
+  const Store = (await import('electron-store')).default;
+  const store = new Store();
+
   protocol.handle('http', async (req) => {
     console.log('Handling request for:', req.url);
 
@@ -126,6 +131,18 @@ declare global {
          */
         // @ts-ignore:next-line
         cloudflare: {},
+        vault: {
+          getSecret: async (key: string) => {
+            try {
+              const encrypted = store.get(`vault:${key}`) as string;
+              if (!encrypted) return null;
+              return safeStorage.decryptString(encrypted);
+            } catch (e) {
+              console.error('Vault context error:', e);
+              return null;
+            }
+          }
+        }
       });
 
       return result;
@@ -135,10 +152,10 @@ declare global {
         error:
           err instanceof Error
             ? {
-                message: err.message,
-                stack: err.stack,
-                cause: err.cause,
-              }
+              message: err.message,
+              stack: err.stack,
+              cause: err.cause,
+            }
             : err,
       });
 
@@ -153,18 +170,18 @@ declare global {
 
   const rendererURL = await (isDev
     ? (async () => {
-        await initViteServer();
+      await initViteServer();
 
-        if (!viteServer) {
-          throw new Error('Vite server is not initialized');
-        }
+      if (!viteServer) {
+        throw new Error('Vite server is not initialized');
+      }
 
-        const listen = await viteServer.listen();
-        global.__electron__ = electron;
-        viteServer.printUrls();
+      const listen = await viteServer.listen();
+      global.__electron__ = electron;
+      viteServer.printUrls();
 
-        return `http://localhost:${listen.config.server.port}`;
-      })()
+      return `http://localhost:${listen.config.server.port}`;
+    })()
     : `http://localhost:${DEFAULT_PORT}`);
 
   console.log('Using renderer URL:', rendererURL);
@@ -181,11 +198,48 @@ declare global {
 
   return win;
 })()
-  .then((win) => {
+  .then(async (win) => {
     // IPC samples : send and recieve.
     let count = 0;
     setInterval(() => win.webContents.send('ping', `hello from main! ${count++}`), 60 * 1000);
     ipcMain.handle('ipcTest', (event, ...args) => console.log('ipc: renderer -> main', { event, ...args }));
+
+    // Vault IPC Handlers
+    const safeStorage = await import('./utils/safeStorage');
+    const Store = (await import('electron-store')).default;
+    const store = new Store();
+
+    ipcMain.handle('vault:save-secret', async (_, key: string, value: string) => {
+      try {
+        const encrypted = safeStorage.encryptString(value);
+        store.set(`vault:${key}`, encrypted);
+        return true;
+      } catch (error) {
+        console.error('Failed to save secret:', error);
+        return false;
+      }
+    });
+
+    ipcMain.handle('vault:get-secret', async (_, key: string) => {
+      try {
+        const encrypted = store.get(`vault:${key}`) as string;
+        if (!encrypted) return null;
+        return safeStorage.decryptString(encrypted);
+      } catch (error) {
+        console.error('Failed to get secret:', error);
+        return null;
+      }
+    });
+
+    ipcMain.handle('vault:delete-secret', async (_, key: string) => {
+      try {
+        store.delete(`vault:${key}`);
+        return true;
+      } catch (error) {
+        console.error('Failed to delete secret:', error);
+        return false;
+      }
+    });
 
     return win;
   })

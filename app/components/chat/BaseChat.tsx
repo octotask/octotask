@@ -10,8 +10,7 @@ import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
-import { getApiKeysFromCookies } from './APIKeyManager';
-import Cookies from 'js-cookie';
+import { vault } from '~/lib/api/vault.client';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import styles from './BaseChat.module.scss';
 import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
@@ -135,7 +134,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     ref,
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
-    const [apiKeys, setApiKeys] = useState<Record<string, string>>(getApiKeysFromCookies());
+    const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
     const [modelList, setModelList] = useState<ModelInfo[]>([]);
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
@@ -202,15 +201,26 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
     useEffect(() => {
       if (typeof window !== 'undefined') {
-        let parsedApiKeys: Record<string, string> | undefined = {};
+        // Load API keys from Vault
+        const loadKeys = async () => {
+          const keys: Record<string, string> = {};
 
-        try {
-          parsedApiKeys = getApiKeysFromCookies();
-          setApiKeys(parsedApiKeys);
-        } catch (error) {
-          console.error('Error loading API keys from cookies:', error);
-          Cookies.remove('apiKeys');
-        }
+          /*
+           * We need to iterate over known providers to fetch their keys
+           * Importing PROVIDER_LIST is required if not already imported,
+           * but providerList prop might be available or we can use the constant.
+           * BaseChat imports PROVIDER_LIST.
+           */
+          for (const p of PROVIDER_LIST) {
+            const key = await vault.getSecret(p.name);
+
+            if (key) {
+              keys[p.name] = key;
+            }
+          }
+          setApiKeys(keys);
+        };
+        loadKeys();
 
         setIsModelLoading('all');
         fetch('/api/models')
@@ -231,7 +241,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const onApiKeysChange = async (providerName: string, apiKey: string) => {
       const newApiKeys = { ...apiKeys, [providerName]: apiKey };
       setApiKeys(newApiKeys);
-      Cookies.set('apiKeys', JSON.stringify(newApiKeys));
+      await vault.saveSecret(providerName, apiKey);
 
       setIsModelLoading(providerName);
 

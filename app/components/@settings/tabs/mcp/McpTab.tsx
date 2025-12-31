@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import type { MCPConfig } from '~/lib/services/mcpService';
 import { toast } from 'react-toastify';
-import { useMCPStore } from '~/lib/stores/mcp';
+import { useStore } from '@nanostores/react';
+import { mcpStore, initializeMCP, updateMCPSettings, checkMCPServersAvailabilities } from '~/lib/stores/mcp';
 import McpServerList from '~/components/@settings/tabs/mcp/McpServerList';
 
 const EXAMPLE_MCP_CONFIG: MCPConfig = {
@@ -27,12 +28,10 @@ const EXAMPLE_MCP_CONFIG: MCPConfig = {
 };
 
 export default function McpTab() {
-  const settings = useMCPStore((state) => state.settings);
-  const isInitialized = useMCPStore((state) => state.isInitialized);
-  const serverTools = useMCPStore((state) => state.serverTools);
-  const initialize = useMCPStore((state) => state.initialize);
-  const updateSettings = useMCPStore((state) => state.updateSettings);
-  const checkServersAvailabilities = useMCPStore((state) => state.checkServersAvailabilities);
+  const { settings, isInitialized, serverTools } = useStore(mcpStore);
+  const initialize = initializeMCP;
+  const updateSettings = updateMCPSettings;
+  const checkServersAvailabilities = checkMCPServersAvailabilities;
 
   const [isSaving, setIsSaving] = useState(false);
   const [mcpConfigText, setMCPConfigText] = useState('');

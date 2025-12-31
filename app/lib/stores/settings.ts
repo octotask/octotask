@@ -4,7 +4,6 @@ import type { IProviderConfig } from '~/types/model';
 import type { TabVisibilityConfig, TabWindowConfig, UserTabConfig } from '~/components/@settings/core/types';
 import { DEFAULT_TAB_CONFIG } from '~/components/@settings/core/constants';
 import { toggleTheme } from './theme';
-import { create } from 'zustand';
 
 export interface Shortcut {
   key: string;
@@ -373,33 +372,26 @@ export const resetTabConfiguration = () => {
 };
 
 // First, let's define the SettingsStore interface
-interface SettingsStore {
+interface SettingsState {
   isOpen: boolean;
   selectedTab: string;
-  openSettings: () => void;
-  closeSettings: () => void;
-  setSelectedTab: (tab: string) => void;
 }
 
-export const useSettingsStore = create<SettingsStore>((set) => ({
+export const settingsUIStore = map<SettingsState>({
   isOpen: false,
-  selectedTab: 'user', // Default tab
+  selectedTab: 'user',
+});
 
-  openSettings: () => {
-    set({
-      isOpen: true,
-      selectedTab: 'user', // Always open to user tab
-    });
-  },
+export const openSettings = () => {
+  settingsUIStore.setKey('isOpen', true);
+  settingsUIStore.setKey('selectedTab', 'user');
+};
 
-  closeSettings: () => {
-    set({
-      isOpen: false,
-      selectedTab: 'user', // Reset to user tab when closing
-    });
-  },
+export const closeSettings = () => {
+  settingsUIStore.setKey('isOpen', false);
+  settingsUIStore.setKey('selectedTab', 'user');
+};
 
-  setSelectedTab: (tab: string) => {
-    set({ selectedTab: tab });
-  },
-}));
+export const setSelectedTab = (tab: string) => {
+  settingsUIStore.setKey('selectedTab', tab);
+};

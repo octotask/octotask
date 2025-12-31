@@ -14,7 +14,8 @@ interface Logger {
   setLevel: (level: DebugLevel) => void;
 }
 
-let currentLevel: DebugLevel = import.meta.env.VITE_LOG_LEVEL || (import.meta.env.DEV ? 'debug' : 'info');
+const env = import.meta.env || {};
+let currentLevel: DebugLevel = env.VITE_LOG_LEVEL || (env.DEV ? 'debug' : 'info');
 
 export const logger: Logger = {
   trace: (...messages: any[]) => logWithDebugCapture('trace', undefined, messages),

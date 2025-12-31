@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { IconButton } from '~/components/ui/IconButton';
 import type { ProviderInfo } from '~/types/model';
-import Cookies from 'js-cookie';
+import { vault } from '~/lib/api/vault.client';
 
 interface APIKeyManagerProps {
   provider: ProviderInfo;
@@ -14,23 +14,6 @@ interface APIKeyManagerProps {
 // cache which stores whether the provider's API key is set via environment variable
 const providerEnvKeyStatusCache: Record<string, boolean> = {};
 
-const apiKeyMemoizeCache: { [k: string]: Record<string, string> } = {};
-
-export function getApiKeysFromCookies() {
-  const storedApiKeys = Cookies.get('apiKeys');
-  let parsedKeys: Record<string, string> = {};
-
-  if (storedApiKeys) {
-    parsedKeys = apiKeyMemoizeCache[storedApiKeys];
-
-    if (!parsedKeys) {
-      parsedKeys = apiKeyMemoizeCache[storedApiKeys] = JSON.parse(storedApiKeys);
-    }
-  }
-
-  return parsedKeys;
-}
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, setApiKey }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -39,13 +22,23 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
 
   // Reset states and load saved key when provider changes
   useEffect(() => {
-    // Load saved API key from cookies for this provider
-    const savedKeys = getApiKeysFromCookies();
-    const savedKey = savedKeys[provider.name] || '';
+    let mounted = true;
 
-    setTempKey(savedKey);
-    setApiKey(savedKey);
-    setIsEditing(false);
+    async function loadKey() {
+      const savedKey = await vault.getSecret(provider.name);
+
+      if (mounted && savedKey) {
+        setTempKey(savedKey);
+        setApiKey(savedKey);
+        setIsEditing(false);
+      }
+    }
+
+    loadKey();
+
+    return () => {
+      mounted = false;
+    };
   }, [provider.name]);
 
   const checkEnvApiKey = useCallback(async () => {
@@ -73,14 +66,12 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
     checkEnvApiKey();
   }, [checkEnvApiKey]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Save to parent state
     setApiKey(tempKey);
 
-    // Save to cookies
-    const currentKeys = getApiKeysFromCookies();
-    const newKeys = { ...currentKeys, [provider.name]: tempKey };
-    Cookies.set('apiKeys', JSON.stringify(newKeys));
+    // Save to Vault
+    await vault.saveSecret(provider.name, tempKey);
 
     setIsEditing(false);
   };

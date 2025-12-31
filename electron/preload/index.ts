@@ -17,6 +17,11 @@ const ipc = {
       ipcRenderer.removeListener(channel, f);
     };
   },
+  vault: {
+    saveSecret: (key: string, value: string) => ipcRenderer.invoke('vault:save-secret', key, value),
+    getSecret: (key: string) => ipcRenderer.invoke('vault:get-secret', key),
+    deleteSecret: (key: string) => ipcRenderer.invoke('vault:delete-secret', key),
+  },
 };
 
 contextBridge.exposeInMainWorld('ipc', ipc);

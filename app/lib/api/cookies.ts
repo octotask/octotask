@@ -22,6 +22,9 @@ export function parseCookies(cookieHeader: string | null) {
   return cookies;
 }
 
+/**
+ * @deprecated usage of cookies for API keys is insecure. Use vault.client.ts instead.
+ */
 export function getApiKeysFromCookie(cookieHeader: string | null): Record<string, string> {
   const cookies = parseCookies(cookieHeader);
   return cookies.apiKeys ? JSON.parse(cookies.apiKeys) : {};

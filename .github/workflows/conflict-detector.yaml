@@ -20,7 +20,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Check for merge conflicts
-        uses: eps1lon/actions-label-merge-conflicts@v3
+        uses: eps1lon/actions-label-merge-conflict@v3.0.3
         with:
           dirtyLabel: "conflict"
           repoToken: "${{ secrets.GITHUB_TOKEN }}"

@@ -1,0 +1,27 @@
+name: Conflict Detector
+
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+    types: [synchronize, opened, reopened, labeled, unlabeled]
+
+# Cancel in-progress runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-conflicts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for merge conflicts
+        uses: eps1lon/actions-label-merge-conflicts@v3
+        with:
+          dirtyLabel: "conflict"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          continueOnMissingDraft: true

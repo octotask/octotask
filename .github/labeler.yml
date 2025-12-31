@@ -1,0 +1,32 @@
+# PR Labeler configuration
+# Ref: https://github.com/actions/labeler
+
+'area:agent':
+  - changed-files:
+    - any-glob-to-any-file: 'app/core/agent/**/*'
+
+'area:tools':
+  - changed-files:
+    - any-glob-to-any-file: 'app/core/tools/**/*'
+
+'area:workspace':
+  - changed-files:
+    - any-glob-to-any-file: 'app/core/workspace/**/*'
+
+'area:ui':
+  - changed-files:
+    - any-glob-to-any-file: 'app/components/**/*'
+    - any-glob-to-any-file: 'app/styles/**/*'
+
+'area:electron':
+  - changed-files:
+    - any-glob-to-any-file: 'electron/**/*'
+
+'ci':
+  - changed-files:
+    - any-glob-to-any-file: '.github/workflows/**/*'
+
+'docs':
+  - changed-files:
+    - any-glob-to-any-file: '**/*.md'
+    - any-glob-to-any-file: 'docs/**/*'

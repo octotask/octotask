@@ -53,8 +53,7 @@ export class EnhancedStreamingMessageParser extends StreamingMessageParser {
   private _hasDetectedArtifacts(input: string): boolean {
     const ARTIFACT_TAG_OPEN = '<octoArtifact';
     const ARTIFACT_TAG_CLOSE = '</octoArtifact>';
-    const ARTIFACT_ACTION_TAG_OPEN = '<octoAction';
-    const ARTIFACT_ACTION_TAG_CLOSE = '</octoAction>';
+
     return input.includes(ARTIFACT_TAG_OPEN) || input.includes(ARTIFACT_TAG_CLOSE);
   }
 

@@ -133,18 +133,18 @@ export function useChatHistory() {
                   content: `OctoTask restored your chat from a snapshot. You can revert this message to load the full chat history.
                   <octoArtifact id="restored-project-setup" title="Restored Project & Setup" type="bundled">
                   ${Object.entries(snapshot?.files || {})
-                      .map(([key, value]) => {
-                        if (value?.type === 'file') {
-                          return `
+                    .map(([key, value]) => {
+                      if (value?.type === 'file') {
+                        return `
                       <octoAction type="file" filePath="${key}">
 ${value.content}
                       </octoAction>
                       `;
-                        } else {
-                          return ``;
-                        }
-                      })
-                      .join('\n')}
+                      } else {
+                        return ``;
+                      }
+                    })
+                    .join('\n')}
                   ${commandActionsString} 
                   </octoArtifact>
                   `, // Added commandActionsString, followupMessage, updated id and title
@@ -152,12 +152,12 @@ ${value.content}
                     'no-store',
                     ...(summary
                       ? [
-                        {
-                          chatId: storedMessages.messages[snapshotIndex].id,
-                          type: 'chatSummary',
-                          summary,
-                        } satisfies ContextAnnotation,
-                      ]
+                          {
+                            chatId: storedMessages.messages[snapshotIndex].id,
+                            type: 'chatSummary',
+                            summary,
+                          } satisfies ContextAnnotation,
+                        ]
                       : []),
                   ],
                 },

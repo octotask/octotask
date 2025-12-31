@@ -7,7 +7,10 @@ import { Header } from '~/components/header/Header';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'OctoTask' }, { name: 'description', content: 'Talk with OctoTask, an AI assistant from KhulnaSoft' }];
+  return [
+    { title: 'OctoTask' },
+    { name: 'description', content: 'Talk with OctoTask, an AI assistant from KhulnaSoft' },
+  ];
 };
 
 export async function loader(args: LoaderFunctionArgs) {

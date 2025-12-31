@@ -77,7 +77,7 @@ export class StreamingMessageParser {
   #messages = new Map<string, MessageState>();
   #artifactCounter = 0;
 
-  constructor(private _options: StreamingMessageParserOptions = {}) { }
+  constructor(private _options: StreamingMessageParserOptions = {}) {}
 
   parse(messageId: string, input: string) {
     let state = this.#messages.get(messageId);

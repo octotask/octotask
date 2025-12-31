@@ -1,45 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <rect width="1200" height="630" fill="#0A0A0A" />
-  <rect width="1200" height="630" fill="url(#gradient)" fill-opacity="0.3" />
-  <circle cx="600" cy="315" r="400" fill="url(#glow)" fill-opacity="0.2" />
-  
-  <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#007BFF" />
-      <stop offset="1" stop-color="#001F3F" />
-    </linearGradient>
-    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 315) rotate(90) scale(400)">
-      <stop stop-color="#007BFF" />
-      <stop offset="1" stop-color="#007BFF" stop-opacity="0" />
-    </radialGradient>
-  </defs>
-
-  {/* OctoTask Wordmark */}
-  <g transform="translate(420, 280)">
-    {/* Octopus Symbol */}
-    <g transform="scale(0.8)">
-      <circle cx="50" cy="40" r="18" fill="#007BFF" />
-      <path
-        d="M25 65C20 75 30 85 45 80"
-        stroke="#007BFF"
-        stroke-width="6"
-        stroke-linecap="round"
-      />
-      <path
-        d="M75 65C80 75 70 85 55 80"
-        stroke="#007BFF"
-        stroke-width="6"
-        stroke-linecap="round"
-      />
-      <circle cx="42" cy="40" r="2" fill="white" />
-      <circle cx="58" cy="40" r="2" fill="white" />
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="social-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#B69EFF" />
+            <stop offset="100%" stop-color="#9C7DFF" />
+        </linearGradient>
+    </defs>
+    <rect width="1200" height="630" fill="#0A0A0A" />
+    <g transform="translate(380, 165) scale(3)">
+        <circle cx="50" cy="40" r="22" fill="url(#social-gradient)" fill-opacity="0.15" />
+        <path d="M50 20C38.9543 20 30 28.9543 30 40C30 45.5228 32.2386 50.5228 35.8579 54.1421C39.4772 57.7614 44.4772 60 50 60C55.5228 60 60.5228 57.7614 64.1421 54.1421C67.7614 50.5228 70 45.5228 70 40C70 28.9543 61.0457 20 50 20Z" fill="url(#social-gradient)" />
+        <path d="M25 65C20 75 30 85 45 80" stroke="url(#social-gradient)" stroke-width="6" stroke-linecap="round" />
+        <path d="M75 65C80 75 70 85 55 80" stroke="url(#social-gradient)" stroke-width="6" stroke-linecap="round" />
+        <path d="M15 40C5 45 10 55 25 50" stroke="url(#social-gradient)" stroke-width="4" stroke-linecap="round" />
+        <path d="M85 40C95 45 90 55 75 50" stroke="url(#social-gradient)" stroke-width="4" stroke-linecap="round" />
+        <circle cx="50" cy="35" r="3" fill="white" />
+        <circle cx="42" cy="40" r="2" fill="white" />
+        <circle cx="58" cy="40" r="2" fill="white" />
     </g>
-    
-    <text x="100" y="55" fill="#007BFF" font-family="sans-serif" font-weight="bold" font-size="84">Octo</text>
-    <text x="310" y="55" fill="white" font-family="sans-serif" font-weight="bold" font-size="84">Task</text>
-  </g>
-
-  <text x="600" y="420" text-anchor="middle" fill="#888888" font-family="sans-serif" font-size="32" letter-spacing="2">THE ELITE OPEN-SOURCE AI FULL-STACK PLATFORM</text>
-  
-  <text x="600" y="580" text-anchor="middle" fill="#444444" font-family="sans-serif" font-size="18">Crafted by KhulnaSoft & The Community</text>
+    <text x="600" y="520" font-family="system-ui, -apple-system, sans-serif" font-weight="bold" font-size="80" fill="white" text-anchor="middle">
+        <tspan fill="#9C7DFF">Octo</tspan>Task
+    </text>
+    <text x="600" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#A3A3A3" text-anchor="middle" letter-spacing="0.1em">
+        THE INTELLIGENT TASK AUTOMATION PLATFORM
+    </text>
 </svg>

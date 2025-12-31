@@ -1,21 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="40" r="18" fill="#007BFF" />
-  <path
-    d="M25 65C20 75 30 85 45 80"
-    stroke="#007BFF"
-    stroke-width="6"
-    stroke-linecap="round"
-  />
-  <path
-    d="M75 65C80 75 70 85 55 80"
-    stroke="#007BFF"
-    stroke-width="6"
-    stroke-linecap="round"
-  />
-  <path
-    d="M50 35"
-    fill="white"
-  />
-  <circle cx="42" cy="40" r="2" fill="white" />
-  <circle cx="58" cy="40" r="2" fill="white" />
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="favicon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#B69EFF" />
+            <stop offset="100%" stop-color="#9C7DFF" />
+        </linearGradient>
+    </defs>
+    <!-- Background for cross-theme visibility -->
+    <rect width="100" height="100" rx="20" fill="#0A0A0A" />
+    <circle cx="50" cy="40" r="20" fill="url(#favicon-gradient)" fill-opacity="0.2" />
+    <path d="M50 20C38.9543 20 30 28.9543 30 40C30 45.5228 32.2386 50.5228 35.8579 54.1421C39.4772 57.7614 44.4772 60 50 60C55.5228 60 60.5228 57.7614 64.1421 54.1421C67.7614 50.5228 70 45.5228 70 40C70 28.9543 61.0457 20 50 20Z" fill="url(#favicon-gradient)" />
+    <path d="M25 65C20 75 30 85 45 80" stroke="url(#favicon-gradient)" stroke-width="6" stroke-linecap="round" />
+    <path d="M75 65C80 75 70 85 55 80" stroke="url(#favicon-gradient)" stroke-width="6" stroke-linecap="round" />
+    <path d="M15 40C5 45 10 55 25 50" stroke="url(#favicon-gradient)" stroke-width="4" stroke-linecap="round" />
+    <path d="M85 40C95 45 90 55 75 50" stroke="url(#favicon-gradient)" stroke-width="4" stroke-linecap="round" />
+    <circle cx="50" cy="35" r="3" fill="white" />
+    <circle cx="42" cy="40" r="2" fill="white" />
+    <circle cx="58" cy="40" r="2" fill="white" />
 </svg>

@@ -1,4 +1,4 @@
-name: 'Approved' Labeler
+name: "'Approved' Labeler"
 
 on:
   pull_request_review:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.event.review.state == 'approved' || github.event.review.state == 'changes_requested'
+    if: ${{ github.event.review.state == 'approved' || github.event.review.state == 'changes_requested' }}
 
     steps:
       - name: Update PR Labels

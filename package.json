@@ -24,7 +24,7 @@
     "dockerstart": "bindings=$(./bindings.sh) && wrangler pages dev ./build/client $bindings --ip 0.0.0.0 --port 5173 --no-show-interactive-dev-session",
     "dockerrun": "docker run -it -d --name octotask-live -p 5173:5173 --env-file .env.local octotask",
     "dockerbuild:prod": "docker build -t octotask:production -t octotask:latest --target octotask-production .",
-    "dockerbuild": "docker build -t octotask:development -t octotask:latest --target development .",
+    "dockerbuild": "docker build -t octotask:development -t octotask:latest --target octotask-development .",
     "typecheck": "tsc",
     "typegen": "wrangler types",
     "preview": "pnpm run build && pnpm run start",

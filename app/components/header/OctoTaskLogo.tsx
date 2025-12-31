@@ -3,9 +3,10 @@ import React from 'react';
 interface OctoTaskLogoProps {
   className?: string;
   size?: number;
+  textSize?: string;
 }
 
-export const OctoTaskLogo: React.FC<OctoTaskLogoProps> = ({ className, size = 32 }) => {
+export const OctoTaskLogo: React.FC<OctoTaskLogoProps> = ({ className, size = 32, textSize = 'text-2xl' }) => {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <svg
@@ -31,7 +32,7 @@ export const OctoTaskLogo: React.FC<OctoTaskLogoProps> = ({ className, size = 32
         <circle cx="42" cy="40" r="2" fill="white" />
         <circle cx="58" cy="40" r="2" fill="white" />
       </svg>
-      <span className="text-2xl font-bold tracking-tight">
+      <span className={`${textSize} font-bold tracking-tight`}>
         <span className="text-octo-elements-accent">Octo</span>
         <span className="text-octo-elements-textPrimary">Task</span>
       </span>

@@ -1,0 +1,30 @@
+# Code Owners for octotask
+# These users/teams will automatically be requested for review when files are modified
+
+# Global ownership - repository maintainers
+* @octotask/maintainers
+
+# GitHub workflows and CI/CD configuration - require maintainer review
+/.github/ @octotask/maintainers
+/package.json @octotask/maintainers
+/pnpm-lock.yaml @octotask/maintainers
+
+# Security-sensitive configurations - require maintainer review
+/.env* @octotask/maintainers
+/wrangler.toml @octotask/maintainers  
+/Dockerfile @octotask/maintainers
+/docker-compose.yaml @octotask/maintainers
+
+# Core application architecture - require maintainer review
+/app/lib/.server/ @octotask/maintainers
+/app/routes/api.* @octotask/maintainers
+
+# Build and deployment configuration - require maintainer review
+/vite*.config.ts @octotask/maintainers
+/tsconfig.json @octotask/maintainers
+/uno.config.ts @octotask/maintainers
+/eslint.config.mjs @octotask/maintainers
+
+# Documentation (optional review)
+/*.md
+/docs/

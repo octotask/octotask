@@ -80,7 +80,7 @@ Interested in maintaining and growing the project? Fill out our [Contributor App
 
 - Clone the repository:
   ```bash
-  git clone https://github.com/octotask-labs/octotask.git
+  git clone https://github.com/octotask/octotask.git
   ```
 - Install dependencies:
   ```bash

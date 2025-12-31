@@ -1,4 +1,6 @@
 import { EventEmitter } from 'events';
+import fs from 'fs/promises';
+import path from 'path';
 import { Indexer } from '~/core/workspace/Indexer';
 import { VectorStore } from '~/core/workspace/VectorStore';
 import { PromptFactory } from './PromptFactory';
@@ -8,6 +10,11 @@ import { PROVIDER_LIST } from '~/utils/constants';
 import { ToolRouter } from './ToolRouter';
 import { FileSystemTools } from '~/core/tools/FileSystemTools';
 import { ShellTools } from '~/core/tools/ShellTools';
+import { HandoverTools } from '~/core/tools/HandoverTools';
+import { LSPTools } from '~/core/tools/LSPTools';
+import { ShadowManager } from '~/core/workspace/ShadowManager';
+import { InteractiveShell } from '~/core/workspace/InteractiveShell';
+import { LSPManager } from '~/core/workspace/LSPManager';
 
 export type AgentStatus = 'idle' | 'planning' | 'acting' | 'observing' | 'indexing';
 
@@ -24,21 +31,31 @@ export abstract class CoreAgent extends EventEmitter {
   protected promptFactory: PromptFactory;
   protected memory: Memory;
   protected toolRouter: ToolRouter;
+  protected shadowManager: ShadowManager;
+  protected delegationDepth: number;
+  protected interactiveShell: InteractiveShell;
+  protected lspManager: LSPManager;
 
-  constructor(context: AgentContext) {
+  constructor(context: AgentContext, depth: number = 0) {
     super();
     this.context = context;
+    this.delegationDepth = depth;
     this.indexer = new Indexer();
     this.vectorStore = new VectorStore();
     this.promptFactory = new PromptFactory();
     this.memory = new Memory();
     this.toolRouter = new ToolRouter();
+    this.shadowManager = new ShadowManager(context.workspacePath);
+    this.interactiveShell = new InteractiveShell(context.workspacePath);
+    this.lspManager = new LSPManager(context.workspacePath);
 
     // Register Tools
-    const fsTools = new FileSystemTools(context.workspacePath);
-    const shTools = new ShellTools(context.workspacePath);
+    const fsTools = new FileSystemTools(context.workspacePath, this.shadowManager);
+    const shTools = new ShellTools(context.workspacePath, this.interactiveShell);
+    const hoTools = new HandoverTools(context, this.delegationDepth + 1);
+    const lspTools = new LSPTools(this.lspManager);
 
-    [...fsTools.getTools(), ...shTools.getTools()].forEach((tool) => {
+    [...fsTools.getTools(), ...shTools.getTools(), ...hoTools.getTools(), ...lspTools.getTools()].forEach((tool) => {
       this.toolRouter.registerTool(tool);
     });
 
@@ -63,17 +80,53 @@ export abstract class CoreAgent extends EventEmitter {
     this.status = 'indexing';
     this.emit('status', this.status);
 
+    const storagePath = path.join(this.context.workspacePath, '.octotask');
+    const vectorStorePath = path.join(storagePath, 'vector_store.json');
+    const metadataPath = path.join(storagePath, 'metadata.json');
+
     try {
       console.log('CoreAgent: Starting workspace indexing...');
 
-      const documents = await this.indexer.indexWorkspace(this.context.workspacePath);
+      // 1. Load existing state
+      await this.vectorStore.load(vectorStorePath);
 
-      if (documents.length > 0) {
-        await this.vectorStore.addDocuments(documents);
-        console.log('CoreAgent: Workspace indexing complete.');
-      } else {
-        console.warn('CoreAgent: No documents found to index.');
+      let oldMetadata = {};
+
+      try {
+        const metaData = await fs.readFile(metadataPath, 'utf-8');
+        oldMetadata = JSON.parse(metaData);
+      } catch {
+        // Safe to ignore if metadata doesn't exist
       }
+
+      // 2. Incremental Index
+      const indexResult = await this.indexer.indexWorkspace(this.context.workspacePath, oldMetadata);
+
+      // 3. Sync Vector Store
+      for (const deletedFile of indexResult.deletedFiles) {
+        this.vectorStore.removeDocuments(deletedFile);
+      }
+
+      for (const changedDoc of indexResult.changedDocuments) {
+        // Clear old vectors if the file was modified
+        this.vectorStore.removeDocuments(changedDoc.path);
+      }
+
+      if (indexResult.changedDocuments.length > 0) {
+        await this.vectorStore.addDocuments(
+          indexResult.changedDocuments.map((doc) => ({
+            path: doc.path,
+            chunks: doc.chunks,
+          })),
+        );
+      }
+
+      // 4. Persist state
+      await this.vectorStore.save(vectorStorePath);
+      await fs.mkdir(storagePath, { recursive: true });
+      await fs.writeFile(metadataPath, JSON.stringify(indexResult.metadata), 'utf-8');
+
+      console.log('CoreAgent: Workspace indexing complete.');
     } catch (error) {
       console.error('CoreAgent: Error initializing workspace:', error);
     } finally {
@@ -86,11 +139,11 @@ export abstract class CoreAgent extends EventEmitter {
     return this.vectorStore.search(query);
   }
 
-  async execute(goal: string) {
+  async execute(goal: string): Promise<string> {
     return this.runLoop(goal);
   }
 
-  protected async runLoop(goal: string) {
+  protected async runLoop(goal: string): Promise<string> {
     console.log(`CoreAgent: Starting loop for goal: "${goal}"`);
     this.status = 'planning';
     this.emit('status', this.status);
@@ -98,6 +151,7 @@ export abstract class CoreAgent extends EventEmitter {
     let iterations = 0;
     const MAX_ITERATIONS = 10;
     let running = true;
+    let resultText = '';
 
     while (running && iterations < MAX_ITERATIONS) {
       iterations++;
@@ -108,7 +162,8 @@ export abstract class CoreAgent extends EventEmitter {
       const contextStr = contextResults.map((r) => r.chunk).join('\n---\n');
 
       // 2. Plan / Decide Action
-      const systemPrompt = this.promptFactory.generateSystemPrompt(this.context);
+      const persona = (this as any).persona; // Use property if it exists (e.g. on DefaultAgent)
+      const systemPrompt = this.promptFactory.generateSystemPrompt(this.context, persona);
       const userPrompt = this.promptFactory.generateUserPrompt(goal, contextStr, this.memory.getHistory());
 
       console.log('--- System Prompt ---\n', systemPrompt);
@@ -145,7 +200,6 @@ export abstract class CoreAgent extends EventEmitter {
 
       const llmService = new LLMService();
       let response;
-      let resultText = '';
 
       try {
         response = await llmService.generate({
@@ -213,7 +267,11 @@ export abstract class CoreAgent extends EventEmitter {
 
     this.status = 'idle';
     this.emit('status', this.status);
+    this.interactiveShell.kill();
+    this.lspManager.stop();
     console.log('CoreAgent: Loop finished.');
+
+    return resultText;
   }
 
   abstract plan(goal: string): Promise<any>;

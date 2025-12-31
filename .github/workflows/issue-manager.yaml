@@ -1,0 +1,69 @@
+name: Issue Manager
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  manage-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Auto-label and Welcome
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = issue.number;
+            const title = issue.title.toLowerCase();
+            const body = (issue.body || '').toLowerCase();
+            const fullText = `${title} ${body}`;
+
+            const labelsToAdd = ['needs-triage'];
+
+            // Automated Labeling Logic
+            const labelMappings = {
+              'bug': ['bug', 'error', 'crash', 'fail', 'broken'],
+              'enhancement': ['feature', 'request', 'enhancement', 'improve'],
+              'question': ['question', 'how to', 'help', 'confused'],
+              'area:agent': ['agent', 'ai', 'llm', 'coreagent', 'persona'],
+              'area:ui': ['ui', 'visual', 'design', 'component', 'css', 'style'],
+              'area:workspace': ['workspace', 'file', 'indexer', 'vector'],
+            };
+
+            for (const [label, keywords] of Object.entries(labelMappings)) {
+              if (keywords.some(kw => fullText.includes(kw))) {
+                labelsToAdd.push(label);
+              }
+            }
+
+            console.log(`Managing Issue #${issueNumber}`);
+            
+            // Apply labels
+            try {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                labels: labelsToAdd
+              });
+            } catch (e) {
+              console.log('Error adding labels:', e.message);
+            }
+
+            // Post welcome comment
+            const welcomeMessage = `Hi @${issue.user.login}! 👋\n\nThank you for opening this issue. Our team (and our AI agents!) will take a look as soon as possible. In the meantime, please make sure you've provided all the details requested in the template.\n\nI've automatically tagged this as \`needs-triage\` and applied any relevant area labels.`;
+            
+            try {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                body: welcomeMessage
+              });
+            } catch (e) {
+              console.log('Error posting comment:', e.message);
+            }

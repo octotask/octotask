@@ -2,7 +2,7 @@ export interface Tool {
   name: string;
   description: string;
   execute: (args: any) => Promise<any>;
-  schema: Record<string, any>; // JSON Schema for arguments
+  parameters: Record<string, any>; // JSON Schema for arguments
 }
 
 export class ToolRouter {
@@ -41,7 +41,21 @@ export class ToolRouter {
     return Array.from(this._tools.values()).map((t) => ({
       name: t.name,
       description: t.description,
-      parameters: t.schema,
+      parameters: t.parameters,
     }));
+  }
+
+  getToolsForSDK(): Record<string, any> {
+    const sdkTools: Record<string, any> = {};
+
+    for (const [name, tool] of this._tools.entries()) {
+      sdkTools[name] = {
+        description: tool.description,
+        parameters: tool.parameters,
+        execute: tool.execute,
+      };
+    }
+
+    return sdkTools;
   }
 }

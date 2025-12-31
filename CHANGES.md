@@ -1,3 +1,31 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.0] - 2026-01-01
+
+### Added
+- **Branching Strategy**: Implemented a Git Flow-inspired branching workflow (`stable`, `main`, `feature/*`, `bugfix/*`, `hotfix/*`, `release/*`, `docs/*`).
+- **PR Template**: Added a comprehensive Pull Request template for better contribution workflow.
+- **QEMU Support**: Added multi-platform (linux/amd64, linux/arm64) support for Docker builds.
+- **Branding Assets**: Refined OctoTask branding including premium logos and icons.
+- **Enhanced UI**: Added new CSS animations, dynamic background rays, and a polished introductory screen.
+
+### Changed
+- **CI/CD Workflow**: Updated Docker publishing workflow with robust GHCR login using `repository_owner`.
+- **Contribution Guide**: Revamped `CONTRIBUTING.md` with detailed branching and PR instructions.
+- **Docker Metadata**: Switched to `docker/metadata-action@v5` and added explicit image source labels for GHCR.
+
+### Fixed
+- **Docker Push Permissions**: Resolved `write_package` denial by linking images to the repository source.
+- **Linting**: Fixed various ESLint and Prettier errors across the codebase.
+- **Type Errors**: Resolved TypeScript definition issues in the core agent reasoning loop.
+
+---
+
 # File and Folder Locking Feature Implementation
 
 ## Overview

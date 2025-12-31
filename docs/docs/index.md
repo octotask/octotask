@@ -77,12 +77,12 @@ If you're new to installing software from GitHub, don't worry! If you encounter 
 
 ### Clone the Repository
 
-Alternatively, you can download the latest version of the project directly from the [Releases Page](https://github.com/octotask-labs/octotask/releases/latest). Simply download the .zip file, extract it, and proceed with the setup instructions below. If you are comfertiable using git then run the command below.
+Alternatively, you can download the latest version of the project directly from the [Releases Page](https://github.com/octotask/octotask/releases/latest). Simply download the .zip file, extract it, and proceed with the setup instructions below. If you are comfertiable using git then run the command below.
 
 Clone the repository using Git:
 
 ```bash
-git clone https://github.com/octotask-labs/octotask
+git clone https://github.com/octotask/octotask
 cd octotask
 ```
 

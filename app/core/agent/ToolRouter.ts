@@ -3,6 +3,7 @@ export interface Tool {
   description: string;
   execute: (args: any) => Promise<any>;
   parameters: Record<string, any>; // JSON Schema for arguments
+  groups?: string[];
 }
 
 export class ToolRouter {
@@ -14,7 +15,7 @@ export class ToolRouter {
     }
 
     this._tools.set(tool.name, tool);
-    console.log(`Registered tool: ${tool.name}`);
+    console.log(`Registered tool: ${tool.name}${tool.groups ? ` (Groups: ${tool.groups.join(', ')})` : ''}`);
   }
 
   getTool(name: string): Tool | undefined {
@@ -45,10 +46,15 @@ export class ToolRouter {
     }));
   }
 
-  getToolsForSDK(): Record<string, any> {
+  getToolsForSDK(groupName?: string): Record<string, any> {
     const sdkTools: Record<string, any> = {};
 
     for (const [name, tool] of this._tools.entries()) {
+      // Filter by group if groupName is provided
+      if (groupName && (!tool.groups || !tool.groups.includes(groupName))) {
+        continue;
+      }
+
       sdkTools[name] = {
         description: tool.description,
         parameters: tool.parameters,

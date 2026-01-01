@@ -8,7 +8,8 @@ import { getDynamicMaxTokens, validateTokenLimits } from '~/controllers/llm/Vali
 
 interface GenerateOptions {
   system: string;
-  message: string;
+  message?: string;
+  messages?: { role: 'user' | 'assistant' | 'system'; content: string }[];
   model: string;
   provider: ProviderInfo;
   apiKeys: Record<string, string>;
@@ -19,7 +20,7 @@ interface GenerateOptions {
 
 export class LLMService {
   async generate(options: GenerateOptions) {
-    const { system, message, model, provider, apiKeys, providerSettings, serverEnv, tools } = options;
+    const { system, message, messages, model, provider, apiKeys, providerSettings, serverEnv, tools } = options;
 
     const models = await this._getModelList({ apiKeys, providerSettings, serverEnv });
     const modelDetails = models.find((m: ModelInfo) => m.name === model);
@@ -44,9 +45,11 @@ export class LLMService {
     const isReasoning = isReasoningModel(modelDetails.name);
     const tokenParams = isReasoning ? { maxCompletionTokens: dynamicMaxTokens } : { maxTokens: dynamicMaxTokens };
 
+    const formattedMessages = messages || (message ? [{ role: 'user' as const, content: message }] : []);
+
     const baseParams = {
       system,
-      messages: [{ role: 'user' as const, content: `${message}` }],
+      messages: formattedMessages,
       model: providerInfo.getModelInstance({
         model: modelDetails.name,
         serverEnv: serverEnv as any,

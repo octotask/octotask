@@ -15,6 +15,7 @@ import { LSPTools } from '~/core/tools/LSPTools';
 import { ShadowManager } from '~/core/workspace/ShadowManager';
 import { InteractiveShell } from '~/core/workspace/InteractiveShell';
 import { LSPManager } from '~/core/workspace/LSPManager';
+import { TextUtility } from '~/utils/TextUtility';
 
 export type AgentStatus = 'idle' | 'planning' | 'acting' | 'observing' | 'indexing';
 
@@ -35,6 +36,12 @@ export abstract class CoreAgent extends EventEmitter {
   protected delegationDepth: number;
   protected interactiveShell: InteractiveShell;
   protected lspManager: LSPManager;
+  protected _tokenMetrics = {
+    input: 0,
+    output: 0,
+    pruned: 0,
+    turns: 0,
+  };
 
   constructor(context: AgentContext, depth: number = 0) {
     super();
@@ -49,20 +56,22 @@ export abstract class CoreAgent extends EventEmitter {
     this.interactiveShell = new InteractiveShell(context.workspacePath);
     this.lspManager = new LSPManager(context.workspacePath);
 
-    // Register Tools
+    // Register Tools with Grouping
     const fsTools = new FileSystemTools(context.workspacePath, this.shadowManager);
     const shTools = new ShellTools(context.workspacePath, this.interactiveShell);
     const hoTools = new HandoverTools(context, this.delegationDepth + 1);
     const lspTools = new LSPTools(this.lspManager);
 
-    [...fsTools.getTools(), ...shTools.getTools(), ...hoTools.getTools(), ...lspTools.getTools()].forEach((tool) => {
-      this.toolRouter.registerTool(tool);
-    });
+    fsTools.getTools().forEach((t) => this.toolRouter.registerTool({ ...t, groups: ['ACT', 'CODE'] }));
+    shTools.getTools().forEach((t) => this.toolRouter.registerTool({ ...t, groups: ['ACT', 'SHELL'] }));
+    hoTools.getTools().forEach((t) => this.toolRouter.registerTool({ ...t, groups: ['PLAN', 'ACT'] }));
+    lspTools.getTools().forEach((t) => this.toolRouter.registerTool({ ...t, groups: ['PLAN', 'LSP'] }));
 
     // Register default search tool
     this.toolRouter.registerTool({
       name: 'search_workspace',
       description: 'Search the codebase using semantic search.',
+      groups: ['PLAN', 'WORKSPACE'],
       parameters: {
         type: 'object',
         properties: {
@@ -156,18 +165,23 @@ export abstract class CoreAgent extends EventEmitter {
     while (running && iterations < MAX_ITERATIONS) {
       iterations++;
       console.log(`CoreAgent: Iteration ${iterations}`);
+      this.status = 'planning';
+      this.emit('status', this.status);
 
       // 1. Context Retrieval (RAG)
       const contextResults = await this.vectorStore.search(goal);
       const contextStr = contextResults.map((r) => r.chunk).join('\n---\n');
 
       // 2. Plan / Decide Action
-      const persona = (this as any).persona; // Use property if it exists (e.g. on DefaultAgent)
-      const systemPrompt = this.promptFactory.generateSystemPrompt(this.context, persona);
-      const userPrompt = this.promptFactory.generateUserPrompt(goal, contextStr, this.memory.getHistory());
+      const persona = (this as any).persona;
+      const systemPrompt = this.promptFactory.generateSystemPrompt(this.context, persona, {
+        includeWorkflows: iterations === 1,
+        agentStatus: this.status,
+      });
+      const structuredPrompt = this.promptFactory.generateStructuredUserPrompt(goal, contextStr);
 
       console.log('--- System Prompt ---\n', systemPrompt);
-      console.log('--- User Prompt ---\n', userPrompt);
+      console.log('--- User Prompt ---\n', structuredPrompt.prompt);
 
       /*
        * 3. LLM Call
@@ -176,7 +190,6 @@ export abstract class CoreAgent extends EventEmitter {
       const apiKeys: Record<string, string> = {};
 
       if (this.context.vault) {
-        // If vault is available, we assume context.vault implements getSecret interface
         for (const p of PROVIDER_LIST) {
           try {
             const key = await this.context.vault.getSecret(p.name);
@@ -202,14 +215,17 @@ export abstract class CoreAgent extends EventEmitter {
       let response;
 
       try {
+        // Construct messages: history + current prompt
+        const messages = [...this.memory.getHistory(), { role: 'user' as const, content: structuredPrompt.prompt }];
+
         response = await llmService.generate({
           system: systemPrompt,
-          message: userPrompt,
+          messages,
           model: modelName,
           provider: { name: providerName } as any,
           apiKeys,
           serverEnv: {},
-          tools: this.toolRouter.getToolsForSDK(),
+          tools: this.toolRouter.getToolsForSDK(this.status === 'planning' ? 'PLAN' : 'ACT'),
         });
         resultText = response.text;
         console.log('LLM Response Text:', resultText);
@@ -230,7 +246,14 @@ export abstract class CoreAgent extends EventEmitter {
           try {
             console.log(`CoreAgent: Executing tool call: ${toolCall.toolName}`, toolCall.args);
 
-            const result = await this.toolRouter.executeTool(toolCall.toolName, toolCall.args);
+            const rawResult = await this.toolRouter.executeTool(toolCall.toolName, toolCall.args);
+
+            // Graduated Truncation based on current context load
+            const currentContextSize = JSON.stringify(this.memory.getHistory()).length / 4;
+            const truncationLevel = currentContextSize > 20000 ? 'heavy' : 'medium';
+            const result =
+              typeof rawResult === 'string' ? TextUtility.smartTruncate(rawResult, truncationLevel) : rawResult;
+
             toolResults.push({ toolCallId: toolCall.toolCallId, result });
           } catch (e: any) {
             toolResults.push({ toolCallId: toolCall.toolCallId, error: e.message });
@@ -242,11 +265,46 @@ export abstract class CoreAgent extends EventEmitter {
       this.status = 'observing';
       this.emit('status', this.status);
 
-      this.memory.add({ role: 'user', content: userPrompt });
+      // Token Tracking (Simplified Estimation)
+      const inputEst = (systemPrompt.length + structuredPrompt.prompt.length) / 4;
+      const outputEst = resultText.length / 4;
+      const prunedEst = structuredPrompt.context.length / 4;
+
+      this._tokenMetrics.input += inputEst;
+      this._tokenMetrics.output += outputEst;
+      this._tokenMetrics.pruned += prunedEst;
+      this._tokenMetrics.turns++;
+
+      console.log(
+        `[TELEMETRY] Turn ${iterations}: In: ${Math.round(inputEst)}, Out: ${Math.round(outputEst)}, Pruned: ${Math.round(prunedEst)}`,
+      );
+
+      // 5.1 Failure Isolation: Separate successful results from intermediate failures
+      const successfulResults = toolResults.filter((r) => !r.error);
+      const failedResults = toolResults.filter((r) => r.error);
+
+      // Persist GOAL and Successful results to Conversational Memory
+      this.memory.add({ role: 'user', content: `GOAL: ${structuredPrompt.goal}` });
       this.memory.add({ role: 'assistant', content: resultText });
 
-      if (toolResults.length > 0) {
-        this.memory.add({ role: 'system', content: `Tool Results: ${JSON.stringify(toolResults)}` });
+      if (successfulResults.length > 0) {
+        this.memory.add({ role: 'system', content: `Tool Successes: ${JSON.stringify(successfulResults)}` });
+      }
+
+      // Isolate Failures to Telemetry (Not sent back to LLM context)
+      if (failedResults.length > 0) {
+        console.warn(`[GOVERNANCE] Isolating ${failedResults.length} tool failures from context.`);
+        this.memory.addTelemetry(
+          { role: 'system', content: `Isolated Tool Failures: ${JSON.stringify(failedResults)}` },
+          { turn: iterations },
+        );
+      }
+
+      // 5.2 Context Budget Alarm
+      const currentContextSize = JSON.stringify(this.memory.getHistory()).length / 4;
+
+      if (currentContextSize > 30000) {
+        console.error(`[GOVERNANCE] Context size Alert: ${Math.round(currentContextSize)} tokens. Growth rate high.`);
       }
 
       /*

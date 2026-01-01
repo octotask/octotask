@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+      target: octotask-development
+    command: pnpm --filter api-service dev
+    ports:
+      - "8787:8787"
+    volumes:
+      - ../../:/app

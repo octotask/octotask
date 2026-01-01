@@ -1,5 +1,4 @@
 import React from 'react';
-import { ClientOnly } from 'remix-utils/client-only';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
 import { ModelSelector } from '~/components/chat/ModelSelector';
@@ -103,34 +102,30 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         <rect className={classNames(styles.PromptShine)} x="48" y="24" width="70" height="1"></rect>
       </svg>
       <div>
-        <ClientOnly>
-          {() => (
-            <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
-              <ModelSelector
-                key={props.provider?.name + ':' + props.modelList.length}
-                model={props.model}
-                setModel={props.setModel}
-                modelList={props.modelList}
+        <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
+          <ModelSelector
+            key={props.provider?.name + ':' + props.modelList.length}
+            model={props.model}
+            setModel={props.setModel}
+            modelList={props.modelList}
+            provider={props.provider}
+            setProvider={props.setProvider}
+            providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
+            apiKeys={props.apiKeys}
+            modelLoading={props.isModelLoading}
+          />
+          {(props.providerList || []).length > 0 &&
+            props.provider &&
+            !LOCAL_PROVIDERS.includes(props.provider.name) && (
+              <APIKeyManager
                 provider={props.provider}
-                setProvider={props.setProvider}
-                providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
-                apiKeys={props.apiKeys}
-                modelLoading={props.isModelLoading}
+                apiKey={props.apiKeys[props.provider.name] || ''}
+                setApiKey={(key) => {
+                  props.onApiKeysChange(props.provider.name, key);
+                }}
               />
-              {(props.providerList || []).length > 0 &&
-                props.provider &&
-                !LOCAL_PROVIDERS.includes(props.provider.name) && (
-                  <APIKeyManager
-                    provider={props.provider}
-                    apiKey={props.apiKeys[props.provider.name] || ''}
-                    setApiKey={(key) => {
-                      props.onApiKeysChange(props.provider.name, key);
-                    }}
-                  />
-                )}
-            </div>
-          )}
-        </ClientOnly>
+            )}
+        </div>
       </div>
       <FilePreview
         files={props.uploadedFiles}
@@ -140,16 +135,12 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           props.setImageDataList?.(props.imageDataList.filter((_, i) => i !== index));
         }}
       />
-      <ClientOnly>
-        {() => (
-          <ScreenshotStateManager
-            setUploadedFiles={props.setUploadedFiles}
-            setImageDataList={props.setImageDataList}
-            uploadedFiles={props.uploadedFiles}
-            imageDataList={props.imageDataList}
-          />
-        )}
-      </ClientOnly>
+      <ScreenshotStateManager
+        setUploadedFiles={props.setUploadedFiles}
+        setImageDataList={props.setImageDataList}
+        uploadedFiles={props.uploadedFiles}
+        imageDataList={props.imageDataList}
+      />
       {props.selectedElement && (
         <div className="flex mx-1.5 gap-2 items-center justify-between rounded-lg rounded-b-none border border-b-none border-octo-elements-borderColor text-octo-elements-textPrimary flex py-1 px-2.5 font-medium text-xs">
           <div className="flex gap-2 items-center lowercase">
@@ -241,25 +232,21 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           }
           translate="no"
         />
-        <ClientOnly>
-          {() => (
-            <SendButton
-              show={props.input.length > 0 || props.isStreaming || props.uploadedFiles.length > 0}
-              isStreaming={props.isStreaming}
-              disabled={!props.providerList || props.providerList.length === 0}
-              onClick={(event) => {
-                if (props.isStreaming) {
-                  props.handleStop?.();
-                  return;
-                }
+        <SendButton
+          show={props.input.length > 0 || props.isStreaming || props.uploadedFiles.length > 0}
+          isStreaming={props.isStreaming}
+          disabled={!props.providerList || props.providerList.length === 0}
+          onClick={(event) => {
+            if (props.isStreaming) {
+              props.handleStop?.();
+              return;
+            }
 
-                if (props.input.length > 0 || props.uploadedFiles.length > 0) {
-                  props.handleSendMessage?.(event);
-                }
-              }}
-            />
-          )}
-        </ClientOnly>
+            if (props.input.length > 0 || props.uploadedFiles.length > 0) {
+              props.handleSendMessage?.(event);
+            }
+          }}
+        />
         <div className="flex justify-between items-center text-sm p-4 pt-2">
           <div className="flex gap-1 items-center">
             <ColorSchemeDialog designScheme={props.designScheme} setDesignScheme={props.setDesignScheme} />

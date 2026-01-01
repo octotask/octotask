@@ -1,7 +1,4 @@
 export type DebugLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'none';
-import { Chalk } from 'chalk';
-
-const chalk = new Chalk({ level: 3 });
 
 type LoggerFunction = (...messages: any[]) => void;
 
@@ -81,10 +78,10 @@ function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
     styles.push('', scopeStyles);
   }
 
-  let labelText = formatText(` ${level.toUpperCase()} `, labelTextColor, labelBackgroundColor);
+  let labelText = ` ${level.toUpperCase()} `;
 
   if (scope) {
-    labelText = `${labelText} ${formatText(` ${scope} `, '#FFFFFF', '77828D')}`;
+    labelText = `${labelText} ${scope}`;
   }
 
   if (typeof window !== 'undefined') {
@@ -92,10 +89,6 @@ function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
   } else {
     console.log(`${labelText}`, allMessages);
   }
-}
-
-function formatText(text: string, color: string, bg: string) {
-  return chalk.bgHex(bg)(chalk.hex(color)(text));
 }
 
 function getLabelStyles(color: string, textColor: string) {

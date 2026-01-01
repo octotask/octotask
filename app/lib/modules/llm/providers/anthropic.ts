@@ -18,29 +18,25 @@ export default class AnthropicProvider extends BaseProvider {
      * Claude 3.5 Sonnet: 200k context, excellent for complex reasoning and coding
      */
     {
-      name: 'claude-3-5-sonnet-20241022',
-      label: 'Claude 3.5 Sonnet',
+      name: 'claude-3-5-sonnet-latest',
+      label: 'Claude 3.5 Sonnet (Latest)',
       provider: 'Anthropic',
       maxTokenAllowed: 200000,
-      maxCompletionTokens: 128000,
+      maxCompletionTokens: 8192,
     },
-
-    // Claude 3 Haiku: 200k context, fastest and most cost-effective
     {
-      name: 'claude-3-haiku-20240307',
-      label: 'Claude 3 Haiku',
+      name: 'claude-3-5-haiku-latest',
+      label: 'Claude 3.5 Haiku',
       provider: 'Anthropic',
       maxTokenAllowed: 200000,
-      maxCompletionTokens: 128000,
+      maxCompletionTokens: 8192,
     },
-
-    // Claude Opus 4: 200k context, 32k output limit (latest flagship model)
     {
-      name: 'claude-opus-4-20250514',
-      label: 'Claude 4 Opus',
+      name: 'claude-3-sonnet-20240229',
+      label: 'Claude 3 Sonnet',
       provider: 'Anthropic',
       maxTokenAllowed: 200000,
-      maxCompletionTokens: 32000,
+      maxCompletionTokens: 4096,
     },
   ];
 
@@ -91,19 +87,17 @@ export default class AnthropicProvider extends BaseProvider {
       }
 
       // Determine completion token limits based on specific model
-      let maxCompletionTokens = 128000; // default for older Claude 3 models
+      let maxCompletionTokens = 8192; // Latest Claude 3.5 standard limit
 
-      if (m.id?.includes('claude-opus-4')) {
-        maxCompletionTokens = 32000; // Claude 4 Opus: 32K output limit
-      } else if (m.id?.includes('claude-sonnet-4')) {
-        maxCompletionTokens = 64000; // Claude 4 Sonnet: 64K output limit
-      } else if (m.id?.includes('claude-4')) {
-        maxCompletionTokens = 32000; // Other Claude 4 models: conservative 32K limit
+      if (m.id?.includes('claude-3-5-sonnet')) {
+        maxCompletionTokens = 8192;
+      } else if (m.id?.includes('claude-3-opus')) {
+        maxCompletionTokens = 4096;
       }
 
       return {
         name: m.id,
-        label: `${m.display_name} (${Math.floor(contextWindow / 1000)}k context)`,
+        label: `${m.display_name || m.id} (${Math.floor(contextWindow / 1000)}k context)`,
         provider: this.name,
         maxTokenAllowed: contextWindow,
         maxCompletionTokens,

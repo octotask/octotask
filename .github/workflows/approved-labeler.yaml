@@ -1,0 +1,43 @@
+name: "'Approved' Labeler"
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  label-approved:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    if: ${{ github.event.review.state == 'approved' || github.event.review.state == 'changes_requested' }}
+
+    steps:
+      - name: Update PR Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const reviewState = context.payload.review.state;
+            const prNumber = context.payload.pull_request.number;
+            const label = 'approved';
+
+            if (reviewState === 'approved') {
+              console.log(`Adding ${label} label to PR #${prNumber}`);
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: [label]
+              });
+            } else if (reviewState === 'changes_requested') {
+              console.log(`Removing ${label} label from PR #${prNumber}`);
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: label
+                });
+              } catch (e) {
+                console.log(`Label ${label} not found or already removed.`);
+              }
+            }

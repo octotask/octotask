@@ -55,7 +55,7 @@ npmRebuild: false
 
 publish:
   provider: github
-  owner: Derek-X-Wang
+  owner: octotask
   repo: octotask
   private: true
   releaseType: release

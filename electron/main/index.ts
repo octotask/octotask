@@ -1,255 +1,124 @@
-/// <reference types="vite/client" />
-import { createRequestHandler } from '@remix-run/node';
-import electron, { app, BrowserWindow, ipcMain, protocol, session } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import log from 'electron-log';
 import path from 'node:path';
-import * as pkg from '../../package.json';
-import { setupAutoUpdater } from './utils/auto-update';
-import { isDev, DEFAULT_PORT } from './utils/constants';
-import { initViteServer, viteServer } from './utils/vite-server';
-import { setupMenu } from './ui/menu';
+
 import { createWindow } from './ui/window';
-import { initCookies, storeCookies } from './utils/cookie';
-import { loadServerBuild, serveAsset } from './utils/serve';
-import { reloadOnChange } from './utils/reload';
+import { setupMenu } from './ui/menu';
+import { secureIpcMainHandle } from './utils/ipc';
+import { isDev } from './utils/constants';
 
+// 1. Set up logging
 Object.assign(console, log.functions);
+log.transports.file.level = isDev ? 'debug' : 'info';
 
-console.debug('main: import.meta.env:', import.meta.env);
-console.log('main: isDev:', isDev);
-console.log('NODE_ENV:', global.process.env.NODE_ENV);
-console.log('isPackaged:', app.isPackaged);
-
-// Log unhandled errors
-process.on('uncaughtException', async (error) => {
-  console.log('Uncaught Exception:', error);
+// 2. Handle unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled Rejection:', error);
 });
 
-process.on('unhandledRejection', async (error) => {
-  console.log('Unhandled Rejection:', error);
-});
-
-(() => {
-  const root = global.process.env.APP_PATH_ROOT ?? import.meta.env.VITE_APP_PATH_ROOT;
-
-  if (root === undefined) {
-    console.log('no given APP_PATH_ROOT or VITE_APP_PATH_ROOT. default path is used.');
-    return;
-  }
-
-  if (!path.isAbsolute(root)) {
-    console.log('APP_PATH_ROOT must be absolute path.');
-    global.process.exit(1);
-  }
-
-  console.log(`APP_PATH_ROOT: ${root}`);
-
-  const subdirName = pkg.name;
-
-  for (const [key, val] of [
-    ['appData', ''],
-    ['userData', subdirName],
-    ['sessionData', subdirName],
-  ] as const) {
-    app.setPath(key, path.join(root, val));
-  }
-
-  app.setAppLogsPath(path.join(root, subdirName, 'Logs'));
-})();
-
-console.log('appPath:', app.getAppPath());
-
-const keys: Parameters<typeof app.getPath>[number][] = ['home', 'appData', 'userData', 'sessionData', 'logs', 'temp'];
-keys.forEach((key) => console.log(`${key}:`, app.getPath(key)));
-console.log('start whenReady');
-
-declare global {
-  // eslint-disable-next-line no-var, @typescript-eslint/naming-convention
-  var __electron__: typeof electron;
-}
-
-(async () => {
+// 3. Main app entry point
+async function main() {
   await app.whenReady();
-  console.log('App is ready');
 
-  // Load any existing cookies from ElectronStore, set as cookie
-  await initCookies();
-
-  const serverBuild = await loadServerBuild();
-
-  // Initialize Vault dependencies
-  const safeStorage = await import('./utils/safeStorage');
-  const Store = (await import('electron-store')).default;
-  const store = new Store();
-
-  protocol.handle('http', async (req) => {
-    console.log('Handling request for:', req.url);
-
-    if (isDev) {
-      console.log('Dev mode: forwarding to vite server');
-      return await fetch(req);
-    }
-
-    req.headers.append('Referer', req.referrer);
-
-    try {
-      const url = new URL(req.url);
-
-      // Forward requests to specific local server ports
-      if (url.port !== `${DEFAULT_PORT}`) {
-        console.log('Forwarding request to local server:', req.url);
-        return await fetch(req);
-      }
-
-      // Always try to serve asset first
-      const assetPath = path.join(app.getAppPath(), 'build', 'client');
-      const res = await serveAsset(req, assetPath);
-
-      if (res) {
-        console.log('Served asset:', req.url);
-        return res;
-      }
-
-      // Forward all cookies to remix server
-      const cookies = await session.defaultSession.cookies.get({});
-
-      if (cookies.length > 0) {
-        req.headers.set('Cookie', cookies.map((c) => `${c.name}=${c.value}`).join('; '));
-
-        // Store all cookies
-        await storeCookies(cookies);
-      }
-
-      // Create request handler with the server build
-      const handler = createRequestHandler(serverBuild, 'production');
-      console.log('Handling request with server build:', req.url);
-
-      const result = await handler(req, {
-        /*
-         * Remix app access cloudflare.env
-         * Need to pass an empty object to prevent undefined
-         */
-        // @ts-ignore:next-line
-        cloudflare: {},
-        vault: {
-          getSecret: async (key: string) => {
-            try {
-              const encrypted = store.get(`vault:${key}`) as string;
-              if (!encrypted) return null;
-              return safeStorage.decryptString(encrypted);
-            } catch (e) {
-              console.error('Vault context error:', e);
-              return null;
-            }
-          }
-        }
-      });
-
-      return result;
-    } catch (err) {
-      console.log('Error handling request:', {
-        url: req.url,
-        error:
-          err instanceof Error
-            ? {
-              message: err.message,
-              stack: err.stack,
-              cause: err.cause,
-            }
-            : err,
-      });
-
-      const error = err instanceof Error ? err : new Error(String(err));
-
-      return new Response(`Error handling request to ${req.url}: ${error.stack ?? error.message}`, {
-        status: 500,
-        headers: { 'content-type': 'text/plain' },
-      });
-    }
+  // 4. Apply security settings
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          // Only allow scripts from 'self' and our secure protocol
+          "script-src 'self' 'unsafe-inline'"
+        ],
+      },
+    });
   });
 
-  const rendererURL = await (isDev
-    ? (async () => {
-      await initViteServer();
+  // 5. Define renderer URL
+  // In production, we'll load the local file.
+  // In development, we'll load the Vite dev server.
+  const rendererURL = isDev
+    ? `http://localhost:5173` // Default Vite port
+    : `file://${path.join(__dirname, '..', 'renderer', 'index.html')}`;
 
-      if (!viteServer) {
-        throw new Error('Vite server is not initialized');
-      }
-
-      const listen = await viteServer.listen();
-      global.__electron__ = electron;
-      viteServer.printUrls();
-
-      return `http://localhost:${listen.config.server.port}`;
-    })()
-    : `http://localhost:${DEFAULT_PORT}`);
-
-  console.log('Using renderer URL:', rendererURL);
-
+  // 6. Create the main window
   const win = await createWindow(rendererURL);
 
+  // 7. Set up the application menu
+  setupMenu(win);
+
+  // 8. Register secure IPC handlers
+  registerIpcHandlers();
+
+  // 9. Handle macOS activation
   app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       await createWindow(rendererURL);
     }
   });
+}
 
-  console.log('end whenReady');
+// 10. IPC Handler Registration
+function registerIpcHandlers() {
+  const API_URL = 'http://localhost:8787';
 
-  return win;
-})()
-  .then(async (win) => {
-    // IPC samples : send and recieve.
-    let count = 0;
-    setInterval(() => win.webContents.send('ping', `hello from main! ${count++}`), 60 * 1000);
-    ipcMain.handle('ipcTest', (event, ...args) => console.log('ipc: renderer -> main', { event, ...args }));
+  secureIpcMainHandle('ipcTest', (event, ...args) => {
+    console.log('IPC Test Received:', { event, args });
+    return { success: true, message: 'IPC Test Handled' };
+  });
 
-    // Vault IPC Handlers
-    const safeStorage = await import('./utils/safeStorage');
-    const Store = (await import('electron-store')).default;
-    const store = new Store();
-
-    ipcMain.handle('vault:save-secret', async (_, key: string, value: string) => {
-      try {
-        const encrypted = safeStorage.encryptString(value);
-        store.set(`vault:${key}`, encrypted);
-        return true;
-      } catch (error) {
-        console.error('Failed to save secret:', error);
-        return false;
-      }
-    });
-
-    ipcMain.handle('vault:get-secret', async (_, key: string) => {
-      try {
-        const encrypted = store.get(`vault:${key}`) as string;
-        if (!encrypted) return null;
-        return safeStorage.decryptString(encrypted);
-      } catch (error) {
-        console.error('Failed to get secret:', error);
+  // Vault handlers now proxy to the API service
+  secureIpcMainHandle('vault:get-secret', async (_, key: string) => {
+    try {
+      const response = await fetch(`${API_URL}/vault/${key}`);
+      if (!response.ok) {
+        console.error(`[API] Error getting secret ${key}:`, response.statusText);
         return null;
       }
-    });
+      const { value } = (await response.json()) as { value: string };
+      return value;
+    } catch (error) {
+      console.error(`[API] Fetch error getting secret ${key}:`, error);
+      return null;
+    }
+  });
 
-    ipcMain.handle('vault:delete-secret', async (_, key: string) => {
-      try {
-        store.delete(`vault:${key}`);
-        return true;
-      } catch (error) {
-        console.error('Failed to delete secret:', error);
-        return false;
-      }
-    });
+  secureIpcMainHandle('vault:save-secret', async (_, key: string, value: string) => {
+    try {
+      const response = await fetch(`${API_URL}/vault/${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value }),
+      });
+      return response.ok;
+    } catch (error) {
+      console.error(`[API] Fetch error saving secret ${key}:`, error);
+      return false;
+    }
+  });
 
-    return win;
-  })
-  .then((win) => setupMenu(win));
+  secureIpcMainHandle('vault:delete-secret', async (_, key: string) => {
+    try {
+      const response = await fetch(`${API_URL}/vault/${key}`, {
+        method: 'DELETE',
+      });
+      return response.ok;
+    } catch (error) {
+      console.error(`[API] Fetch error deleting secret ${key}:`, error);
+      return false;
+    }
+  });
+}
 
+// 11. App lifecycle handlers
 app.on('window-all-closed', () => {
+  // On macOS, it's common for applications to stay open until the user explicitly quits.
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-reloadOnChange();
-setupAutoUpdater();
+// 12. Start the application
+main().catch(console.error);

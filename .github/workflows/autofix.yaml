@@ -1,0 +1,41 @@
+name: Autofix
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# Cancel in-progress runs on the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  autofix:
+    name: Lint & Format Autofix
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only run on pull requests or push to main
+    # Ensure we don't run on commits made by this workflow itself
+    if: github.actor != 'github-actions[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      - name: Setup and Build
+        uses: ./.github/actions/setup-and-build
+
+      - name: Run Autofix
+        run: pnpm run lint:fix
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: autofix lint and formatting issues"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

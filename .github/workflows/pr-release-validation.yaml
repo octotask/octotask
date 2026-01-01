@@ -24,7 +24,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-name: 'Test'
+          check-name: 'Core Tests'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
@@ -39,26 +39,34 @@ jobs:
               ref: context.payload.pull_request.head.sha
             });
 
-            const requiredChecks = ['Test', 'CodeQL Analysis'];
-            const optionalChecks = ['Quality Analysis', 'Deploy Preview'];
-            const failedChecks = [];
+            // Required checks (using Core Tests and CodeQL Analysis)
             const passedChecks = [];
-
-            // Check required workflows
-            for (const checkName of requiredChecks) {
-              const check = checks.check_runs.find(c => c.name === checkName);
-              if (check && check.conclusion === 'success') {
-                passedChecks.push(checkName);
-              } else {
-                failedChecks.push(checkName);
-              }
+            const failedChecks = [];
+            
+            // 1. Check Core Tests specifically
+            const coreTests = checks.check_runs.find(c => c.name === 'Core Tests');
+            if (coreTests && coreTests.conclusion === 'success') {
+              passedChecks.push('Core Tests');
+            } else {
+              failedChecks.push('Core Tests');
             }
 
-            // Report optional checks
-            for (const checkName of optionalChecks) {
-              const check = checks.check_runs.find(c => c.name === checkName);
+            // 2. Check CodeQL Analysis (handles both JS and TS matrix jobs)
+            const codeqlChecks = checks.check_runs.filter(c => c.name.includes('CodeQL Analysis'));
+            if (codeqlChecks.length > 0 && codeqlChecks.every(c => c.conclusion === 'success')) {
+              passedChecks.push('CodeQL Analysis');
+            } else if (codeqlChecks.length > 0) {
+              failedChecks.push('CodeQL Analysis');
+            } else {
+              failedChecks.push('CodeQL Analysis (missing)');
+            }
+
+            // Optional checks
+            const optionalNames = ['Quality Analysis', 'Deploy Preview'];
+            for (const name of optionalNames) {
+              const check = checks.check_runs.find(c => c.name === name);
               if (check && check.conclusion === 'success') {
-                passedChecks.push(`${checkName} (optional)`);
+                passedChecks.push(`${name} (optional)`);
               }
             }
 

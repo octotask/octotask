@@ -8,13 +8,14 @@ Welcome! This guide provides all the details you need to contribute effectively 
 
 1. [Code of Conduct](#code-of-conduct)
 2. [How Can I Contribute?](#how-can-i-contribute)
-3. [Pull Request Guidelines](#pull-request-guidelines)
-4. [Coding Standards](#coding-standards)
-5. [Development Setup](#development-setup)
-6. [Testing](#testing)
-7. [Deployment](#deployment)
-8. [Docker Deployment](#docker-deployment)
-9. [VS Code Dev Containers Integration](#vs-code-dev-containers-integration)
+3. [Branching Workflow](#branching-workflow)
+4. [Pull Request Guidelines](#pull-request-guidelines)
+5. [Coding Standards](#coding-standards)
+6. [Development Setup](#development-setup)
+7. [Testing](#testing)
+8. [Deployment](#deployment)
+9. [Docker Deployment](#docker-deployment)
+10. [VS Code Dev Containers Integration](#vs-code-dev-containers-integration)
 
 ---
 
@@ -45,14 +46,68 @@ Interested in maintaining and growing the project? Fill out our [Contributor App
 
 ---
 
+## 🌿 Branching Workflow
+
+OctoTask follows a **Git Flow-inspired** branching strategy. For complete details, see [BRANCHING.md](./BRANCHING.md).
+
+### Quick Reference
+
+**Main Branches:**
+- `stable` - Production-ready code (protected)
+- `main` - Active development (protected)
+
+**Supporting Branches:**
+- `feature/*` - New features (branch from `main`)
+- `bugfix/*` - Bug fixes (branch from `main`)
+- `hotfix/*` - Critical production fixes (branch from `stable`)
+- `release/*` - Release preparation (branch from `main`)
+- `docs/*` - Documentation updates (branch from `main`)
+
+### Workflow Examples
+
+**Adding a Feature:**
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/my-feature
+# ... make changes ...
+git push -u origin feature/my-feature
+# Create PR to main
+```
+
+**Fixing a Bug:**
+```bash
+git checkout main
+git pull origin main
+git checkout -b bugfix/123-fix-issue
+# ... make changes ...
+git push -u origin bugfix/123-fix-issue
+# Create PR to main
+```
+
+**Commit Message Format:**
+```
+<type>(<scope>): <subject>
+
+Examples:
+feat(auth): add OAuth2 authentication
+fix(ui): resolve button alignment
+docs(readme): update installation steps
+```
+
+---
+
 ## ✅ Pull Request Guidelines
 
 ### PR Checklist
 
-- Branch from the **main** branch.
-- Update documentation, if needed.
-- Test all functionality manually.
-- Focus on one feature/bug per PR.
+- Follow the [branching workflow](./BRANCHING.md)
+- Branch from the appropriate base branch (`main` for features/bugs, `stable` for hotfixes)
+- Use conventional commit messages
+- Update documentation, if needed
+- Test all functionality manually
+- Run `pnpm lint` and fix any issues
+- Focus on one feature/bug per PR
 
 ### Review Process
 

@@ -5,6 +5,13 @@
   <p align="center">
     <strong>The Elite Open-Source AI Full-Stack Web Development Platform.</strong>
   </p>
+  
+  <p align="center">
+    <a href="https://github.com/octotask/octotask/tree/stable"><img src="https://img.shields.io/badge/branch-stable-green?style=flat-square" alt="Stable Branch"></a>
+    <a href="https://github.com/octotask/octotask/tree/main"><img src="https://img.shields.io/badge/branch-main-blue?style=flat-square" alt="Main Branch"></a>
+    <a href="https://github.com/octotask/octotask/releases"><img src="https://img.shields.io/github/v/release/octotask/octotask?style=flat-square" alt="Latest Release"></a>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
+  </p>
 </div>
 
 Welcome to **OctoTask**, the definitive open-source platform for AI-assisted high-performance development. Engineered for professionals and built for the community, OctoTask empowers you to harness the world's most sophisticated LLMs to architect, deploy, and scale complex web applications directly within your browser.
@@ -67,6 +74,18 @@ Run OctoTask in a standardized, isolated environment:
 ```bash
 docker compose --profile production up -d
 ```
+
+## 🌿 Branching Strategy
+
+OctoTask uses a Git Flow-inspired branching model:
+
+- **`stable`**: Production-ready releases (protected)
+- **`main`**: Active development (protected)
+- **`feature/*`**: New features
+- **`bugfix/*`**: Bug fixes
+- **`hotfix/*`**: Critical production fixes
+
+For detailed branching guidelines, see [BRANCHING.md](./BRANCHING.md).
 
 ## 🤝 Join the Ecosystem
 We are a community driven by innovation. Your contributions keep OctoTask at the cutting edge.

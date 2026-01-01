@@ -18,6 +18,20 @@ export default class GoogleProvider extends BaseProvider {
      * Gemini 1.5 Pro: 2M context, 8K output limit (verified from API docs)
      */
     {
+      name: 'gemini-2.0-flash-exp',
+      label: 'Gemini 2.0 Flash (Experimental)',
+      provider: 'Google',
+      maxTokenAllowed: 1000000,
+      maxCompletionTokens: 8192,
+    },
+    {
+      name: 'gemini-2.0-flash-lite-preview-02-05',
+      label: 'Gemini 2.0 Flash-Lite',
+      provider: 'Google',
+      maxTokenAllowed: 1000000,
+      maxCompletionTokens: 8192,
+    },
+    {
       name: 'gemini-1.5-pro',
       label: 'Gemini 1.5 Pro',
       provider: 'Google',

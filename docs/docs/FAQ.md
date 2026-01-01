@@ -386,7 +386,7 @@ If the live preview isn't working:
 **Windows-specific issue**: Update the [Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)
 
 ??? error "Miniflare or Wrangler errors in Windows"
-**Windows development environment**: Install Visual Studio C++ (version 14.40.33816 or later). More details in [GitHub Issues](https://github.com/octotask-labs/octotask/issues/19)
+**Windows development environment**: Install Visual Studio C++ (version 14.40.33816 or later). More details in [GitHub Issues](https://github.com/octotask/octotask/issues/19)
 
 ??? error "Provider not showing up after adding it"
 If your custom LLM provider isn't appearing:
@@ -405,4 +405,4 @@ If your custom LLM provider isn't appearing:
 [Join the octotask Community](https://thinktank.ottomator.ai/c/octotask/17){target=\_blank} for discussions and help
 
 !!! bug "Report Issues"
-[Open an Issue](https://github.com/octotask-labs/octotask/issues/19){target=\_blank} in our GitHub Repository
+[Open an Issue](https://github.com/octotask/octotask/issues/19){target=\_blank} in our GitHub Repository

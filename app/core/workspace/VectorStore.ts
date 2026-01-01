@@ -1,4 +1,6 @@
 import { pipeline } from '@xenova/transformers';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface SearchResult {
   path: string;
@@ -40,7 +42,7 @@ export class VectorStore {
       for (const chunk of doc.chunks) {
         try {
           const output = await this._embedder(chunk, { pooling: 'mean', normalize: true });
-          const embedding = output.data;
+          const embedding = Array.from(output.data as Float32Array);
 
           this._documents.push({
             path: doc.path,
@@ -53,6 +55,42 @@ export class VectorStore {
       }
     }
     console.log(`Stored ${this._documents.length} vector chunks.`);
+  }
+
+  removeDocuments(filePath: string) {
+    const before = this._documents.length;
+    this._documents = this._documents.filter((doc) => doc.path !== filePath);
+
+    const removed = before - this._documents.length;
+
+    if (removed > 0) {
+      console.log(`Removed ${removed} stale vector chunks for ${filePath}`);
+    }
+  }
+
+  async save(storagePath: string) {
+    try {
+      await fs.mkdir(path.dirname(storagePath), { recursive: true });
+
+      const data = JSON.stringify(this._documents);
+      await fs.writeFile(storagePath, data, 'utf-8');
+      console.log(`Vector store saved to ${storagePath}`);
+    } catch (error) {
+      console.error('Failed to save vector store:', error);
+    }
+  }
+
+  async load(storagePath: string) {
+    try {
+      const data = await fs.readFile(storagePath, 'utf-8');
+      this._documents = JSON.parse(data);
+      console.log(`Loaded ${this._documents.length} vector chunks from ${storagePath}`);
+    } catch (error) {
+      // It's fine if the file doesn't exist yet
+      if ((error as any).code !== 'ENOENT') {
+        console.error('Failed to load vector store:', error);
+      }
+    }
   }
 
   async search(query: string, k: number = 5): Promise<SearchResult[]> {
@@ -78,15 +116,17 @@ export class VectorStore {
     }));
   }
 
-  private _cosineSimilarity(a: Float32Array, b: Float32Array): number {
+  private _cosineSimilarity(a: Float32Array, b: any): number {
+    const bVec = b instanceof Float32Array ? b : new Float32Array(b);
+
     let dotProduct = 0;
     let magnitudeA = 0;
     let magnitudeB = 0;
 
     for (let i = 0; i < a.length; i++) {
-      dotProduct += a[i] * b[i];
+      dotProduct += a[i] * bVec[i];
       magnitudeA += a[i] * a[i];
-      magnitudeB += b[i] * b[i];
+      magnitudeB += bVec[i] * bVec[i];
     }
 
     magnitudeA = Math.sqrt(magnitudeA);

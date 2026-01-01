@@ -2,8 +2,6 @@ import { useSearchParams } from '@remix-run/react';
 import { generateId, type Message } from 'ai';
 import ignore from 'ignore';
 import { useEffect, useState } from 'react';
-import { ClientOnly } from 'remix-utils/client-only';
-import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
 import { useGit } from '~/lib/hooks/useGit';
 import { useChatHistory } from '~/lib/persistence';
@@ -135,13 +133,9 @@ ${escapeOctoTags(file.content)}
   }, [searchParams, historyReady, gitReady, imported]);
 
   return (
-    <ClientOnly fallback={<BaseChat />}>
-      {() => (
-        <>
-          <Chat />
-          {loading && <LoadingOverlay message="Please wait while we clone the repository..." />}
-        </>
-      )}
-    </ClientOnly>
+    <>
+      <Chat />
+      {loading && <LoadingOverlay message="Please wait while we clone the repository..." />}
+    </>
   );
 }

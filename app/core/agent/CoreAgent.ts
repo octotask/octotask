@@ -16,6 +16,8 @@ import { ShadowManager } from '~/core/workspace/ShadowManager';
 import { InteractiveShell } from '~/core/workspace/InteractiveShell';
 import { LSPManager } from '~/core/workspace/LSPManager';
 import { TextUtility } from '~/utils/TextUtility';
+import { TestSurface } from '~/core/workspace/TestSurface';
+import { FlowPersistence } from '~/core/workspace/FlowPersistence';
 
 export type AgentStatus = 'idle' | 'planning' | 'acting' | 'observing' | 'indexing';
 
@@ -36,6 +38,9 @@ export abstract class CoreAgent extends EventEmitter {
   protected delegationDepth: number;
   protected interactiveShell: InteractiveShell;
   protected lspManager: LSPManager;
+  protected testSurface: TestSurface;
+  protected flowPersistence: FlowPersistence;
+  protected _sessionId: string;
   protected _tokenMetrics = {
     input: 0,
     output: 0,
@@ -55,6 +60,9 @@ export abstract class CoreAgent extends EventEmitter {
     this.shadowManager = new ShadowManager(context.workspacePath);
     this.interactiveShell = new InteractiveShell(context.workspacePath);
     this.lspManager = new LSPManager(context.workspacePath);
+    this.testSurface = new TestSurface();
+    this.flowPersistence = new FlowPersistence(context.workspacePath);
+    this._sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
     // Register Tools with Grouping
     const fsTools = new FileSystemTools(context.workspacePath, this.shadowManager);
@@ -178,10 +186,18 @@ export abstract class CoreAgent extends EventEmitter {
         includeWorkflows: iterations === 1,
         agentStatus: this.status,
       });
-      const structuredPrompt = this.promptFactory.generateStructuredUserPrompt(goal, contextStr);
+
+      // Synthesis Flow Narrative from FlowStore
+      const flowStore = this.memory.getFlowStore();
+      const flowAwarePrompt = this.promptFactory.generateFlowAwarePrompt(
+        goal,
+        contextStr,
+        flowStore.getWindow(),
+        this.testSurface,
+      );
 
       console.log('--- System Prompt ---\n', systemPrompt);
-      console.log('--- User Prompt ---\n', structuredPrompt.prompt);
+      console.log('--- Flow-Aware User Prompt ---\n', flowAwarePrompt);
 
       /*
        * 3. LLM Call
@@ -216,7 +232,7 @@ export abstract class CoreAgent extends EventEmitter {
 
       try {
         // Construct messages: history + current prompt
-        const messages = [...this.memory.getHistory(), { role: 'user' as const, content: structuredPrompt.prompt }];
+        const messages = [...this.memory.getHistory(), { role: 'user' as const, content: flowAwarePrompt }];
 
         response = await llmService.generate({
           system: systemPrompt,
@@ -246,6 +262,13 @@ export abstract class CoreAgent extends EventEmitter {
           try {
             console.log(`CoreAgent: Executing tool call: ${toolCall.toolName}`, toolCall.args);
 
+            // FLOW: Log Action
+            const actionEntry = flowStore.append({
+              type: 'action',
+              surface: this._getSurfaceForTool(toolCall.toolName),
+              content: { tool: toolCall.toolName, args: toolCall.args },
+            });
+
             const rawResult = await this.toolRouter.executeTool(toolCall.toolName, toolCall.args);
 
             // Graduated Truncation based on current context load
@@ -253,6 +276,14 @@ export abstract class CoreAgent extends EventEmitter {
             const truncationLevel = currentContextSize > 20000 ? 'heavy' : 'medium';
             const result =
               typeof rawResult === 'string' ? TextUtility.smartTruncate(rawResult, truncationLevel) : rawResult;
+
+            // FLOW: Log Observation (Causality linked to Action)
+            flowStore.append({
+              type: 'observation',
+              surface: this._getSurfaceForTool(toolCall.toolName),
+              content: result,
+              causedBy: [actionEntry.id],
+            });
 
             toolResults.push({ toolCallId: toolCall.toolCallId, result });
           } catch (e: any) {
@@ -266,9 +297,9 @@ export abstract class CoreAgent extends EventEmitter {
       this.emit('status', this.status);
 
       // Token Tracking (Simplified Estimation)
-      const inputEst = (systemPrompt.length + structuredPrompt.prompt.length) / 4;
+      const inputEst = (systemPrompt.length + flowAwarePrompt.length) / 4;
       const outputEst = resultText.length / 4;
-      const prunedEst = structuredPrompt.context.length / 4;
+      const prunedEst = contextStr.length / 4;
 
       this._tokenMetrics.input += inputEst;
       this._tokenMetrics.output += outputEst;
@@ -284,7 +315,7 @@ export abstract class CoreAgent extends EventEmitter {
       const failedResults = toolResults.filter((r) => r.error);
 
       // Persist GOAL and Successful results to Conversational Memory
-      this.memory.add({ role: 'user', content: `GOAL: ${structuredPrompt.goal}` });
+      this.memory.add({ role: 'user', content: `GOAL: ${goal}` });
       this.memory.add({ role: 'assistant', content: resultText });
 
       if (successfulResults.length > 0) {
@@ -305,6 +336,20 @@ export abstract class CoreAgent extends EventEmitter {
 
       if (currentContextSize > 30000) {
         console.error(`[GOVERNANCE] Context size Alert: ${Math.round(currentContextSize)} tokens. Growth rate high.`);
+      }
+
+      // 5.3 Auto-save session every 3 iterations
+      if (iterations % 3 === 0) {
+        await this.flowPersistence.autoSave(
+          this._sessionId,
+          goal,
+          flowStore.getWindow(),
+          this.testSurface.getHistory(),
+          {
+            iterations,
+            tokenMetrics: this._tokenMetrics,
+          },
+        );
       }
 
       /*
@@ -346,5 +391,25 @@ export abstract class CoreAgent extends EventEmitter {
 
   async observe(): Promise<any> {
     return null;
+  }
+
+  private _getSurfaceForTool(toolName: string): any {
+    if (['read_file', 'write_file', 'list_files', 'search_workspace'].includes(toolName)) {
+      return 'editor';
+    }
+
+    if (['run_command', 'spawn_command', 'read_terminal', 'send_terminal_input'].includes(toolName)) {
+      return 'terminal';
+    }
+
+    if (toolName.includes('test')) {
+      return 'test';
+    }
+
+    if (['go_to_definition', 'find_references', 'list_symbols'].includes(toolName)) {
+      return 'lsp';
+    }
+
+    return 'docs';
   }
 }

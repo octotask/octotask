@@ -358,17 +358,21 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       >
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
-          <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
+          <div
+            className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full', {
+              'justify-center': !chatStarted,
+            })}
+          >
             {!chatStarted && (
-              <div
-                id="intro"
-                className="mt-[12vh] max-w-2xl mx-auto text-center px-4 lg:px-0 flex flex-col items-center"
-              >
+              <div id="intro" className="max-w-2xl mx-auto text-center px-4 lg:px-0 flex flex-col items-center mb-10">
                 <OctoTaskLogo size={80} textSize="text-6xl" className="mb-6 animate-zoom-in" />
-                <h1 className="text-4xl lg:text-7xl font-bold tracking-tight text-octo-elements-textPrimary mb-6 animate-fade-in animation-delay-300">
-                  Where ideas <span className="text-octo-elements-accent">begin</span>
+                <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-octo-elements-textPrimary mb-6 animate-fade-in animation-delay-300">
+                  Where ideas{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-500 via-accent-300 to-accent-700 animate-gradient-x">
+                    begin
+                  </span>
                 </h1>
-                <p className="text-lg lg:text-2xl font-light mb-10 text-octo-elements-textSecondary animate-fade-in animation-delay-600 max-w-lg">
+                <p className="text-lg lg:text-2xl font-light text-octo-elements-textSecondary animate-fade-in animation-delay-600 max-w-lg">
                   Unleash your creativity with the power of OctoTask.
                 </p>
               </div>

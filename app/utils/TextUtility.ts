@@ -37,14 +37,18 @@ export class TextUtility {
     // Simple regex for semantic anchors
     const patterns = [
       /error|failure|exception|bug|todo|fixme/gi,
-      /^(?:export\s+)?(?:class|function|const|let|var|interface|type)\s+([a-zA-Z0-9_$]+)/gm,
+      /fatal|critical|severe|warn(?:ing)?/gi,
+      /^(?:export\s+)?(?:class|function|const|let|var|interface|type|enum)\s+([a-zA-Z0-9_$]+)/gm,
+      /if\s*\(.*\)|else|switch|case|try|catch|finally/g,
     ];
 
     for (const pattern of patterns) {
       const matches = middleSection.match(pattern);
 
       if (matches) {
-        semanticMatches.push(...matches.slice(0, 5)); // Grab first 5 interesting bits
+        // Keep a unique set of hints
+        const uniqueMatches = Array.from(new Set(matches.slice(0, 10)));
+        semanticMatches.push(...uniqueMatches);
       }
     }
 

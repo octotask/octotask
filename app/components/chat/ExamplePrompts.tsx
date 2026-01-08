@@ -20,7 +20,7 @@ export function ExamplePrompts(sendMessage?: { (event: React.UIEvent, messageInp
               onClick={(event) => {
                 sendMessage?.(event, examplePrompt.text);
               }}
-              className="group flex items-center gap-3 p-4 rounded-xl border border-octo-elements-borderColor bg-octo-elements-background-depth-2 hover:bg-octo-elements-background-depth-3 hover:border-octo-elements-borderColorActive transition-all duration-300 text-left items-start shadow-sm hover:shadow-md"
+              className="group flex items-center gap-3 p-4 rounded-xl border border-octo-elements-borderColor bg-octo-elements-background-depth-2 hover:bg-octo-elements-background-depth-3 hover:border-octo-elements-borderColorActive transition-all duration-300 text-left items-start shadow-sm hover:shadow-md hover:-translate-y-1"
             >
               <div
                 className={`text-xl text-octo-elements-textTertiary group-hover:text-octo-elements-accent transition-colors ${examplePrompt.icon}`}

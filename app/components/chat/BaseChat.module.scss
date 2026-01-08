@@ -28,6 +28,12 @@
   height: calc(100% + var(--prompt-container-offset));
 }
 
+@keyframes borderFlow {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
 .PromptEffectLine {
   width: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
   height: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
@@ -39,6 +45,7 @@
   stroke: url(#line-gradient);
   stroke-dasharray: 35px 65px;
   stroke-dashoffset: 10;
+  animation: borderFlow 30s linear infinite;
 }
 
 .PromptShine {

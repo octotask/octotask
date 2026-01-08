@@ -67,7 +67,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
   return (
     <div
       className={classNames(
-        'relative bg-octo-elements-background-depth-2 backdrop-blur p-3 rounded-lg border border-octo-elements-borderColor relative w-full max-w-chat mx-auto z-prompt',
+        'relative bg-octo-elements-background-depth-2/80 backdrop-blur-xl p-3 rounded-xl border border-octo-elements-borderColor/60 w-full max-w-chat mx-auto z-prompt shadow-2xl transition-all duration-300 focus-within:ring-1 focus-within:ring-white/10 hover:border-octo-elements-borderColorActive focus-within:border-octo-elements-borderColorActive focus-within:shadow-[0_0_40px_-10px_rgba(156,125,255,0.2)]',
 
         /*
          * {
@@ -87,10 +87,10 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             gradientUnits="userSpaceOnUse"
             gradientTransform="rotate(-45)"
           >
-            <stop offset="0%" stopColor="#9C7DFF" stopOpacity="0%"></stop>
-            <stop offset="40%" stopColor="#9C7DFF" stopOpacity="80%"></stop>
-            <stop offset="50%" stopColor="#9C7DFF" stopOpacity="80%"></stop>
-            <stop offset="100%" stopColor="#9C7DFF" stopOpacity="0%"></stop>
+            <stop offset="0%" stopColor="var(--octo-elements-item-contentAccent)" stopOpacity="0%"></stop>
+            <stop offset="40%" stopColor="var(--octo-elements-item-contentAccent)" stopOpacity="80%"></stop>
+            <stop offset="50%" stopColor="var(--octo-elements-item-contentAccent)" stopOpacity="80%"></stop>
+            <stop offset="100%" stopColor="var(--octo-elements-item-contentAccent)" stopOpacity="0%"></stop>
           </linearGradient>
           <linearGradient id="shine-gradient">
             <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
@@ -172,9 +172,8 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         <textarea
           ref={props.textareaRef}
           className={classNames(
-            'w-full pl-4 pt-4 pr-16 outline-none resize-none text-octo-elements-textPrimary placeholder-octo-elements-textTertiary bg-transparent text-sm',
+            'w-full pl-6 pt-6 pr-16 outline-none resize-none text-octo-elements-textPrimary placeholder-octo-elements-textTertiary bg-transparent text-base leading-relaxed',
             'transition-all duration-200',
-            'hover:border-octo-elements-focus',
           )}
           onDragEnter={(e) => {
             e.preventDefault();

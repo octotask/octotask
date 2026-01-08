@@ -13,7 +13,7 @@ export function useGitLabDeploy() {
   const currentChatId = useStore(chatId);
 
   const handleGitLabDeploy = async () => {
-    const connection = getLocalStorage('gitlab_connection');
+    const connection = getLocalStorage('gitlab_connection') as any;
 
     if (!connection?.token || !connection?.user) {
       toast.error('Please connect your GitLab account in Settings > Connections first');
@@ -166,6 +166,6 @@ export function useGitLabDeploy() {
   return {
     isDeploying,
     handleGitLabDeploy,
-    isConnected: !!getLocalStorage('gitlab_connection')?.user,
+    isConnected: !!(getLocalStorage('gitlab_connection') as any)?.user,
   };
 }

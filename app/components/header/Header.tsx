@@ -13,7 +13,8 @@ export function Header() {
   return (
     <header
       className={classNames(
-        'flex items-center px-4 border-b h-[var(--header-height)] bg-octo-elements-background-depth-1',
+        'flex items-center px-4 border-b h-[var(--header-height)] z-50 sticky top-0',
+        'bg-octo-elements-background-depth-1/80 backdrop-blur-xl',
         {
           'border-transparent': !chat.started,
           'border-octo-elements-borderColor': chat.started,

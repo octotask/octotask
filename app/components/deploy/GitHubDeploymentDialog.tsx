@@ -57,7 +57,7 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
 
   useEffect(() => {
     if (isOpen) {
-      const connection = getLocalStorage('github_connection');
+      const connection = getLocalStorage('github_connection') as any;
 
       // Set a default repository name based on the project name with proper sanitization
       setRepoName(sanitizeRepoName(projectName));
@@ -134,7 +134,7 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
             toast.error('GitHub token expired. Please reconnect your account.');
 
             // Clear invalid token
-            const connection = getLocalStorage('github_connection');
+            const connection = getLocalStorage('github_connection') as any;
 
             if (connection) {
               localStorage.removeItem('github_connection');
@@ -188,7 +188,7 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const connection = getLocalStorage('github_connection');
+    const connection = getLocalStorage('github_connection') as any;
 
     if (!connection?.token || !connection?.user) {
       toast.error('Please connect your GitHub account in Settings > Connections first');
@@ -545,7 +545,7 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
     setShowAuthDialog(false);
 
     // Refresh user data after auth
-    const connection = getLocalStorage('github_connection');
+    const connection = getLocalStorage('github_connection') as any;
 
     if (connection?.user && connection?.token) {
       setUser(connection.user);

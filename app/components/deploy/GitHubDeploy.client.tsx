@@ -13,7 +13,7 @@ export function useGitHubDeploy() {
   const currentChatId = useStore(chatId);
 
   const handleGitHubDeploy = async () => {
-    const connection = getLocalStorage('github_connection');
+    const connection = getLocalStorage('github_connection') as any;
 
     if (!connection?.token || !connection?.user) {
       toast.error('Please connect your GitHub account in Settings > Connections first');
@@ -166,6 +166,6 @@ export function useGitHubDeploy() {
   return {
     isDeploying,
     handleGitHubDeploy,
-    isConnected: !!getLocalStorage('github_connection')?.user,
+    isConnected: !!(getLocalStorage('github_connection') as any)?.user,
   };
 }

@@ -600,9 +600,11 @@ export class WorkbenchStore {
     }
   }
 
+  static readonly ACTION_STREAM_DELAY = 100;
+
   actionStreamSampler = createSampler(async (data: ActionCallbackData, isStreaming: boolean = false) => {
     return await this._runAction(data, isStreaming);
-  }, 100); // TODO: remove this magic number to have it configurable
+  }, WorkbenchStore.ACTION_STREAM_DELAY);
 
   #getArtifact(id: string) {
     const artifacts = this.artifacts.get();

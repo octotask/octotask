@@ -166,7 +166,7 @@ export class ActionRunner {
         case 'supabase': {
           try {
             await this.handleSupabaseAction(action as SupabaseAction);
-          } catch (error: any) {
+          } catch (error: unknown) {
             // Update action status
             this.#updateAction(actionId, {
               status: 'failed',
@@ -308,11 +308,7 @@ export class ActionRunner {
     return resp;
   }
 
-  async #runFileAction(action: ActionState) {
-    if (action.type !== 'file') {
-      unreachable('Expected file action');
-    }
-
+  async #runFileAction(action: { type: 'file'; filePath: string; content: string; changeSource?: string }) {
     const webcontainer = await this.#webcontainer;
     const relativePath = nodePath.relative(webcontainer.workdir, action.filePath);
 
@@ -341,7 +337,7 @@ export class ActionRunner {
   #updateAction(id: string, newState: ActionStateUpdate) {
     const actions = this.actions.get();
 
-    this.actions.setKey(id, { ...actions[id], ...newState });
+    this.actions.setKey(id, { ...actions[id], ...newState } as ActionState);
   }
 
   async getFileHistory(filePath: string): Promise<FileHistory | null> {
@@ -358,7 +354,6 @@ export class ActionRunner {
   }
 
   async saveFileHistory(filePath: string, history: FileHistory) {
-    // const webcontainer = await this.#webcontainer;
     const historyPath = this.#getHistoryPath(filePath);
 
     await this.#runFileAction({
@@ -366,7 +361,7 @@ export class ActionRunner {
       filePath: historyPath,
       content: JSON.stringify(history),
       changeSource: 'auto-save',
-    } as any);
+    });
   }
 
   #getHistoryPath(filePath: string) {
@@ -461,6 +456,7 @@ export class ActionRunner {
       output,
     };
   }
+
   async handleSupabaseAction(action: SupabaseAction) {
     const { operation, content, filePath } = action;
     logger.debug('[Supabase Action]:', { operation, filePath, content });
@@ -486,7 +482,7 @@ export class ActionRunner {
           filePath,
           content,
           changeSource: 'supabase',
-        } as any);
+        });
         return { success: true };
 
       case 'query': {
@@ -553,8 +549,8 @@ export class ActionRunner {
       content: details?.error || '',
       url: details?.url,
       stage,
-      buildStatus: buildStatus as any,
-      deployStatus: deployStatus as any,
+      buildStatus: buildStatus as 'pending' | 'running' | 'complete' | 'failed',
+      deployStatus: deployStatus as 'pending' | 'running' | 'complete' | 'failed',
       source: details?.source || 'netlify',
     });
   }

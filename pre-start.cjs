@@ -10,8 +10,8 @@ const getGitHash = () => {
 };
 
 let commitJson = {
-  hash: JSON.stringify(getGitHash()),
-  version: JSON.stringify(process.env.npm_package_version),
+  hash: getGitHash(),
+  version: process.env.npm_package_version,
 };
 
 // ANSI color codes for polished terminal output

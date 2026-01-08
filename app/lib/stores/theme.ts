@@ -15,10 +15,23 @@ export const themeStore = atom<Theme>(initStore());
 
 function initStore() {
   if (!import.meta.env.SSR) {
-    const persistedTheme = localStorage.getItem(kTheme) as Theme | undefined;
-    const themeAttribute = document.querySelector('html')?.getAttribute('data-theme');
+    try {
+      const persistedTheme = localStorage.getItem(kTheme) as Theme | undefined;
+      const themeAttribute = document.querySelector('html')?.getAttribute('data-theme');
 
-    return persistedTheme ?? (themeAttribute as Theme) ?? DEFAULT_THEME;
+      const validTheme = (t: string | null | undefined): t is Theme => t === 'dark' || t === 'light';
+
+      if (validTheme(persistedTheme)) {
+        return persistedTheme;
+      }
+
+      if (validTheme(themeAttribute)) {
+        return themeAttribute as Theme;
+      }
+    } catch (e) {
+      console.warn('Failed to initialize theme store:', e);
+    }
+    return DEFAULT_THEME;
   }
 
   return DEFAULT_THEME;

@@ -93,3 +93,22 @@
 .animation-delay-600 {
   animation-delay: 600ms;
 }
+
+.animate-gradient-x {
+  background-size: 200% auto;
+  animation: gradientX 4s linear infinite;
+}
+
+@keyframes gradientX {
+  0% {
+    background-position: 0% center;
+  }
+
+  50% {
+    background-position: 100% center;
+  }
+
+  100% {
+    background-position: 0% center;
+  }
+}

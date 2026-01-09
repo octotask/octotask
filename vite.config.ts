@@ -19,6 +19,11 @@ export default defineConfig((config) => {
     build: {
       target: 'esnext',
     },
+    resolve: {
+      alias: {
+        path: 'path-browserify',
+      },
+    },
     plugins: [
       nodePolyfills({
         include: ['buffer', 'process', 'util', 'stream'],
@@ -28,7 +33,7 @@ export default defineConfig((config) => {
           global: true,
         },
         protocolImports: true,
-        exclude: ['child_process', 'fs', 'path'],
+        exclude: ['child_process', 'fs'],
       }),
       {
         name: 'buffer-polyfill',

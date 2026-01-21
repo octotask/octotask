@@ -31,9 +31,9 @@ octotask allows you to choose the LLM that you use for each prompt! Currently, y
 
 ## Join the community!
 
-[Join the community!](https://thinktank.ottomator.ai)
+[Join the community!](https://ai.khulnasoft.com)
 
-Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
+Also [this pinned post in our community](https://ai.khulnasoft.com/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying octotask yourself!
 
 ---
 
@@ -628,7 +628,7 @@ The documentation includes:
 
 ### Community Support
 - **GitHub Issues**: Report bugs and request features
-- **Community Forum**: Join discussions at [thinktank.ottomator.ai](https://thinktank.ottomator.ai)
+- **Community Forum**: Join discussions at [ai.khulnasoft.com](https://ai.khulnasoft.com)
 - **Contributing Guide**: Learn how to contribute to the project
 
 ## Tips and Tricks

@@ -71,8 +71,8 @@ docker compose --profile production up -d
 ## 🤝 Join the Ecosystem
 We are a community driven by innovation. Your contributions keep OctoTask at the cutting edge.
 - **Discord**: [KhulnaSoft Community](https://discord.gg/khulnasoft)
-- **Think Tank**: [oTTomator Discussion Board](https://thinktank.ottomator.ai)
-- **AI Expert**: [OctoTask Studio](https://studio.ottomator.ai/)
+- **Think Tank**: [KhulnaSoft Discussion Board](https://ai.khulnasoft.com)
+- **AI Expert**: [OctoTask Studio](https://studio.khulnasoft.com/)
 
 ## 📄 Licensing & Terms
 Distributed under the **MIT License**.

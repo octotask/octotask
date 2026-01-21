@@ -116,7 +116,7 @@ octotask provides multiple ways to access help and documentation:
 
     **Community Support:**
     - **GitHub Issues**: Report bugs and request features
-    - **Community Forum**: [thinktank.ottomator.ai](https://thinktank.ottomator.ai)
+    - **Community Forum**: [ai.khulnasoft.com](https://ai.khulnasoft.com)
 
 ??? question "How do I get the best results with octotask?"
 Follow these proven strategies for optimal results:
@@ -402,7 +402,7 @@ If your custom LLM provider isn't appearing:
 ## Get Help & Support
 
 !!! tip "Community Support"
-[Join the octotask Community](https://thinktank.ottomator.ai/c/octotask/17){target=\_blank} for discussions and help
+[Join the octotask Community](https://ai.khulnasoft.com/c/octotask/17){target=\_blank} for discussions and help
 
 !!! bug "Report Issues"
 [Open an Issue](https://github.com/octotask-labs/octotask/issues/19){target=\_blank} in our GitHub Repository

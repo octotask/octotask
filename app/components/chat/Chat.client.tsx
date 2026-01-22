@@ -580,7 +580,9 @@ export const ChatImpl = memo(
       const storedApiKeys = Cookies.get('apiKeys');
 
       if (storedApiKeys) {
-        setApiKeys(JSON.parse(storedApiKeys));
+        const parsedApiKeys = JSON.parse(storedApiKeys);
+        setApiKeys(parsedApiKeys);
+        workbenchStore.setApiKeys(parsedApiKeys);
       }
     }, []);
 

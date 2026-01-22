@@ -21,6 +21,8 @@ import {
   clearCache,
 } from '~/lib/persistence/lockedFiles';
 import { getCurrentChatId } from '~/utils/fileLocks';
+import type { Indexer } from '~/core/workspace/Indexer';
+import type { VectorStore } from '~/core/workspace/VectorStore';
 
 const logger = createScopedLogger('FilesStore');
 
@@ -46,6 +48,8 @@ export type FileMap = Record<string, Dirent | undefined>;
 
 export class FilesStore {
   #webcontainer: Promise<WebContainer>;
+  #indexer: Indexer;
+  #vectorStore: VectorStore | undefined;
 
   /**
    * Tracks the number of files without folders.
@@ -73,8 +77,10 @@ export class FilesStore {
     return this.#size;
   }
 
-  constructor(webcontainerPromise: Promise<WebContainer>) {
+  constructor(webcontainerPromise: Promise<WebContainer>, indexer: Indexer, vectorStore: VectorStore | undefined) {
     this.#webcontainer = webcontainerPromise;
+    this.#indexer = indexer;
+    this.#vectorStore = vectorStore;
 
     // Load deleted paths from localStorage if available
     try {
@@ -693,63 +699,67 @@ export class FilesStore {
     }
   }
 
-  #processEventBuffer(events: Array<[events: PathWatcherEvent[]]>) {
+  async #processEventBuffer(events: Array<[events: PathWatcherEvent[]]>) {
     const watchEvents = events.flat(2);
 
     for (const { type, path, buffer } of watchEvents) {
-      // remove any trailing slashes
       const sanitizedPath = path.replace(/\/+$/g, '');
 
       switch (type) {
-        case 'add_dir': {
-          // we intentionally add a trailing slash so we can distinguish files from folders in the file tree
+        case 'add_dir':
           this.files.setKey(sanitizedPath, { type: 'folder' });
           break;
-        }
-        case 'remove_dir': {
-          this.files.setKey(sanitizedPath, undefined);
 
-          for (const [direntPath] of Object.entries(this.files)) {
-            if (direntPath.startsWith(sanitizedPath)) {
+        case 'remove_dir':
+          this.files.setKey(sanitizedPath, undefined);
+          this.#vectorStore?.removeDocumentsByPath(sanitizedPath); // In case a dir is indexed
+
+          for (const [direntPath] of Object.entries(this.files.get())) {
+            if (direntPath.startsWith(sanitizedPath + '/')) {
               this.files.setKey(direntPath, undefined);
+              this.#vectorStore?.removeDocumentsByPath(direntPath);
             }
           }
-
           break;
-        }
+
         case 'add_file':
         case 'change': {
           if (type === 'add_file') {
             this.#size++;
           }
 
-          let content = '';
-
-          /**
-           * @note This check is purely for the editor. The way we detect this is not
-           * bullet-proof and it's a best guess so there might be false-positives.
-           * The reason we do this is because we don't want to display binary files
-           * in the editor nor allow to edit them.
-           */
           const isBinary = isBinaryFile(buffer);
 
-          if (!isBinary) {
-            content = this.#decodeFileContent(buffer);
+          if (isBinary) {
+            this.files.setKey(sanitizedPath, { type: 'file', content: '', isBinary });
+            this.#vectorStore?.removeDocumentsByPath(sanitizedPath);
+            break;
           }
 
-          this.files.setKey(sanitizedPath, { type: 'file', content, isBinary });
+          const content = this.#decodeFileContent(buffer);
+          this.files.setKey(sanitizedPath, { type: 'file', content, isBinary: false });
+
+          // Re-index this file
+          this.#vectorStore?.removeDocumentsByPath(sanitizedPath);
+
+          const newDoc = await this.#indexer.indexFile(sanitizedPath, content);
+
+          if (newDoc) {
+            await this.#vectorStore?.addDocuments([newDoc]);
+          }
 
           break;
         }
-        case 'remove_file': {
+
+        case 'remove_file':
           this.#size--;
           this.files.setKey(sanitizedPath, undefined);
+          this.#vectorStore?.removeDocumentsByPath(sanitizedPath);
           break;
-        }
-        case 'update_directory': {
+
+        case 'update_directory':
           // we don't care about these events
           break;
-        }
       }
     }
   }

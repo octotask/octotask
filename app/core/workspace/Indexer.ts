@@ -48,6 +48,20 @@ export class Indexer {
     }
   }
 
+  async indexFile(filePath: string, fileContent: string): Promise<Document | null> {
+    try {
+      const chunks = this._chunkContent(fileContent);
+      return {
+        path: filePath,
+        content: fileContent,
+        chunks,
+      };
+    } catch (err) {
+      console.error(`Failed to index file ${filePath}:`, err);
+      return null;
+    }
+  }
+
   private _chunkContent(content: string): string[] {
     if (!content || content.length === 0) {
       return [];

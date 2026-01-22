@@ -59,8 +59,26 @@ export default defineConfig((config) => {
       }),
       UnoCSS(),
       tsconfigPaths(),
+      crossOriginIsolationPlugin(),
       chrome129IssuePlugin(),
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
+      {
+        // This plugin is a workaround for the issue with `@xenova/transformers` in Cloudflare Workers.
+        // The library is not compatible with the Workers runtime and causes a `TypeError`.
+        // This plugin replaces the import with an empty module to prevent the error.
+        name: 'exclude-xenova-transformers',
+        enforce: 'pre',
+        load(id) {
+          if (id.includes('@xenova/transformers') || id.includes('VectorStore.client')) {
+            return `export const pipeline = () => {}; export const getEmbedder = () => {};`;
+          }
+        },
+        resolveId(id) {
+          if (id.includes('@xenova/transformers')) {
+            return '\0' + id; // Prevent further processing
+          }
+        },
+      },
     ],
     envPrefix: [
       'VITE_',
@@ -89,6 +107,19 @@ export default defineConfig((config) => {
     },
   };
 });
+
+function crossOriginIsolationPlugin() {
+  return {
+    name: 'cross-origin-isolation',
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use((_req, res, next) => {
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        next();
+      });
+    },
+  };
+}
 
 function chrome129IssuePlugin() {
   return {

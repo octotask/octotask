@@ -96,7 +96,7 @@ export class OctoShell {
   #readyPromise: Promise<void>;
   #webcontainer: WebContainer | undefined;
   #terminal: ITerminal | undefined;
-  #process: WebContainerProcess | undefined;
+  process: WebContainerProcess | undefined;
   executionState = atom<
     { sessionId: string; active: boolean; executionPrms?: Promise<any>; abort?: () => void } | undefined
   >();
@@ -118,8 +118,12 @@ export class OctoShell {
     this.#terminal = terminal;
 
     // Use all three streams from tee: one for terminal, one for command execution, one for Expo URL detection
-    const { process, commandStream, expoUrlStream } = await this.newOctoShellProcess(webcontainer, terminal);
-    this.#process = process;
+    const {
+      process: processInstance,
+      commandStream,
+      expoUrlStream,
+    } = await this.newOctoShellProcess(webcontainer, terminal);
+    this.process = processInstance;
     this.#outputStream = commandStream.getReader();
 
     // Start background Expo URL watcher immediately
@@ -209,10 +213,6 @@ export class OctoShell {
 
   get terminal() {
     return this.#terminal;
-  }
-
-  get process() {
-    return this.#process;
   }
 
   async executeCommand(sessionId: string, command: string, abort?: () => void): Promise<ExecutionResult> {

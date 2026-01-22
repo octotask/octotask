@@ -1,5 +1,5 @@
 import type { ModelInfo } from '~/lib/modules/llm/types';
-import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS } from '~/lib/.server/llm/constants';
+import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS } from '~/lib/llm/constants';
 
 function getCompletionTokenLimit(modelDetails: ModelInfo): number {
   if (modelDetails.maxCompletionTokens && modelDetails.maxCompletionTokens > 0) {

@@ -1,5 +1,3 @@
-import { pipeline } from '@xenova/transformers';
-
 export interface SearchResult {
   path: string;
   score: number;
@@ -10,8 +8,16 @@ export class VectorStore {
   private _documents: any[] = [];
   private _embedder: any = null;
   private _isInitialized = false;
+  private _isServer = typeof window === 'undefined';
 
   async initialize() {
+    if (this._isServer) {
+      console.log('VectorStore: Running in server mode, skipping embedding model initialization');
+      this._isInitialized = true;
+
+      return;
+    }
+
     if (this._isInitialized) {
       return;
     }
@@ -20,7 +26,8 @@ export class VectorStore {
       console.log('Initializing local embedding model...');
 
       // Use a small, efficient model for local embeddings
-      this._embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+      const { getEmbedder } = await import('./VectorStore.client');
+      this._embedder = await getEmbedder();
       this._isInitialized = true;
       console.log('Embedding model initialized.');
     } catch (error) {
@@ -30,6 +37,11 @@ export class VectorStore {
   }
 
   async addDocuments(documents: { path: string; chunks: string[] }[]) {
+    if (this._isServer) {
+      console.log('VectorStore: Running in server mode, skipping document addition');
+      return;
+    }
+
     if (!this._isInitialized) {
       await this.initialize();
     }
@@ -55,7 +67,23 @@ export class VectorStore {
     console.log(`Stored ${this._documents.length} vector chunks.`);
   }
 
+  removeDocumentsByPath(path: string) {
+    const initialCount = this._documents.length;
+    this._documents = this._documents.filter((doc) => doc.path !== path);
+
+    const removedCount = initialCount - this._documents.length;
+
+    if (removedCount > 0) {
+      console.log(`Removed ${removedCount} chunks for path: ${path}`);
+    }
+  }
+
   async search(query: string, k: number = 5): Promise<SearchResult[]> {
+    if (this._isServer) {
+      console.log('VectorStore: Running in server mode, returning empty search results');
+      return [];
+    }
+
     if (!this._isInitialized) {
       await this.initialize();
     }

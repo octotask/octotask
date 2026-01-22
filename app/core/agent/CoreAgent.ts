@@ -8,6 +8,8 @@ import { PROVIDER_LIST } from '~/utils/constants';
 import { ToolRouter } from './ToolRouter';
 import { FileSystemTools } from '~/core/tools/FileSystemTools';
 import { ShellTools } from '~/core/tools/ShellTools';
+import { AgentDebugger } from './AgentDebugger';
+import { SearchService } from './SearchService';
 
 export type AgentStatus = 'idle' | 'planning' | 'acting' | 'observing' | 'indexing';
 
@@ -20,19 +22,40 @@ export abstract class CoreAgent extends EventEmitter {
   protected status: AgentStatus = 'idle';
   protected context: AgentContext;
   protected indexer: Indexer;
-  protected vectorStore: VectorStore;
+  protected vectorStore: VectorStore | undefined;
   protected promptFactory: PromptFactory;
   protected memory: Memory;
   protected toolRouter: ToolRouter;
+  protected debugger: AgentDebugger;
+  protected searchService: SearchService;
 
   constructor(context: AgentContext) {
     super();
     this.context = context;
     this.indexer = new Indexer();
-    this.vectorStore = new VectorStore();
+
+    if (typeof window !== 'undefined') {
+      this.vectorStore = new VectorStore();
+    }
+
     this.promptFactory = new PromptFactory();
     this.memory = new Memory();
     this.toolRouter = new ToolRouter();
+    this.debugger = new AgentDebugger();
+
+    const apiKeys: Record<string, string> = {};
+
+    if (this.context.vault) {
+      for (const p of PROVIDER_LIST) {
+        this.context.vault.getSecret(p.name).then((key: string | null) => {
+          if (key) {
+            apiKeys[p.name] = key;
+          }
+        });
+      }
+    }
+
+    this.searchService = new SearchService(this.vectorStore, apiKeys);
 
     // Register Tools
     const fsTools = new FileSystemTools(context.workspacePath);
@@ -68,11 +91,11 @@ export abstract class CoreAgent extends EventEmitter {
 
       const documents = await this.indexer.indexWorkspace(this.context.workspacePath);
 
-      if (documents.length > 0) {
+      if (documents.length > 0 && this.vectorStore) {
         await this.vectorStore.addDocuments(documents);
         console.log('CoreAgent: Workspace indexing complete.');
       } else {
-        console.warn('CoreAgent: No documents found to index.');
+        console.warn('CoreAgent: No documents found to index or VectorStore not initialized.');
       }
     } catch (error) {
       console.error('CoreAgent: Error initializing workspace:', error);
@@ -83,7 +106,19 @@ export abstract class CoreAgent extends EventEmitter {
   }
 
   async searchWorkspace(query: string) {
-    return this.vectorStore.search(query);
+    let providerName = 'Anthropic';
+    let modelName = 'claude-3-5-sonnet-20240620';
+
+    /*
+     * A simple check to fallback to OpenAI if Anthropic key is not available
+     * This logic can be improved to be more robust
+     */
+    if (!this.searchService.apiKeys[providerName]) {
+      providerName = 'OpenAI';
+      modelName = 'gpt-4o';
+    }
+
+    return this.searchService.search(query, { name: providerName } as any, modelName);
   }
 
   async execute(goal: string) {
@@ -100,12 +135,13 @@ export abstract class CoreAgent extends EventEmitter {
     let running = true;
 
     while (running && iterations < MAX_ITERATIONS) {
+      await this.debugger.checkBreakpoint(iterations);
       iterations++;
+      this.emit('iteration', iterations);
       console.log(`CoreAgent: Iteration ${iterations}`);
 
       // 1. Context Retrieval (RAG)
-      const contextResults = await this.vectorStore.search(goal);
-      const contextStr = contextResults.map((r) => r.chunk).join('\n---\n');
+      const contextStr = await this.searchWorkspace(goal);
 
       // 2. Plan / Decide Action
       const systemPrompt = this.promptFactory.generateSystemPrompt(this.context);

@@ -1,7 +1,7 @@
 import { generateText } from 'ai';
 import { LLMManager } from '~/lib/modules/llm/manager';
 import { PROVIDER_LIST } from '~/utils/constants';
-import { isReasoningModel } from '~/lib/.server/llm/constants';
+import { isReasoningModel } from './constants';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import type { ProviderInfo, IProviderSetting } from '~/types/model';
 import { getDynamicMaxTokens, validateTokenLimits } from '~/controllers/llm/Validation';

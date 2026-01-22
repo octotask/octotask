@@ -18,6 +18,10 @@ import { description } from '~/lib/persistence';
 import Cookies from 'js-cookie';
 import { createSampler } from '~/utils/sampler';
 import type { ActionAlert, DeployAlert, SupabaseAlert } from '~/types/actions';
+import { LLMService } from '~/lib/llm/LLMService';
+import { Indexer } from '~/core/workspace/Indexer';
+import { VectorStore } from '~/core/workspace/VectorStore';
+import { MemoryMonitor } from '~/lib/runtime/MemoryMonitor';
 
 const { saveAs } = fileSaver;
 
@@ -37,9 +41,14 @@ export type WorkbenchViewType = 'code' | 'diff' | 'preview';
 
 export class WorkbenchStore {
   #previewsStore = new PreviewsStore(webcontainer);
-  #filesStore = new FilesStore(webcontainer);
-  #editorStore = new EditorStore(this.#filesStore);
+  #filesStore: FilesStore;
+  #editorStore: EditorStore;
   #terminalStore = new TerminalStore(webcontainer);
+  #indexer: Indexer;
+  #vectorStore: VectorStore | undefined;
+  #llmService: LLMService;
+  #memoryMonitor: MemoryMonitor;
+  #apiKeys: Record<string, string> = {};
 
   #reloadedMessages = new Set<string>();
 
@@ -57,7 +66,26 @@ export class WorkbenchStore {
   modifiedFiles = new Set<string>();
   artifactIdList: string[] = [];
   #globalExecutionQueue = Promise.resolve();
+
+  setApiKeys(apiKeys: Record<string, string>) {
+    this.#apiKeys = apiKeys;
+  }
+
   constructor() {
+    this.#indexer = new Indexer();
+
+    // Only create VectorStore on client side
+    if (typeof window !== 'undefined') {
+      this.#vectorStore = new VectorStore();
+    }
+
+    this.#llmService = new LLMService();
+    this.#memoryMonitor = new MemoryMonitor();
+    this.#filesStore = new FilesStore(webcontainer, this.#indexer, this.#vectorStore);
+    this.#editorStore = new EditorStore(this.#filesStore);
+
+    this.#memoryMonitor.startMonitoring();
+
     if (import.meta.hot) {
       import.meta.hot.data.artifacts = this.artifacts;
       import.meta.hot.data.unsavedFiles = this.unsavedFiles;
@@ -484,21 +512,24 @@ export class WorkbenchStore {
       runner: new ActionRunner(
         webcontainer,
         () => this.octoTerminal,
-        (alert) => {
+        this.#llmService,
+        this.#apiKeys,
+        this.#memoryMonitor,
+        (alert: ActionAlert) => {
           if (this.#reloadedMessages.has(messageId)) {
             return;
           }
 
           this.actionAlert.set(alert);
         },
-        (alert) => {
+        (alert: SupabaseAlert) => {
           if (this.#reloadedMessages.has(messageId)) {
             return;
           }
 
           this.supabaseAlert.set(alert);
         },
-        (alert) => {
+        (alert: DeployAlert) => {
           if (this.#reloadedMessages.has(messageId)) {
             return;
           }

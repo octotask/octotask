@@ -1,5 +1,7 @@
 import { json } from '@remix-run/cloudflare';
 import { withSecurity } from '~/lib/security';
+import { validateRequestBody, createErrorResponse } from '~/lib/api/validation';
+import { GitLabBranchesSchema } from '~/lib/api/schemas';
 
 interface GitLabBranch {
   name: string;
@@ -22,16 +24,14 @@ interface BranchInfo {
 
 async function gitlabBranchesLoader({ request }: { request: Request }) {
   try {
-    const body: any = await request.json();
-    const { token, gitlabUrl = 'https://gitlab.com', projectId } = body;
+    // Validate request body early
+    const validation = await validateRequestBody(request, GitLabBranchesSchema);
 
-    if (!token) {
-      return json({ error: 'GitLab token is required' }, { status: 400 });
+    if (!validation.success) {
+      return createErrorResponse(validation.error, 400);
     }
 
-    if (!projectId) {
-      return json({ error: 'Project ID is required' }, { status: 400 });
-    }
+    const { token, gitlabUrl, projectId } = validation.data;
 
     // Fetch branches from GitLab API
     const branchesUrl = `${gitlabUrl}/api/v4/projects/${projectId}/repository/branches?per_page=100`;

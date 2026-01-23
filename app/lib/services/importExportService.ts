@@ -4,7 +4,7 @@ import { getAllChats, deleteChat } from '~/lib/persistence/chats';
 
 interface ExtendedMessage extends Message {
   name?: string;
-  function_call?: any;
+  function_call?: unknown;
   timestamp?: number;
 }
 
@@ -17,7 +17,7 @@ export class ImportExportService {
    * @param db The IndexedDB database instance
    * @returns A promise that resolves to the export data
    */
-  static async exportAllChats(db: IDBDatabase): Promise<{ chats: any[]; exportDate: string }> {
+  static async exportAllChats(db: IDBDatabase): Promise<{ chats: unknown[]; exportDate: string }> {
     if (!db) {
       throw new Error('Database not initialized');
     }
@@ -198,7 +198,7 @@ export class ImportExportService {
    * Import API keys from a JSON file
    * @param keys The API keys to import
    */
-  static importAPIKeys(keys: Record<string, any>): Record<string, string> {
+  static importAPIKeys(keys: Record<string, unknown>): Record<string, string> {
     // Get existing keys from cookies
     const existingKeys = (() => {
       const storedApiKeys = Cookies.get('apiKeys');
@@ -248,7 +248,7 @@ export class ImportExportService {
    * Create an API keys template
    * @returns The API keys template
    */
-  static createAPIKeysTemplate(): Record<string, any> {
+  static createAPIKeysTemplate(): Record<string, unknown> {
     /*
      * Create a template with provider names as keys
      * This matches how the application stores API keys in cookies
@@ -585,10 +585,24 @@ export class ImportExportService {
    * @param key The key to get
    * @returns The value or null if not found
    */
-  private static _safeGetItem(key: string): any {
+  private static async _safeGetItem(key: string): Promise<any> {
     try {
       const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
+
+      if (!item) {
+        return null;
+      }
+
+      // Use safe JSON parsing
+      const { safeJSONParse } = await import('~/lib/api/validation');
+      const parseResult = safeJSONParse(item);
+
+      if (!parseResult.success) {
+        console.error(`Error parsing localStorage item ${key}:`, parseResult.error.message);
+        return null;
+      }
+
+      return parseResult.data;
     } catch (err) {
       console.error(`Error getting localStorage item ${key}:`, err);
       return null;
@@ -599,8 +613,8 @@ export class ImportExportService {
    * Get all localStorage items
    * @returns All localStorage items
    */
-  private static _getAllLocalStorage(): Record<string, any> {
-    const result: Record<string, any> = {};
+  private static _getAllLocalStorage(): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
 
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -627,8 +641,8 @@ export class ImportExportService {
    * @param _cookies The cookies object
    * @returns GitHub connections
    */
-  private static _getGitHubConnections(_cookies: Record<string, string>): Record<string, any> {
-    const result: Record<string, any> = {};
+  private static _getGitHubConnections(_cookies: Record<string, string>): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
 
     // Get GitHub connections from localStorage
     const localStorageKeys = Object.keys(localStorage).filter((key) => key.startsWith('github_'));
@@ -649,8 +663,8 @@ export class ImportExportService {
    * Get chat snapshots from localStorage
    * @returns Chat snapshots
    */
-  private static _getChatSnapshots(): Record<string, any> {
-    const result: Record<string, any> = {};
+  private static _getChatSnapshots(): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
 
     // Get chat snapshots from localStorage
     const snapshotKeys = Object.keys(localStorage).filter((key) => key.startsWith('snapshot:'));
@@ -672,9 +686,17 @@ export class ImportExportService {
    * @param key The key to set
    * @param value The value to set
    */
-  private static _safeSetItem(key: string, value: any): void {
+  private static async _safeSetItem(key: string, value: any): Promise<void> {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      const { safeJSONStringify, VALIDATION_LIMITS } = await import('~/lib/api/validation');
+      const stringifyResult = safeJSONStringify(value, VALIDATION_LIMITS.MAX_STORAGE_ITEM_SIZE);
+
+      if (!stringifyResult.success) {
+        console.error(`Error stringifying localStorage item ${key}:`, stringifyResult.error.message);
+        return;
+      }
+
+      localStorage.setItem(key, stringifyResult.data);
     } catch (err) {
       console.error(`Error setting localStorage item ${key}:`, err);
     }

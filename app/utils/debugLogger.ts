@@ -2,26 +2,30 @@ import { isMac, isWindows, isLinux } from './os';
 import { isMobile } from './mobile';
 import { PROVIDER_LIST, DEFAULT_MODEL } from './constants';
 import { logger } from './logger';
+import type { IDebugLogger } from '~/core/logger/LoggerInterface';
 
-// Lazy import to avoid circular dependencies
-let logStore: any = null;
-const getLogStore = () => {
-  if (!logStore && typeof window !== 'undefined') {
-    try {
-      // Import and set the logStore on first access
-      import('~/lib/stores/logs')
-        .then(({ logStore: store }) => {
-          logStore = store;
-        })
-        .catch(() => {
-          // Ignore import errors
-        });
-    } catch {
-      // Ignore errors
-    }
+// Log store provider - injected instead of imported
+let logStoreProvider: (() => Promise<any>) | null = null;
+
+/**
+ * Set the log store provider to avoid circular dependencies
+ * Call this during app initialization
+ */
+export function setLogStoreProvider(provider: () => Promise<any>): void {
+  logStoreProvider = provider;
+}
+
+const getLogStore = async () => {
+  if (!logStoreProvider) {
+    return null;
   }
 
-  return logStore;
+  try {
+    return await logStoreProvider();
+  } catch {
+    // Ignore import errors
+    return null;
+  }
 };
 
 // Configuration interface for debug logger
@@ -148,7 +152,7 @@ export interface LogEntry {
   level: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   scope?: string;
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface ErrorEntry {
@@ -160,7 +164,7 @@ export interface ErrorEntry {
   line?: number;
   column?: number;
   userAgent?: string;
-  context?: any;
+  context?: unknown;
 }
 
 export interface NetworkEntry {
@@ -185,7 +189,7 @@ export interface PerformanceEntry {
     total: number;
     limit: number;
   };
-  timing: any; // Using any instead of deprecated PerformanceTiming
+  timing: unknown; // Using unknown instead of deprecated PerformanceTiming
 }
 
 export interface StateEntry {
@@ -205,7 +209,7 @@ export interface UserActionEntry {
   timestamp: string;
   action: string;
   target?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface TerminalEntry {
@@ -215,7 +219,7 @@ export interface TerminalEntry {
   command?: string;
 }
 
-class DebugLogger {
+class DebugLogger implements IDebugLogger {
   private _logs: CircularBuffer<LogEntry>;
   private _errors: CircularBuffer<ErrorEntry>;
   private _networkRequests: CircularBuffer<NetworkEntry>;

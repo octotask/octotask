@@ -3,6 +3,7 @@ import { BaseProvider } from './base-provider';
 import type { ModelInfo, ProviderInfo } from './types';
 import * as providers from './registry';
 import { createScopedLogger } from '~/utils/logger';
+import { ProviderRegistry } from './provider-registry';
 
 const logger = createScopedLogger('LLMManager');
 export class LLMManager {
@@ -10,10 +11,13 @@ export class LLMManager {
   private _providers: Map<string, BaseProvider> = new Map();
   private _modelList: ModelInfo[] = [];
   private readonly _env: any = {};
+  private _registry: ProviderRegistry;
 
-  private constructor(_env: Record<string, string>) {
+  private constructor(env: Record<string, string>) {
+    this._registry = ProviderRegistry.getInstance();
     this._registerProvidersFromDirectory();
-    this._env = _env;
+    this._setupPluginHooks();
+    this._env = env;
   }
 
   static getInstance(env: Record<string, string> = {}): LLMManager {
@@ -51,6 +55,31 @@ export class LLMManager {
     }
   }
 
+  /**
+   * Setup hooks to integrate plugins with LLMManager
+   */
+  private _setupPluginHooks(): void {
+    // When a plugin is loaded, register it as a provider
+    this._registry.onPluginLoaded((plugin) => {
+      try {
+        this.registerProvider(plugin);
+        logger.info(`Plugin provider registered in LLMManager: ${plugin.name}`);
+      } catch (error: any) {
+        logger.error(`Failed to register plugin provider ${plugin.name}:`, error?.message);
+      }
+    });
+
+    // When a plugin is unloaded, unregister it
+    this._registry.onPluginUnloaded((plugin) => {
+      try {
+        this.unregisterProvider(plugin.name);
+        logger.info(`Plugin provider unregistered from LLMManager: ${plugin.name}`);
+      } catch (error: any) {
+        logger.error(`Failed to unregister plugin provider ${plugin.name}:`, error?.message);
+      }
+    });
+  }
+
   registerProvider(provider: BaseProvider) {
     if (this._providers.has(provider.name)) {
       logger.warn(`Provider ${provider.name} is already registered. Skipping.`);
@@ -60,6 +89,66 @@ export class LLMManager {
     logger.info('Registering Provider: ', provider.name);
     this._providers.set(provider.name, provider);
     this._modelList = [...this._modelList, ...provider.staticModels];
+  }
+
+  /**
+   * Unregister a provider
+   */
+  unregisterProvider(name: string): void {
+    if (!this._providers.has(name)) {
+      logger.warn(`Provider ${name} is not registered`);
+      return;
+    }
+
+    const provider = this._providers.get(name);
+    this._providers.delete(name);
+
+    if (provider) {
+      // Remove provider's models from model list
+      const providerModelNames = new Set(provider.staticModels.map((m) => m.name));
+      this._modelList = this._modelList.filter((m) => m.provider !== name || !providerModelNames.has(m.name));
+    }
+
+    logger.info(`Unregistered Provider: ${name}`);
+  }
+
+  /**
+   * Get plugin registry instance
+   */
+  getPluginRegistry(): ProviderRegistry {
+    return this._registry;
+  }
+
+  /**
+   * Register a plugin and load it into the manager
+   */
+  async registerPlugin(
+    plugin: any,
+    options?: { config?: Record<string, unknown> },
+  ): Promise<{
+    success: boolean;
+    error?: string;
+    pluginId?: string;
+  }> {
+    try {
+      const result = await this._registry.registerPlugin(plugin, options);
+
+      if (!result.success) {
+        return result;
+      }
+
+      // Load the plugin
+      const loadResult = await this._registry.loadPlugin(result.pluginId!);
+
+      if (!loadResult.success) {
+        return { success: false, error: loadResult.error, pluginId: result.pluginId };
+      }
+
+      return result;
+    } catch (error: any) {
+      logger.error('Failed to register plugin:', error?.message);
+      return { success: false, error: error?.message };
+    }
   }
 
   getProvider(name: string): BaseProvider | undefined {

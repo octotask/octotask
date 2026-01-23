@@ -18,15 +18,13 @@ export default defineConfig((config) => {
     },
     build: {
       target: 'esnext',
-    },
-    resolve: {
-      alias: {
-        path: 'path-browserify',
-      },
+      sourcemap: false,
+      outDir: 'build',
+      ssr: true,
     },
     plugins: [
       nodePolyfills({
-        include: ['buffer', 'process', 'util', 'stream'],
+        include: ['buffer', 'process', 'util', 'stream', 'path'],
         globals: {
           Buffer: true,
           process: true,
@@ -50,6 +48,7 @@ export default defineConfig((config) => {
       },
       config.mode !== 'test' && remixCloudflareDevProxy(),
       remixVitePlugin({
+        serverModuleFormat: "esm",
         future: {
           v3_fetcherPersist: true,
           v3_relativeSplatPath: true,
@@ -79,6 +78,23 @@ export default defineConfig((config) => {
           }
         },
       },
+      {
+        // Exclude fast-glob from client bundle since it depends on Node.js 'os' module
+        // It will still be available for build-time use (uno.config.ts)
+        name: 'exclude-fast-glob-client',
+        enforce: 'pre',
+        resolveId(id) {
+          if (id === 'fast-glob') {
+            return '\0fast-glob-empty';
+          }
+        },
+        load(id) {
+          if (id === '\0fast-glob-empty') {
+            return `export default {}; export const globSync = () => []; export const glob = async () => [];`;
+          }
+        },
+      },
+
     ],
     envPrefix: [
       'VITE_',

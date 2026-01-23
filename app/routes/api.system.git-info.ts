@@ -48,13 +48,13 @@ interface GitHubGist {
 }
 
 // These values will be replaced at build time
-declare const __COMMIT_HASH: string;
-declare const __GIT_BRANCH: string;
-declare const __GIT_COMMIT_TIME: string;
-declare const __GIT_AUTHOR: string;
-declare const __GIT_EMAIL: string;
-declare const __GIT_REMOTE_URL: string;
-declare const __GIT_REPO_NAME: string;
+declare const COMMIT_HASH: string;
+declare const GIT_BRANCH: string;
+declare const GIT_COMMIT_TIME: string;
+declare const GIT_AUTHOR: string;
+declare const GIT_EMAIL: string;
+declare const GIT_REMOTE_URL: string;
+declare const GIT_REPO_NAME: string;
 
 /*
  * Remove unused variable to fix linter error
@@ -312,13 +312,13 @@ export const loader: LoaderFunction = async ({ request, context }: LoaderFunctio
 
   const gitInfo: GitInfo = {
     local: {
-      commitHash: typeof __COMMIT_HASH !== 'undefined' ? __COMMIT_HASH : 'development',
-      branch: typeof __GIT_BRANCH !== 'undefined' ? __GIT_BRANCH : 'main',
-      commitTime: typeof __GIT_COMMIT_TIME !== 'undefined' ? __GIT_COMMIT_TIME : new Date().toISOString(),
-      author: typeof __GIT_AUTHOR !== 'undefined' ? __GIT_AUTHOR : 'development',
-      email: typeof __GIT_EMAIL !== 'undefined' ? __GIT_EMAIL : 'development@local',
-      remoteUrl: typeof __GIT_REMOTE_URL !== 'undefined' ? __GIT_REMOTE_URL : 'local',
-      repoName: typeof __GIT_REPO_NAME !== 'undefined' ? __GIT_REPO_NAME : 'octotask',
+      commitHash: typeof COMMIT_HASH !== 'undefined' ? COMMIT_HASH : 'development',
+      branch: typeof GIT_BRANCH !== 'undefined' ? GIT_BRANCH : 'main',
+      commitTime: typeof GIT_COMMIT_TIME !== 'undefined' ? GIT_COMMIT_TIME : new Date().toISOString(),
+      author: typeof GIT_AUTHOR !== 'undefined' ? GIT_AUTHOR : 'development',
+      email: typeof GIT_EMAIL !== 'undefined' ? GIT_EMAIL : 'development@local',
+      remoteUrl: typeof GIT_REMOTE_URL !== 'undefined' ? GIT_REMOTE_URL : 'local',
+      repoName: typeof GIT_REPO_NAME !== 'undefined' ? GIT_REPO_NAME : 'octotask',
     },
     timestamp: new Date().toISOString(),
   };

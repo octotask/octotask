@@ -1,7 +1,7 @@
 import { json } from '@remix-run/cloudflare';
 import { getApiKeysFromCookie } from '~/lib/api/cookies';
 import { withSecurity } from '~/lib/security';
-import type { GitHubUserResponse, GitHubStats } from '~/types/GitHub';
+import type { GitHubUserResponse, GitHubStats } from '~/types/api';
 
 async function githubStatsLoader({ request, context }: { request: Request; context: any }) {
   try {
@@ -42,7 +42,7 @@ async function githubStatsLoader({ request, context }: { request: Request; conte
     const user = (await userResponse.json()) as GitHubUserResponse;
 
     // Fetch repositories with pagination
-    let allRepos: any[] = [];
+    let allRepos: unknown[] = [];
     let page = 1;
     let hasMore = true;
 
@@ -62,7 +62,7 @@ async function githubStatsLoader({ request, context }: { request: Request; conte
         throw new Error(`GitHub API error: ${repoResponse.status}`);
       }
 
-      const repos: any[] = await repoResponse.json();
+      const repos: unknown[] = await repoResponse.json();
       allRepos = allRepos.concat(repos);
 
       if (repos.length < 100) {

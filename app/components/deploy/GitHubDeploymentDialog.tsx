@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Octokit } from '@octokit/rest';
 import { classNames } from '~/utils/classNames';
 import { getLocalStorage } from '~/lib/persistence/localStorage';
-import type { GitHubUserResponse, GitHubRepoInfo } from '~/types/GitHub';
+import type { GitHubUserResponse, GitHubRepoInfo } from '~/types/api';
 import { logStore } from '~/lib/stores/logs';
 import { chatId } from '~/lib/persistence/useChatHistory';
 import { useStore } from '@nanostores/react';

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { classNames } from '~/utils/classNames';
 import { getLocalStorage } from '~/lib/persistence/localStorage';
-import type { GitLabUserResponse, GitLabProjectInfo } from '~/types/GitLab';
+import type { GitLabUserResponse, GitLabProjectInfo } from '~/types/api';
 import { logStore } from '~/lib/stores/logs';
 import { chatId } from '~/lib/persistence/useChatHistory';
 import { useStore } from '@nanostores/react';

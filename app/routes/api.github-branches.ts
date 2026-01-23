@@ -1,6 +1,8 @@
 import { json } from '@remix-run/cloudflare';
 import { getApiKeysFromCookie } from '~/lib/api/cookies';
 import { withSecurity } from '~/lib/security';
+import { validateRequestBody, createErrorResponse } from '~/lib/api/validation';
+import { z } from 'zod';
 
 interface GitHubBranch {
   name: string;
@@ -18,6 +20,19 @@ interface BranchInfo {
   isDefault: boolean;
 }
 
+// Validation schema for POST requests
+const GitHubBranchesRequestSchema = z.object({
+  owner: z.string().min(1, 'Owner is required'),
+  repo: z.string().min(1, 'Repository is required'),
+  token: z.string().min(1, 'GitHub token is required'),
+});
+
+// Validation schema for GET query parameters
+const GitHubBranchesQuerySchema = z.object({
+  owner: z.string().min(1, 'Owner is required'),
+  repo: z.string().min(1, 'Repository is required'),
+});
+
 async function githubBranchesLoader({ request, context }: { request: Request; context: any }) {
   try {
     let owner: string;
@@ -26,27 +41,39 @@ async function githubBranchesLoader({ request, context }: { request: Request; co
 
     if (request.method === 'POST') {
       // Handle POST request with token in body (from BranchSelector)
-      const body: any = await request.json();
+      const validation = await validateRequestBody(request, GitHubBranchesRequestSchema);
+
+      if (!validation.success) {
+        return createErrorResponse(validation.error, 400);
+      }
+
+      const body = validation.data;
       owner = body.owner;
       repo = body.repo;
       githubToken = body.token;
-
-      if (!owner || !repo) {
-        return json({ error: 'Owner and repo parameters are required' }, { status: 400 });
-      }
-
-      if (!githubToken) {
-        return json({ error: 'GitHub token is required' }, { status: 400 });
-      }
     } else {
       // Handle GET request with params and cookie token (backwards compatibility)
       const url = new URL(request.url);
-      owner = url.searchParams.get('owner') || '';
-      repo = url.searchParams.get('repo') || '';
+      const params: Record<string, string> = {};
+      url.searchParams.forEach((value, key) => {
+        params[key] = value;
+      });
 
-      if (!owner || !repo) {
-        return json({ error: 'Owner and repo parameters are required' }, { status: 400 });
+      const queryValidation = z.record(z.string()).safeParse(params);
+
+      if (!queryValidation.success) {
+        return createErrorResponse('Invalid query parameters', 400);
       }
+
+      const schemaValidation = GitHubBranchesQuerySchema.safeParse(params);
+
+      if (!schemaValidation.success) {
+        return createErrorResponse(schemaValidation.error, 400);
+      }
+
+      const validated = schemaValidation.data;
+      owner = validated.owner;
+      repo = validated.repo;
 
       // Get API keys from cookies (server-side only)
       const cookieHeader = request.headers.get('Cookie');

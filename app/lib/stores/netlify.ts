@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { NetlifyConnection, NetlifyUser } from '~/types/netlify';
+import type { NetlifyConnection, NetlifyUser } from '~/types/api';
 import { logStore } from './logs';
 import { toast } from 'react-toastify';
 

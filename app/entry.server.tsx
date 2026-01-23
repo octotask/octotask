@@ -6,6 +6,7 @@ import { renderHeadToString } from 'remix-island';
 import { Head } from './root';
 import { themeStore } from '~/lib/stores/theme';
 import { startTracing } from '~/lib/tracer';
+import { handleError } from '~/lib/errors';
 
 startTracing();
 
@@ -21,8 +22,9 @@ export default async function handleRequest(
   const readable = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
     signal: request.signal,
     onError(error: unknown) {
-      console.error(error);
-      responseStatusCode = 500;
+      const { error: appError } = handleError(error, { operation: 'renderToReadableStream' });
+      console.error('[entry.server]', appError.toString());
+      responseStatusCode = appError.statusCode;
     },
   });
 

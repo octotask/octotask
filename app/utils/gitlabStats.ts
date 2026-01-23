@@ -1,8 +1,8 @@
-import type { GitLabProjectInfo, GitLabStats } from '~/types/GitLab';
+import type { GitLabProjectInfo, GitLabStats } from '~/types/api';
 
-export function calculateProjectStats(projects: any[]): { projects: GitLabProjectInfo[] } {
+export function calculateProjectStats(projects: GitLabProjectInfo[]): { projects: GitLabProjectInfo[] } {
   const projectStats = {
-    projects: projects.map((project: any) => ({
+    projects: projects.map((project: GitLabProjectInfo) => ({
       id: project.id,
       name: project.name,
       path_with_namespace: project.path_with_namespace,
@@ -19,18 +19,26 @@ export function calculateProjectStats(projects: any[]): { projects: GitLabProjec
   return projectStats;
 }
 
+export interface GitLabEvent {
+  id: number;
+  action_name: string;
+  project_id: number;
+  project: unknown;
+  created_at: string;
+}
+
 export function calculateStatsSummary(
   projects: GitLabProjectInfo[],
-  events: any[],
-  groups: any[],
-  snippets: any[],
-  user: any,
+  events: GitLabEvent[],
+  groups: unknown[],
+  snippets: unknown[],
+  user: { followers: number },
 ): GitLabStats {
   const totalStars = projects.reduce((sum, p) => sum + (p.star_count || 0), 0);
   const totalForks = projects.reduce((sum, p) => sum + (p.forks_count || 0), 0);
   const privateProjects = projects.filter((p) => p.visibility === 'private').length;
 
-  const recentActivity = events.slice(0, 5).map((event: any) => ({
+  const recentActivity = events.slice(0, 5).map((event) => ({
     id: event.id,
     action_name: event.action_name,
     project_id: event.project_id,

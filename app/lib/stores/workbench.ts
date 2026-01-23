@@ -148,16 +148,8 @@ export class WorkbenchStore {
     this.actionAlert.set(undefined);
   }
 
-  get SupabaseAlert() {
-    return this.supabaseAlert;
-  }
-
   clearSupabaseAlert() {
     this.supabaseAlert.set(undefined);
-  }
-
-  get DeployAlert() {
-    return this.deployAlert;
   }
 
   clearDeployAlert() {

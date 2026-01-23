@@ -1,5 +1,5 @@
 import React from 'react';
-import type { GitHubUserResponse } from '~/types/GitHub';
+import type { GitHubUserResponse } from '~/types/api';
 
 interface GitHubUserProfileProps {
   user: GitHubUserResponse;

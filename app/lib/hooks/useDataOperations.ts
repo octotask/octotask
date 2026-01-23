@@ -51,7 +51,7 @@ export function useDataOperations({
   const [isDownloadingTemplate, setIsDownloadingTemplate] = useState(false);
   const [progressMessage, setProgressMessage] = useState<string>('');
   const [progressPercent, setProgressPercent] = useState<number>(0);
-  const [lastOperation, setLastOperation] = useState<{ type: string; data: any } | null>(null);
+  const [lastOperation, setLastOperation] = useState<{ type: string; data: unknown } | null>(null);
 
   /**
    * Show progress toast with percentage
@@ -176,7 +176,7 @@ export function useDataOperations({
         // Step 2: Filter settings by category
         showProgress('Filtering selected categories', 40);
 
-        const filteredSettings: Record<string, any> = {
+        const filteredSettings: Record<string, unknown> = {
           exportDate: allSettings.exportDate,
         };
 
@@ -282,7 +282,7 @@ export function useDataOperations({
       });
 
       // Direct database query approach for more reliable access
-      const directChats = await new Promise<any[]>((resolve, reject) => {
+      const directChats = await new Promise<unknown[]>((resolve, reject) => {
         try {
           console.log(`Creating transaction on '${db.name}' database, objectStore 'chats'`);
 
@@ -405,7 +405,7 @@ export function useDataOperations({
 
         // Create an array to store the promises for getting each chat
         const chatPromises = chatIds.map((chatId) => {
-          return new Promise<any>((resolve, reject) => {
+          return new Promise<unknown>((resolve, reject) => {
             const request = store.get(chatId);
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);
@@ -502,7 +502,14 @@ export function useDataOperations({
         // Step 2: Parse JSON
         showProgress('Parsing settings data', 40);
 
-        const importedData = JSON.parse(fileContent);
+        const { safeJSONParse } = await import('~/lib/api/validation');
+        const parseResult = safeJSONParse(fileContent);
+
+        if (!parseResult.success) {
+          throw new Error(`Invalid JSON format: ${parseResult.error.message}`);
+        }
+
+        const importedData = parseResult.data;
 
         // Step 3: Validate data
         showProgress('Validating settings data', 60);
@@ -583,7 +590,14 @@ export function useDataOperations({
         // Step 2: Parse JSON and validate structure
         showProgress('Parsing chat data', 40);
 
-        const importedData = JSON.parse(fileContent);
+        const { safeJSONParse } = await import('~/lib/api/validation');
+        const parseResult = safeJSONParse(fileContent);
+
+        if (!parseResult.success) {
+          throw new Error(`Invalid JSON format: ${parseResult.error.message}`);
+        }
+
+        const importedData = parseResult.data;
 
         if (!importedData.chats || !Array.isArray(importedData.chats)) {
           throw new Error('Invalid chat data format: missing or invalid chats array');
@@ -592,13 +606,13 @@ export function useDataOperations({
         // Step 3: Validate each chat object
         showProgress('Validating chat data', 60);
 
-        const validatedChats = importedData.chats.map((chat: any) => {
+        const validatedChats = importedData.chats.map((chat: unknown) => {
           if (!chat.id || !Array.isArray(chat.messages)) {
             throw new Error('Invalid chat format: missing required fields');
           }
 
           // Ensure each message has required fields
-          const validatedMessages = chat.messages.map((msg: any) => {
+          const validatedMessages = chat.messages.map((msg: unknown) => {
             if (!msg.role || !msg.content) {
               throw new Error('Invalid message format: missing required fields');
             }
@@ -714,14 +728,30 @@ export function useDataOperations({
         // Step 2: Parse JSON
         showProgress('Parsing API keys data', 40);
 
-        const importedData = JSON.parse(fileContent);
+        const { safeJSONParse } = await import('~/lib/api/validation');
+        const parseResult = safeJSONParse(fileContent);
+
+        if (!parseResult.success) {
+          throw new Error(`Invalid JSON format: ${parseResult.error.message}`);
+        }
+
+        const importedData = parseResult.data;
 
         // Step 3: Validate data
         showProgress('Validating API keys data', 60);
 
         // Get current API keys from cookies for potential undo
         const apiKeysStr = document.cookie.split(';').find((row) => row.trim().startsWith('apiKeys='));
-        const currentApiKeys = apiKeysStr ? JSON.parse(decodeURIComponent(apiKeysStr.split('=')[1])) : {};
+        let currentApiKeys = {};
+
+        if (apiKeysStr) {
+          const apiKeysParseResult = safeJSONParse(decodeURIComponent(apiKeysStr.split('=')[1]));
+
+          if (apiKeysParseResult.success) {
+            currentApiKeys = apiKeysParseResult.data as Record<string, unknown>;
+          }
+        }
+
         setLastOperation({ type: 'import-api-keys', data: { previous: currentApiKeys } });
 
         // Step 4: Import API keys

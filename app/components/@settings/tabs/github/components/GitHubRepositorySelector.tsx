@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '~/components/ui/Button';
 import { BranchSelector } from '~/components/ui/BranchSelector';
 import { GitHubRepositoryCard } from './GitHubRepositoryCard';
-import type { GitHubRepoInfo } from '~/types/GitHub';
+import type { GitHubRepoInfo } from '~/types/api';
 import { useGitHubConnection, useGitHubStats } from '~/lib/hooks';
 import { classNames } from '~/utils/classNames';
 import { Search, RefreshCw, GitBranch, Calendar, Filter } from 'lucide-react';

@@ -5,6 +5,7 @@ import type { ProviderInfo, IProviderSetting } from '~/types/model';
 import { getProviderSettingsFromCookie } from '~/lib/api/cookies';
 import { StreamController } from './StreamController';
 import { LLMService } from '~/lib/llm/LLMService';
+import { LLMError, LLMAuthError, handleError, getErrorMessage } from '~/lib/errors';
 
 export class LLMController {
   async handleRequest({ context, request }: ActionFunctionArgs) {
@@ -73,7 +74,7 @@ export class LLMController {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       return this._handleError(error);
     }
   }
@@ -87,33 +88,35 @@ export class LLMController {
     return llmManager.updateModelList(options);
   }
 
-  private _handleError(error: any) {
-    console.log(error);
+  private _handleError(error: unknown) {
+    const { error: appError } = handleError(error);
+
+    let llmError = appError;
+
+    if (getErrorMessage(error).includes('API key')) {
+      llmError = new LLMAuthError('Invalid or missing API key', {
+        cause: appError instanceof Error ? appError : undefined,
+        context: appError.context,
+      });
+    } else if (appError instanceof LLMError) {
+      llmError = appError;
+    }
 
     const errorResponse = {
       error: true,
-      message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      statusCode: (error as any).statusCode || 500,
-      isRetryable: (error as any).isRetryable !== false,
-      provider: (error as any).provider || 'unknown',
+      message: llmError.message,
+      code: llmError.code,
+      statusCode: llmError.statusCode,
+      isRetryable: llmError.canRetry(),
+      provider: (llmError as LLMError).provider || 'unknown',
     };
 
-    if (error instanceof Error && error.message?.includes('API key')) {
-      errorResponse.message = 'Invalid or missing API key';
-      errorResponse.statusCode = 401;
-      errorResponse.isRetryable = false;
-
-      return new Response(JSON.stringify(errorResponse), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-        statusText: 'Unauthorized',
-      });
-    }
+    console.error('[LLMController]', llmError.toString());
 
     return new Response(JSON.stringify(errorResponse), {
-      status: errorResponse.statusCode,
+      status: llmError.statusCode,
       headers: { 'Content-Type': 'application/json' },
-      statusText: 'Error',
+      statusText: llmError.statusCode === 401 ? 'Unauthorized' : 'Error',
     });
   }
 }

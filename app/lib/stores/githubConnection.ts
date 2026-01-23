@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { logStore } from '~/lib/stores/logs';
 import { gitHubApiService } from '~/lib/services/githubApiService';
 import { calculateStatsSummary } from '~/utils/githubStats';
-import type { GitHubConnection } from '~/types/GitHub';
+import type { GitHubConnection } from '~/types/api';
 
 // Auto-connect using environment variable
 const envToken = import.meta.env?.VITE_GITHUB_ACCESS_TOKEN;

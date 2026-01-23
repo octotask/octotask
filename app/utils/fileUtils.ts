@@ -57,7 +57,15 @@ const readPackageJson = async (files: File[]): Promise<{ scripts?: Record<string
       reader.readAsText(packageJsonFile);
     });
 
-    return JSON.parse(content);
+    const { safeJSONParse } = await import('~/lib/api/validation');
+    const parseResult = safeJSONParse(content);
+
+    if (!parseResult.success) {
+      console.error('Error parsing package.json:', parseResult.error.message);
+      return null;
+    }
+
+    return parseResult.data;
   } catch (error) {
     console.error('Error reading package.json:', error);
     return null;

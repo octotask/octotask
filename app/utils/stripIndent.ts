@@ -7,13 +7,13 @@ export function stripIndents(arg0: string | TemplateStringsArray, ...values: any
       return acc;
     }, '');
 
-    return _stripIndents(processedString);
+    return doStripIndents(processedString);
   }
 
-  return _stripIndents(arg0);
+  return doStripIndents(arg0);
 }
 
-function _stripIndents(value: string) {
+function doStripIndents(value: string) {
   return value
     .split('\n')
     .map((line) => line.trim())

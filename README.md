@@ -40,7 +40,7 @@ OctoTask isn't just a development tool—it's your intelligent partner in creati
 
 ### 📦 Binary Installation (Recommended)
 Download the optimized production release for your OS:
-[![GitHub release](https://img.shields.io/github/v/release/KhulnaSoft/octotask?label=Download%20OctoTask&style=for-the-badge&color=007BFF)](https://github.com/octotask/octotask/releases/latest)
+[![GitHub release](https://img.shields.io/github/v/release/octotask/octotask?label=Download%20OctoTask&style=for-the-badge&color=007BFF)](https://github.com/octotask/octotask/releases/latest)
 
 > [!TIP]
 > **macOS Security**: If the app reports as "damaged," run: `xattr -cr /path/to/OctoTask.app`

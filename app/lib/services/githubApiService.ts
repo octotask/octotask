@@ -1,11 +1,5 @@
-import type {
-  GitHubUserResponse,
-  GitHubRepoInfo,
-  GitHubBranch,
-  GitHubOrganization,
-  GitHubStats,
-  GitHubLanguageStats,
-} from '~/types/GitHub';
+import type { GitHubUserResponse, GitHubRepoInfo, GitHubBranch, GitHubOrganization, GitHubStats } from '~/types/api';
+import { dedupedApiCall } from '~/lib/utils/deduplicationCache';
 
 export interface GitHubApiServiceConfig {
   token?: string;
@@ -72,10 +66,15 @@ export class GitHubApiServiceClass {
   }
 
   /**
-   * Fetch all user repositories with pagination
+   * Fetch all user repositories with pagination and deduplication
    */
   async getAuthenticatedUser(): Promise<GitHubUserResponse> {
-    return this._makeRequestInternal<GitHubUserResponse>('/user');
+    return dedupedApiCall(
+      'github.getAuthenticatedUser',
+      () => this._makeRequestInternal<GitHubUserResponse>('/user'),
+      undefined,
+      10000, // Cache for 10 seconds
+    );
   }
 
   async getAllUserRepositories(): Promise<GitHubRepoInfo[]> {
@@ -97,37 +96,49 @@ export class GitHubApiServiceClass {
   }
 
   /**
-   * Fetch detailed information for a repository including additional metrics
+   * Fetch detailed information for a repository including additional metrics with deduplication
    */
   async getDetailedRepositoryInfo(owner: string, repo: string): Promise<DetailedRepoInfo> {
-    const [repoInfo, branches] = await Promise.all([
-      this._makeRequestInternal<GitHubRepoInfo>(`/repos/${owner}/${repo}`),
-      this.getRepositoryBranches(owner, repo).catch(() => []),
-    ]);
+    return dedupedApiCall(
+      'github.getDetailedRepositoryInfo',
+      async () => {
+        const [repoInfo, branches] = await Promise.all([
+          this._makeRequestInternal<GitHubRepoInfo>(`/repos/${owner}/${repo}`),
+          this.getRepositoryBranches(owner, repo).catch(() => []),
+        ]);
 
-    // Try to get additional metrics
-    const [contributors, issues, pullRequests] = await Promise.allSettled([
-      this._getRepositoryContributorsCount(owner, repo),
-      this._getRepositoryIssuesCount(owner, repo),
-      this._getRepositoryPullRequestsCount(owner, repo),
-    ]);
+        // Try to get additional metrics
+        const [contributors, issues, pullRequests] = await Promise.allSettled([
+          this._getRepositoryContributorsCount(owner, repo),
+          this._getRepositoryIssuesCount(owner, repo),
+          this._getRepositoryPullRequestsCount(owner, repo),
+        ]);
 
-    const detailedInfo: DetailedRepoInfo = {
-      ...repoInfo,
-      branches_count: branches.length,
-      contributors_count: contributors.status === 'fulfilled' ? contributors.value : undefined,
-      issues_count: issues.status === 'fulfilled' ? issues.value : undefined,
-      pull_requests_count: pullRequests.status === 'fulfilled' ? pullRequests.value : undefined,
-    };
+        const detailedInfo: DetailedRepoInfo = {
+          ...repoInfo,
+          branches_count: branches.length,
+          contributors_count: contributors.status === 'fulfilled' ? contributors.value : undefined,
+          issues_count: issues.status === 'fulfilled' ? issues.value : undefined,
+          pull_requests_count: pullRequests.status === 'fulfilled' ? pullRequests.value : undefined,
+        };
 
-    return detailedInfo;
+        return detailedInfo;
+      },
+      { owner, repo },
+      30000, // Cache for 30 seconds
+    );
   }
 
   /**
-   * Get repository branches
+   * Get repository branches with deduplication
    */
   async getRepositoryBranches(owner: string, repo: string): Promise<GitHubBranch[]> {
-    return this._makeRequestInternal<GitHubBranch[]>(`/repos/${owner}/${repo}/branches`);
+    return dedupedApiCall(
+      'github.getRepositoryBranches',
+      () => this._makeRequestInternal<GitHubBranch[]>(`/repos/${owner}/${repo}/branches`),
+      { owner, repo },
+      30000, // Cache for 30 seconds
+    );
   }
 
   /**

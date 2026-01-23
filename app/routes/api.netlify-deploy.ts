@@ -1,16 +1,24 @@
 import { type ActionFunctionArgs, json } from '@remix-run/cloudflare';
 import crypto from 'crypto';
-import type { NetlifySiteInfo } from '~/types/netlify';
-
-interface DeployRequestBody {
-  siteId?: string;
-  files: Record<string, string>;
-  chatId: string;
-}
+import type { NetlifySiteInfo } from '~/types/api';
+import { validateRequestBody, createErrorResponse } from '~/lib/api/validation';
+import { netlifyDeployRequestSchema } from '~/lib/api/schemas';
 
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const { siteId, files, token, chatId } = (await request.json()) as DeployRequestBody & { token: string };
+    // Validate request body early
+    const validation = await validateRequestBody(request, netlifyDeployRequestSchema);
+
+    if (!validation.success) {
+      return createErrorResponse(validation.error, 400);
+    }
+
+    const { siteId, files, token, chatId } = validation.data as {
+      siteId: string;
+      files: Record<string, string>;
+      token: string;
+      chatId: string;
+    };
 
     if (!token) {
       return json({ error: 'Not connected to Netlify' }, { status: 401 });
@@ -64,7 +72,7 @@ export async function action({ request }: ActionFunctionArgs) {
             chatId,
           };
         } else {
-          targetSiteId = undefined;
+          targetSiteId = '';
         }
       }
 

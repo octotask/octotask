@@ -1,8 +1,8 @@
 // Simple EventEmitter implementation for browser compatibility
 class SimpleEventEmitter {
-  private _events: Record<string, ((...args: any[]) => void)[]> = {};
+  private _events: Record<string, ((...args: unknown[]) => void)[]> = {};
 
-  on(event: string, listener: (...args: any[]) => void): void {
+  on(event: string, listener: (...args: unknown[]) => void): void {
     if (!this._events[event]) {
       this._events[event] = [];
     }
@@ -10,7 +10,7 @@ class SimpleEventEmitter {
     this._events[event].push(listener);
   }
 
-  off(event: string, listener: (...args: any[]) => void): void {
+  off(event: string, listener: (...args: unknown[]) => void): void {
     if (!this._events[event]) {
       return;
     }
@@ -18,7 +18,7 @@ class SimpleEventEmitter {
     this._events[event] = this._events[event].filter((l) => l !== listener);
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit(event: string, ...args: unknown[]): void {
     if (!this._events[event]) {
       return;
     }

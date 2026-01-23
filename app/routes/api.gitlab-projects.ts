@@ -1,6 +1,6 @@
 import { json } from '@remix-run/cloudflare';
 import { withSecurity } from '~/lib/security';
-import type { GitLabProjectInfo } from '~/types/GitLab';
+import type { GitLabProjectInfo } from '~/types/api';
 
 interface GitLabProject {
   id: number;

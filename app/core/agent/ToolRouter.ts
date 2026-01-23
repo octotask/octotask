@@ -1,8 +1,10 @@
+import type { ToolSchema, ToolArgs } from '~/types/tool';
+
 export interface Tool {
   name: string;
   description: string;
-  execute: (args: any) => Promise<any>;
-  schema: Record<string, any>; // JSON Schema for arguments
+  execute: (args: ToolArgs) => Promise<unknown>;
+  schema: ToolSchema;
 }
 
 export class ToolRouter {
@@ -21,7 +23,7 @@ export class ToolRouter {
     return this._tools.get(name);
   }
 
-  async executeTool(name: string, args: any): Promise<any> {
+  async executeTool(name: string, args: ToolArgs): Promise<unknown> {
     const tool = this._tools.get(name);
 
     if (!tool) {
@@ -37,7 +39,7 @@ export class ToolRouter {
     }
   }
 
-  getToolDefinitions(): any[] {
+  getToolDefinitions(): Array<{ name: string; description: string; parameters: ToolSchema }> {
     return Array.from(this._tools.values()).map((t) => ({
       name: t.name,
       description: t.description,

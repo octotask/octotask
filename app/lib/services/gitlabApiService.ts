@@ -5,7 +5,7 @@ import type {
   GitLabGroupInfo,
   GitLabProjectResponse,
   GitLabCommitRequest,
-} from '~/types/GitLab';
+} from '~/types/api';
 
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
@@ -171,7 +171,11 @@ export class GitLabApiService {
     // Handle different avatar URL fields that GitLab might return
     const processedUser = {
       ...user,
-      avatar_url: user.avatar_url || (user as any).avatarUrl || (user as any).profile_image_url || null,
+      avatar_url:
+        user.avatar_url ||
+        (user as unknown as Record<string, unknown>).avatarUrl ||
+        (user as unknown as Record<string, unknown>).profile_image_url ||
+        null,
     };
 
     return { ...processedUser, rateLimit } as GitLabUserResponse & { rateLimit: typeof rateLimit };
@@ -249,14 +253,14 @@ export class GitLabApiService {
       throw new Error(`Failed to fetch events: ${response.statusText}`);
     }
 
-    const events: any[] = await response.json();
+    const events: unknown[] = await response.json();
 
-    return events.slice(0, 5).map((event: any) => ({
-      id: event.id,
-      action_name: event.action_name,
-      project_id: event.project_id,
-      project: event.project,
-      created_at: event.created_at,
+    return events.slice(0, 5).map((event: unknown) => ({
+      id: (event as Record<string, unknown>).id as number,
+      action_name: (event as Record<string, unknown>).action_name as string,
+      project_id: (event as Record<string, unknown>).project_id as number,
+      project: (event as Record<string, unknown>).project,
+      created_at: (event as Record<string, unknown>).created_at as string,
     }));
   }
 
@@ -270,7 +274,7 @@ export class GitLabApiService {
     return [];
   }
 
-  async getSnippets(): Promise<any[]> {
+  async getSnippets(): Promise<unknown[]> {
     const response = await this._request('/snippets');
 
     if (response.ok) {

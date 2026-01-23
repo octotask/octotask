@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { SupabaseUser, SupabaseStats, SupabaseApiKey, SupabaseCredentials } from '~/types/supabase';
+import type { SupabaseUser, supabaseStats, SupabaseApiKey, supabaseCredentials } from '~/types/supabase';
 
 export interface SupabaseProject {
   id: string;
@@ -44,11 +44,11 @@ export interface SupabaseProject {
 export interface SupabaseConnectionState {
   user: SupabaseUser | null;
   token: string;
-  stats?: SupabaseStats;
+  stats?: supabaseStats;
   selectedProjectId?: string;
   isConnected?: boolean;
   project?: SupabaseProject;
-  credentials?: SupabaseCredentials;
+  credentials?: supabaseCredentials;
 }
 
 const storage =
@@ -87,7 +87,7 @@ export const isFetchingStats = atom(false);
 export const isFetchingApiKeys = atom(false);
 
 if (initialState.token && !initialState.stats) {
-  fetchSupabaseStats(initialState.token).catch(console.error);
+  fetchsupabaseStats(initialState.token).catch(console.error);
 }
 
 export function updateSupabaseConnection(connection: Partial<SupabaseConnectionState>) {
@@ -149,11 +149,11 @@ export function initializeSupabaseConnection() {
 
   if (envToken && !supabaseConnection.get().token) {
     updateSupabaseConnection({ token: envToken });
-    fetchSupabaseStats(envToken).catch(console.error);
+    fetchsupabaseStats(envToken).catch(console.error);
   }
 }
 
-export async function fetchSupabaseStats(token: string) {
+export async function fetchsupabaseStats(token: string) {
   isFetchingStats.set(true);
 
   try {

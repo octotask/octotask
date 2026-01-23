@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import type { GitHubUserResponse, GitHubConnection } from '~/types/GitHub';
+import type { GitHubUserResponse, GitHubConnection } from '~/types/api';
 import { useGitHubAPI } from './useGitHubAPI';
 import { githubConnection, isConnecting, updateGitHubConnection } from '~/lib/stores/github';
 

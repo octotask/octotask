@@ -51,7 +51,14 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
     }
 
     try {
-      const packageJson = JSON.parse(packageJsonFile.content);
+      const { safeJSONParse } = await import('~/lib/api/validation');
+      const parseResult = safeJSONParse(packageJsonFile.content);
+
+      if (!parseResult.success) {
+        throw new Error(`Failed to parse package.json: ${parseResult.error.message}`);
+      }
+
+      const packageJson = parseResult.data as Record<string, any>;
       const scripts = packageJson?.scripts || {};
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
 

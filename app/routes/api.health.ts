@@ -1,8 +1,12 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { createValidatedResponse } from '~/lib/api/validation';
 
 export const loader = async ({ request: _request }: LoaderFunctionArgs) => {
-  return json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-  });
+  return createValidatedResponse(
+    {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    },
+    200,
+  );
 };

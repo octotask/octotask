@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { GitHubConnection } from '~/types/GitHub';
+import type { GitHubConnection } from '~/types/api';
 import { logStore } from './logs';
 
 // Initialize with stored connection or defaults

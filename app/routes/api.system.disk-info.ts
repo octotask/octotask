@@ -1,5 +1,9 @@
 import type { ActionFunctionArgs, LoaderFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
+import { safeJSONParse } from '~/lib/api/validation';
+import { createScopedLogger } from '~/utils/logger';
+
+const logger = createScopedLogger('api.system.disk-info');
 
 // Only import child_process if we're not in a Cloudflare environment
 let execSync: any;
@@ -196,7 +200,14 @@ const getDiskInfo = (): DiskInfo[] => {
           .toString()
           .trim();
 
-        const driveData = JSON.parse(output);
+        const parseResult = safeJSONParse(output);
+
+        if (!parseResult.success) {
+          logger.error('Failed to parse PowerShell output:', parseResult.error.message);
+          throw new Error('Failed to parse disk information');
+        }
+
+        const driveData = parseResult.data;
         const drivesArray = Array.isArray(driveData) ? driveData : [driveData];
 
         disks = drivesArray.map((drive) => {

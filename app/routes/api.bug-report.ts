@@ -1,6 +1,7 @@
 import { json, type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { Octokit } from '@octokit/rest';
 import { z } from 'zod';
+import { safeJSONParse } from '~/lib/api/validation';
 
 // Rate limiting store (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -76,7 +77,7 @@ function isSpam(title: string, description: string): boolean {
   const spamPatterns = [
     /\b(viagra|casino|poker|loan|debt|credit)\b/i,
     /\b(click here|buy now|limited time)\b/i,
-    /\b(make money|work from home|earn \$\$)\b/i,
+    /\b(make money|work from home|earn \$$)\b/i,
   ];
 
   const content = title + ' ' + description;
@@ -161,9 +162,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     // Parse environment info if provided
     if (rawData.environmentInfo && typeof rawData.environmentInfo === 'string') {
-      try {
-        rawData.environmentInfo = JSON.parse(rawData.environmentInfo);
-      } catch {
+      const parseResult = safeJSONParse(rawData.environmentInfo);
+
+      if (parseResult.success) {
+        rawData.environmentInfo = parseResult.data;
+      } else {
         rawData.environmentInfo = undefined;
       }
     }
@@ -194,7 +197,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const githubToken =
       (context?.cloudflare?.env as any)?.GITHUB_BUG_REPORT_TOKEN || process.env.GITHUB_BUG_REPORT_TOKEN;
     const targetRepo =
-      (context?.cloudflare?.env as any)?.BUG_REPORT_REPO || process.env.BUG_REPORT_REPO || 'KhulnaSoft/octotask';
+      (context?.cloudflare?.env as any)?.BUG_REPORT_REPO || process.env.BUG_REPORT_REPO || 'octotask/octotask';
 
     if (!githubToken) {
       console.error('GitHub bug report token not configured');

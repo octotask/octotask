@@ -4,9 +4,15 @@ export interface SearchResult {
   chunk: string;
 }
 
+export interface Document {
+  path: string;
+  content: string;
+  chunks?: string[];
+}
+
 export class VectorStore {
-  private _documents: any[] = [];
-  private _embedder: any = null;
+  private _documents: Document[] = [];
+  private _embedder: unknown = null;
   private _isInitialized = false;
   private _isServer = typeof window === 'undefined';
 

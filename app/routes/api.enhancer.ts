@@ -1,9 +1,11 @@
 import { type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { streamText } from '~/lib/.server/llm/stream-text';
 import { stripIndents } from '~/utils/stripIndent';
-import type { ProviderInfo } from '~/types/model';
 import { getApiKeysFromCookie, getProviderSettingsFromCookie } from '~/lib/api/cookies';
 import { createScopedLogger } from '~/utils/logger';
+import { validateRequestBody, createErrorResponse } from '~/lib/api/validation';
+import { handleError, LLMAuthError } from '~/lib/errors';
+import { z } from 'zod';
 
 export async function action(args: ActionFunctionArgs) {
   return enhancerAction(args);
@@ -11,30 +13,29 @@ export async function action(args: ActionFunctionArgs) {
 
 const logger = createScopedLogger('api.enhancher');
 
+// Enhanced validation schema for enhancer endpoint
+const EnhancerRequestSchema = z.object({
+  message: z.string().min(1, 'Message cannot be empty').max(10000),
+  model: z.string().min(1, 'Model is required'),
+  provider: z
+    .object({
+      name: z.string().min(1, 'Provider name is required'),
+    })
+    .passthrough(),
+  apiKeys: z.record(z.string()).optional(),
+});
+
 async function enhancerAction({ context, request }: ActionFunctionArgs) {
-  const { message, model, provider } = await request.json<{
-    message: string;
-    model: string;
-    provider: ProviderInfo;
-    apiKeys?: Record<string, string>;
-  }>();
+  // Validate request body early
+  const validation = await validateRequestBody(request, EnhancerRequestSchema);
+
+  if (!validation.success) {
+    return createErrorResponse(validation.error, 400);
+  }
+
+  const { message, model, provider } = validation.data;
 
   const { name: providerName } = provider;
-
-  // validate 'model' and 'provider' fields
-  if (!model || typeof model !== 'string') {
-    throw new Response('Invalid or missing model', {
-      status: 400,
-      statusText: 'Bad Request',
-    });
-  }
-
-  if (!providerName || typeof providerName !== 'string') {
-    throw new Response('Invalid or missing provider', {
-      status: 400,
-      statusText: 'Bad Request',
-    });
-  }
 
   const cookieHeader = request.headers.get('Cookie');
   const apiKeys = getApiKeysFromCookie(cookieHeader);
@@ -100,13 +101,15 @@ async function enhancerAction({ context, request }: ActionFunctionArgs) {
       try {
         for await (const part of result.fullStream) {
           if (part.type === 'error') {
-            const error: any = part.error;
-            logger.error('Streaming error:', error);
+            const error: unknown = part.error;
+            const { error: appError } = handleError(error, { operation: 'streamText' });
+            logger.error('Streaming error:', appError.toString());
             break;
           }
         }
-      } catch (error) {
-        logger.error('Error processing stream:', error);
+      } catch (error: unknown) {
+        const { error: appError } = handleError(error, { operation: 'streamText processing' });
+        logger.error('Error processing stream:', appError.toString());
       }
     })();
 
@@ -120,17 +123,28 @@ async function enhancerAction({ context, request }: ActionFunctionArgs) {
       },
     });
   } catch (error: unknown) {
-    console.log(error);
+    const { error: appError, statusCode } = handleError(error, { operation: 'enhancer' });
 
-    if (error instanceof Error && error.message?.includes('API key')) {
-      throw new Response('Invalid or missing API key', {
-        status: 401,
+    let message = appError.message;
+    let status = statusCode;
+
+    if (message.includes('API key')) {
+      const llmAuthError = new LLMAuthError('Invalid or missing API key', {
+        cause: appError instanceof Error ? appError : undefined,
+      });
+      message = llmAuthError.message;
+      status = llmAuthError.statusCode;
+
+      logger.error('[api.enhancer]', llmAuthError.toString());
+      throw new Response(message, {
+        status,
         statusText: 'Unauthorized',
       });
     }
 
+    logger.error('[api.enhancer]', appError.toString());
     throw new Response(null, {
-      status: 500,
+      status,
       statusText: 'Internal Server Error',
     });
   }

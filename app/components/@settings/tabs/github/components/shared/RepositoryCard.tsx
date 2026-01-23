@@ -1,7 +1,7 @@
 import React from 'react';
 import { classNames } from '~/utils/classNames';
 import { formatSize } from '~/utils/formatSize';
-import type { GitHubRepoInfo } from '~/types/GitHub';
+import type { GitHubRepoInfo } from '~/types/api';
 import {
   Star,
   GitFork,

@@ -11,7 +11,7 @@ import {
   isFetchingStats,
   isFetchingApiKeys,
   updateSupabaseConnection,
-  fetchSupabaseStats,
+  fetchsupabaseStats,
   fetchProjectApiKeys,
   initializeSupabaseConnection,
   type SupabaseProject,
@@ -211,7 +211,7 @@ export default function SupabaseTab() {
   useEffect(() => {
     const fetchProjects = async () => {
       if (connection.user && connection.token && !connection.stats) {
-        await fetchSupabaseStats(connection.token);
+        await fetchsupabaseStats(connection.token);
       }
     };
     fetchProjects();
@@ -226,7 +226,7 @@ export default function SupabaseTab() {
     isConnecting.set(true);
 
     try {
-      await fetchSupabaseStats(tokenInput);
+      await fetchsupabaseStats(tokenInput);
       updateSupabaseConnection({
         token: tokenInput,
         isConnected: true,

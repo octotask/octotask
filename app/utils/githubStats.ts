@@ -1,4 +1,4 @@
-import type { GitHubStats } from '~/types/GitHub';
+import type { GitHubStats } from '~/types/api';
 
 export function calculateStatsSummary(stats: GitHubStats): GitHubStats {
   return {

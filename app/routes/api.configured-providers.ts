@@ -1,16 +1,13 @@
 import type { LoaderFunction } from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare';
 import { LLMManager } from '~/lib/modules/llm/manager';
 import { LOCAL_PROVIDERS } from '~/lib/stores/settings';
+import type { CloudflareEnv } from '~/types/environment';
+import { createValidatedResponse, createErrorResponse } from '~/lib/api/validation';
 
 interface ConfiguredProvider {
   name: string;
   isConfigured: boolean;
   configMethod: 'environment' | 'none';
-}
-
-interface ConfiguredProvidersResponse {
-  providers: ConfiguredProvider[];
 }
 
 /**
@@ -19,7 +16,8 @@ interface ConfiguredProvidersResponse {
  */
 export const loader: LoaderFunction = async ({ context }) => {
   try {
-    const llmManager = LLMManager.getInstance(context?.cloudflare?.env as any);
+    const env = context?.cloudflare?.env as CloudflareEnv | undefined;
+    const llmManager = LLMManager.getInstance(env);
     const configuredProviders: ConfiguredProvider[] = [];
 
     // Check each local provider for environment configuration
@@ -37,7 +35,7 @@ export const loader: LoaderFunction = async ({ context }) => {
          */
         if (config.baseUrlKey) {
           const baseUrlEnvVar = config.baseUrlKey;
-          const cloudflareEnv = (context?.cloudflare?.env as Record<string, any>)?.[baseUrlEnvVar];
+          const cloudflareEnv = env?.[baseUrlEnvVar];
           const processEnv = process.env[baseUrlEnvVar];
           const managerEnv = llmManager.env[baseUrlEnvVar];
 
@@ -64,10 +62,7 @@ export const loader: LoaderFunction = async ({ context }) => {
         // For providers that might need API keys as well (check this separately, not as fallback)
         if (config.apiTokenKey && !isConfigured) {
           const apiTokenEnvVar = config.apiTokenKey;
-          const envApiToken =
-            (context?.cloudflare?.env as Record<string, any>)?.[apiTokenEnvVar] ||
-            process.env[apiTokenEnvVar] ||
-            llmManager.env[apiTokenEnvVar];
+          const envApiToken = env?.[apiTokenEnvVar] || process.env[apiTokenEnvVar] || llmManager.env[apiTokenEnvVar];
 
           // Only consider configured if API key is set and not a placeholder
           const isValidApiToken =
@@ -92,19 +87,15 @@ export const loader: LoaderFunction = async ({ context }) => {
       });
     }
 
-    return json<ConfiguredProvidersResponse>({
-      providers: configuredProviders,
-    });
+    return createValidatedResponse(
+      {
+        providers: configuredProviders,
+      },
+      200,
+    );
   } catch (error) {
     console.error('Error detecting configured providers:', error);
 
-    // Return default state on error
-    return json<ConfiguredProvidersResponse>({
-      providers: LOCAL_PROVIDERS.map((name) => ({
-        name,
-        isConfigured: false,
-        configMethod: 'none' as const,
-      })),
-    });
+    return createErrorResponse('Failed to detect configured providers', 500);
   }
 };

@@ -26,9 +26,143 @@ export default [
     },
   },
   {
-    files: ['**/*.tsx'],
+    files: ['**/*.d.ts'],
     rules: {
-      ...getNamingConventionRule({}, true),
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
+  },
+  {
+    files: [...tsFileExtensions, ...jsFileExtensions, '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'default',
+          format: ['camelCase'],
+          leadingUnderscore: 'forbid',
+          trailingUnderscore: 'forbid',
+        },
+        {
+          selector: 'variable',
+          format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'variable',
+          format: ['UPPER_CASE'],
+          filter: {
+            regex: '^__',
+            match: true,
+          },
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'parameter',
+          format: null,
+          filter: {
+            regex: '^_$',
+            match: true,
+          },
+        },
+        {
+          selector: 'parameter',
+          format: ['camelCase'],
+          leadingUnderscore: 'forbid', // For other parameters, forbid leading underscore
+        },
+        {
+          selector: 'parameter',
+          modifiers: ['unused'],
+          format: ['camelCase', 'PascalCase'],
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'property',
+          format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+          leadingUnderscore: 'allow', // Allow leading underscores for private properties
+        },
+        {
+          selector: ['classProperty', 'objectLiteralProperty'],
+          format: null, // Allow any format for __html
+          leadingUnderscore: 'allow', // Allow leading underscores
+          filter: {
+            regex: '^__html$',
+            match: true,
+          },
+        },
+        {
+          selector: 'objectLiteralProperty',
+          format: null, // Allow any format for object literal properties that are quoted or special cases
+          modifiers: ['requiresQuotes'],
+        },
+        {
+          selector: 'objectLiteralProperty', // Fallback for other unquoted properties
+          format: ['camelCase', 'PascalCase', 'UPPER_CASE', 'snake_case'], // Allow snake_case
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'parameterProperty', // Rule for parameter properties (constructor args that become properties)
+          format: ['camelCase'],
+          leadingUnderscore: 'allow', // Allow leading underscore for private parameter properties
+        },
+        {
+          selector: 'method',
+          format: ['camelCase'],
+          leadingUnderscore: 'allow', // Allow leading underscores for private methods
+        },
+        {
+          selector: 'accessor',
+          format: ['camelCase'],
+          leadingUnderscore: 'allow', // Allow leading underscores for private accessors
+        },
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+        },
+        {
+          selector: 'class',
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'interface',
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'typeAlias',
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'enum',
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'enumMember',
+          format: ['PascalCase', 'UPPER_CASE'],
+        },
+        {
+          selector: 'typeParameter',
+          format: ['PascalCase'], // Allow PascalCase for type parameters
+        },
+        {
+          selector: 'typeProperty',
+          format: ['camelCase', 'PascalCase', 'UPPER_CASE', 'snake_case'], // Allow snake_case
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'import', // Rule for import statements
+          format: ['camelCase', 'PascalCase'], // Allow both camelCase (for values) and PascalCase (for components/types)
+        },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../'],
+              message: "Relative imports are not allowed. Please use '~/' instead.",
+            },
+          ],
+        },
+      ],
     },
   },
   {

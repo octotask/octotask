@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import type { GitLabConnection } from '~/types/GitLab';
+import type { GitLabConnection } from '~/types/api';
 import { useGitLabAPI } from './useGitLabAPI';
 import { gitlabConnectionStore, gitlabConnection, isGitLabConnected } from '~/lib/stores/gitlabConnection';
 

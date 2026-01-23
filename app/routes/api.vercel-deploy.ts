@@ -1,5 +1,6 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import type { VercelProjectInfo } from '~/types/vercel';
+import type { VercelProjectInfo } from '~/types/api';
+import { safeJSONParse } from '~/lib/api/validation';
 
 // Function to detect framework from project files
 const detectFramework = (files: Record<string, string>): string => {
@@ -8,7 +9,14 @@ const detectFramework = (files: Record<string, string>): string => {
 
   if (packageJson) {
     try {
-      const pkg = JSON.parse(packageJson);
+      const parseResult = safeJSONParse(packageJson);
+
+      if (!parseResult.success) {
+        console.warn('Failed to parse package.json for framework detection');
+        return 'unknown';
+      }
+
+      const pkg = parseResult.data as Record<string, any>;
       const dependencies = { ...pkg.dependencies, ...pkg.devDependencies };
 
       // Check for specific frameworks

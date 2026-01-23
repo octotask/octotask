@@ -498,7 +498,7 @@ ${content.trim()}
     return false;
   }
 
-  private _detectAndWrapShellCommands(_messageId: string, input: string, processed: Set<string>): string {
+  private _detectAndWrapShellCommands(messageId: string, input: string, processed: Set<string>): string {
     // Pattern to detect standalone shell code blocks that look like commands
     const shellCommandPattern = /```(bash|sh|shell|zsh|fish|powershell|ps1)\n([\s\S]*?)```/gi;
 
@@ -514,7 +514,7 @@ ${content.trim()}
         processed.add(blockHash);
         logger.debug(`Auto-wrapped shell code block as command: ${language}`);
 
-        return this._wrapInShellAction(content, _messageId);
+        return this._wrapInShellAction(content, messageId);
       }
 
       // If it looks like a script, let the file detection patterns handle it

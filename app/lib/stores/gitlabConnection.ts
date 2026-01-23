@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { logStore } from '~/lib/stores/logs';
 import { GitLabApiService } from '~/lib/services/gitlabApiService';
 import { calculateStatsSummary } from '~/utils/gitlabStats';
-import type { GitLabConnection, GitLabStats } from '~/types/GitLab';
+import type { GitLabConnection, GitLabStats } from '~/types/api';
 
 // Auto-connect using environment variable
 const envToken = import.meta.env?.VITE_GITLAB_ACCESS_TOKEN;

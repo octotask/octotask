@@ -1,23 +1,13 @@
 export type DebugLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'none';
 import { Chalk } from 'chalk';
+import type { ILogger } from '~/core/logger/LoggerInterface';
 
 const chalk = new Chalk({ level: 3 });
-
-type LoggerFunction = (...messages: any[]) => void;
-
-interface Logger {
-  trace: LoggerFunction;
-  debug: LoggerFunction;
-  info: LoggerFunction;
-  warn: LoggerFunction;
-  error: LoggerFunction;
-  setLevel: (level: DebugLevel) => void;
-}
 
 const env = import.meta.env || {};
 let currentLevel: DebugLevel = env.VITE_LOG_LEVEL || (env.DEV ? 'debug' : 'info');
 
-export const logger: Logger = {
+export const logger: ILogger = {
   trace: (...messages: any[]) => logWithDebugCapture('trace', undefined, messages),
   debug: (...messages: any[]) => logWithDebugCapture('debug', undefined, messages),
   info: (...messages: any[]) => logWithDebugCapture('info', undefined, messages),
@@ -26,7 +16,7 @@ export const logger: Logger = {
   setLevel,
 };
 
-export function createScopedLogger(scope: string): Logger {
+export function createScopedLogger(scope: string): ILogger {
   return {
     trace: (...messages: any[]) => logWithDebugCapture('trace', scope, messages),
     debug: (...messages: any[]) => logWithDebugCapture('debug', scope, messages),

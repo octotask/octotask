@@ -83,6 +83,7 @@ function cleanEscapedTags(content: string) {
 export class StreamingMessageParser {
   #messages = new Map<string, MessageState>();
   #artifactCounter = 0;
+  #preservePosition = false;
 
   constructor(private _options: StreamingMessageParserOptions = {}) {}
 
@@ -308,12 +309,24 @@ export class StreamingMessageParser {
 
             break;
           } else if (!ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
-            output += input.slice(i, j + 1);
-            i = j + 1;
+            const remaining = input.slice(i);
+
+            if (remaining === '<b' || remaining.startsWith('<bo')) {
+              this.#preservePosition = true;
+              i = j + 1;
+            } else {
+              output += input.slice(i, j + 1);
+              i = j + 1;
+            }
+
             break;
           }
 
           j++;
+        }
+
+        if (this.#preservePosition) {
+          break;
         }
 
         if (j === input.length && ARTIFACT_TAG_OPEN.startsWith(potentialTag)) {
@@ -333,7 +346,8 @@ export class StreamingMessageParser {
       }
     }
 
-    state.position = i;
+    state.position = this.#preservePosition ? state.position : i;
+    this.#preservePosition = false;
 
     return output;
   }

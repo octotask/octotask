@@ -4,10 +4,10 @@ import { classNames } from '~/utils/classNames';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import type { FileHistory } from '~/types/actions';
-import { diffLines, type Change } from 'diff';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { toast } from 'react-toastify';
 import { path } from '~/utils/path';
+import { getFileChangeStats } from './fileChangeStats';
 
 const logger = createScopedLogger('FileTree');
 
@@ -647,38 +647,11 @@ function File({
   const fileModifications = fileHistory[fullPath];
 
   const { additions, deletions } = useMemo(() => {
-    if (!fileModifications?.originalContent) {
+    if (!fileModifications) {
       return { additions: 0, deletions: 0 };
     }
 
-    const normalizedOriginal = fileModifications.originalContent.replace(/\r\n/g, '\n');
-    const normalizedCurrent =
-      fileModifications.versions[fileModifications.versions.length - 1]?.content.replace(/\r\n/g, '\n') || '';
-
-    if (normalizedOriginal === normalizedCurrent) {
-      return { additions: 0, deletions: 0 };
-    }
-
-    const changes = diffLines(normalizedOriginal, normalizedCurrent, {
-      newlineIsToken: false,
-      ignoreWhitespace: true,
-      ignoreCase: false,
-    });
-
-    return changes.reduce(
-      (acc: { additions: number; deletions: number }, change: Change) => {
-        if (change.added) {
-          acc.additions += change.value.split('\n').length;
-        }
-
-        if (change.removed) {
-          acc.deletions += change.value.split('\n').length;
-        }
-
-        return acc;
-      },
-      { additions: 0, deletions: 0 },
-    );
+    return getFileChangeStats(fileModifications);
   }, [fileModifications]);
 
   const showStats = additions > 0 || deletions > 0;
@@ -765,12 +738,48 @@ interface FolderNode extends BaseNode {
   kind: 'folder';
 }
 
-function buildFileList(
+const fileListCache = new Map<string, Node[]>();
+
+export function buildFileListCacheKey(
+  files: FileMap,
+  rootFolder = '/',
+  hideRoot: boolean,
+  hiddenFiles: Array<string | RegExp>,
+): string {
+  const visiblePaths = Object.keys(files)
+    .filter((filePath) => {
+      const segments = filePath.split('/').filter(Boolean);
+      const fileName = segments.at(-1);
+
+      if (!fileName) {
+        return false;
+      }
+
+      return !isHiddenFile(filePath, fileName, hiddenFiles);
+    })
+    .sort();
+
+  return JSON.stringify({
+    rootFolder,
+    hideRoot,
+    hiddenFiles: hiddenFiles.map((entry) => (typeof entry === 'string' ? entry : entry.source)),
+    visiblePaths,
+  });
+}
+
+export function buildFileList(
   files: FileMap,
   rootFolder = '/',
   hideRoot: boolean,
   hiddenFiles: Array<string | RegExp>,
 ): Node[] {
+  const cacheKey = buildFileListCacheKey(files, rootFolder, hideRoot, hiddenFiles);
+  const cached = fileListCache.get(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
+
   const folderPaths = new Set<string>();
   const fileList: Node[] = [];
 
@@ -828,7 +837,10 @@ function buildFileList(
     }
   }
 
-  return sortFileList(rootFolder, fileList, hideRoot);
+  const sortedFileList = sortFileList(rootFolder, fileList, hideRoot);
+  fileListCache.set(cacheKey, sortedFileList);
+
+  return sortedFileList;
 }
 
 function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<string | RegExp>) {

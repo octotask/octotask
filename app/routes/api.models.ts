@@ -51,6 +51,8 @@ export async function loader({
     };
   };
 }): Promise<Response> {
+  const requestUrl = new URL(request.url);
+  const staticOnly = requestUrl.searchParams.get('static') === 'true';
   const llmManager = LLMManager.getInstance(context.cloudflare?.env);
 
   // Get client side maintained API keys and provider settings from cookies
@@ -62,7 +64,9 @@ export async function loader({
 
   let modelList: ModelInfo[] = [];
 
-  if (params.provider) {
+  if (staticOnly) {
+    modelList = llmManager.getStaticModelList();
+  } else if (params.provider) {
     // Only update models for the specific provider
     const provider = llmManager.getProvider(params.provider);
 

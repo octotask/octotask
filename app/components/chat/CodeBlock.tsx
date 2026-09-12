@@ -6,6 +6,7 @@ import { createScopedLogger } from '~/utils/logger';
 import styles from './CodeBlock.module.scss';
 
 const logger = createScopedLogger('CodeBlock');
+const codeHtmlCache = new Map<string, string>();
 
 interface CodeBlockProps {
   className?: string;
@@ -36,19 +37,42 @@ export const CodeBlock = memo(
 
     useEffect(() => {
       let effectiveLanguage = language;
+      let cancelled = false;
 
       if (language && !isSpecialLang(language) && !(language in bundledLanguages)) {
         logger.warn(`Unsupported language '${language}', falling back to plaintext`);
         effectiveLanguage = 'plaintext';
       }
 
-      logger.trace(`Language = ${effectiveLanguage}`);
+      const cacheKey = `${effectiveLanguage}:${theme}:${code}`;
+      const cachedHtml = codeHtmlCache.get(cacheKey);
 
-      const processCode = async () => {
-        setHTML(await codeToHtml(code, { lang: effectiveLanguage, theme }));
+      if (cachedHtml) {
+        setHTML(cachedHtml);
+        return undefined;
+      }
+
+      const timeout = setTimeout(async () => {
+        try {
+          const html = await codeToHtml(code, { lang: effectiveLanguage, theme });
+          codeHtmlCache.set(cacheKey, html);
+
+          if (codeHtmlCache.size > 100) {
+            codeHtmlCache.delete(codeHtmlCache.keys().next().value as string);
+          }
+
+          if (!cancelled) {
+            setHTML(html);
+          }
+        } catch (error) {
+          logger.error('Failed to highlight code:', error);
+        }
+      }, 80);
+
+      return () => {
+        cancelled = true;
+        clearTimeout(timeout);
       };
-
-      processCode();
     }, [code, language, theme]);
 
     return (

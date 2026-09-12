@@ -113,9 +113,8 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 disabled={isConnecting || isConnected}
-                placeholder={`Enter your GitHub ${
-                  tokenType === 'classic' ? 'personal access token' : 'fine-grained token'
-                }`}
+                placeholder={`Enter your GitHub ${tokenType === 'classic' ? 'personal access token' : 'fine-grained token'
+                  }`}
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
                   'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
@@ -127,7 +126,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
               />
               <div className="mt-2 text-sm text-octotask-elements-textSecondary">
                 <a
-                  href={`https://github.com/settings/tokens${tokenType === 'fine-grained' ? '/beta' : '/new'}`}
+                  href={`https://github.com/settings/${tokenType === 'fine-grained' ? 'personal-access-tokens' : 'tokens'}/new`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-octotask-elements-borderColorActive hover:underline inline-flex items-center gap-1"

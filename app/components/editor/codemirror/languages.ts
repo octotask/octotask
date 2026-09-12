@@ -1,5 +1,7 @@
 import { LanguageDescription } from '@codemirror/language';
 
+const languageCache = new Map<string, Promise<any>>();
+
 export const supportedLanguages = [
   LanguageDescription.of({
     name: 'VUE',
@@ -102,11 +104,26 @@ export const supportedLanguages = [
 ];
 
 export async function getLanguage(fileName: string) {
-  const languageDescription = LanguageDescription.matchFilename(supportedLanguages, fileName);
+  const extension = fileName.split('.').pop()?.toLowerCase();
 
-  if (languageDescription) {
-    return await languageDescription.load();
+  if (!extension) {
+    return undefined;
   }
 
-  return undefined;
+  const cached = languageCache.get(extension);
+
+  if (cached) {
+    return cached;
+  }
+
+  const languageDescription = LanguageDescription.matchFilename(supportedLanguages, fileName);
+
+  if (!languageDescription) {
+    return undefined;
+  }
+
+  const promise = languageDescription.load();
+  languageCache.set(extension, promise);
+
+  return await promise;
 }

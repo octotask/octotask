@@ -194,10 +194,10 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
           zIndex: 10,
         }}
         onMouseOver={(e) =>
-          (e.currentTarget.style.background = 'var(--octotask-elements-background-depth-4, rgba(0,0,0,.3))')
+        (e.currentTarget.style.background = 'var(--octotask-elements-background-depth-4, rgba(0,0,0,.3))')
         }
         onMouseOut={(e) =>
-          (e.currentTarget.style.background = 'var(--octotask-elements-background-depth-3, rgba(0,0,0,.15))')
+        (e.currentTarget.style.background = 'var(--octotask-elements-background-depth-3, rgba(0,0,0,.15))')
         }
         title="Drag to resize width"
       >
@@ -455,11 +455,11 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   overflow: hidden;
                   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
                 }
-                
+
                 .device-container {
                   position: relative;
                 }
-                
+
                 .device-name {
                   position: absolute;
                   top: -30px;
@@ -469,7 +469,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   font-size: 14px;
                   color: #333;
                 }
-                
+
                 .device-frame {
                   position: relative;
                   border-radius: ${frameRadius};
@@ -478,7 +478,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                   overflow: hidden;
                 }
-                
+
                 /* Notch */
                 .device-frame:before {
                   content: '';
@@ -492,7 +492,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   border-radius: 4px;
                   z-index: 2;
                 }
-                
+
                 /* Home button */
                 .device-frame:after {
                   content: '';
@@ -506,7 +506,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   border-radius: 50%;
                   z-index: 2;
                 }
-                
+
                 iframe {
                   border: none;
                   width: ${width}px;
@@ -743,7 +743,9 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
             icon="i-ph:cursor-click"
             onClick={toggleInspectorMode}
             className={
-              isInspectorMode ? 'bg-octotask-elements-background-depth-3 !text-octotask-elements-item-contentAccent' : ''
+              isInspectorMode
+                ? 'bg-octotask-elements-background-depth-3 !text-octotask-elements-item-contentAccent'
+                : ''
             }
             title={isInspectorMode ? 'Disable Element Inspector' : 'Enable Element Inspector'}
           />
@@ -812,36 +814,32 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-octotask-elements-textTertiary">Show Device Frame</span>
                         <button
-                          className={`w-10 h-5 rounded-full transition-colors duration-200 ${
-                            showDeviceFrame ? 'bg-[#6D28D9]' : 'bg-gray-300 dark:bg-gray-700'
-                          } relative`}
+                          className={`w-10 h-5 rounded-full transition-colors duration-200 ${showDeviceFrame ? 'bg-[#6D28D9]' : 'bg-gray-300 dark:bg-gray-700'
+                            } relative`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowDeviceFrame(!showDeviceFrame);
                           }}
                         >
                           <span
-                            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
-                              showDeviceFrame ? 'transform translate-x-5' : ''
-                            }`}
+                            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${showDeviceFrame ? 'transform translate-x-5' : ''
+                              }`}
                           />
                         </button>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-octotask-elements-textTertiary">Landscape Mode</span>
                         <button
-                          className={`w-10 h-5 rounded-full transition-colors duration-200 ${
-                            isLandscape ? 'bg-[#6D28D9]' : 'bg-gray-300 dark:bg-gray-700'
-                          } relative`}
+                          className={`w-10 h-5 rounded-full transition-colors duration-200 ${isLandscape ? 'bg-[#6D28D9]' : 'bg-gray-300 dark:bg-gray-700'
+                            } relative`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setIsLandscape(!isLandscape);
                           }}
                         >
                           <span
-                            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${
-                              isLandscape ? 'transform translate-x-5' : ''
-                            }`}
+                            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200 ${isLandscape ? 'transform translate-x-5' : ''
+                              }`}
                           />
                         </button>
                       </div>

@@ -67,7 +67,10 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-octotask-elements-borderColor">
         <h3 className="font-medium text-octotask-elements-textPrimary">Element Inspector</h3>
-        <button onClick={onClose} className="text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary">
+        <button
+          onClick={onClose}
+          className="text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary"
+        >
           ✕
         </button>
       </div>
@@ -96,11 +99,10 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-3 py-2 text-sm capitalize ${
-              activeTab === tab
+            className={`px-3 py-2 text-sm capitalize ${activeTab === tab
                 ? 'border-b-2 border-blue-500 text-blue-500'
                 : 'text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary'
-            }`}
+              }`}
           >
             {tab}
           </button>

@@ -14,6 +14,10 @@ export class TerminalStore {
   constructor(webcontainerPromise: Promise<WebContainer>) {
     this.#webcontainer = webcontainerPromise;
 
+    if (typeof window === 'undefined' || import.meta.env.SSR) {
+      return;
+    }
+
     if (import.meta.hot) {
       import.meta.hot.data.showTerminal = this.showTerminal;
     }

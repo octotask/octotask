@@ -54,7 +54,9 @@ function SetupGuide({ onBack }: { onBack: () => void }) {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-octotask-elements-textPrimary">System Requirements</h3>
-              <p className="text-sm text-octotask-elements-textSecondary">Recommended hardware for optimal performance</p>
+              <p className="text-sm text-octotask-elements-textSecondary">
+                Recommended hardware for optimal performance
+              </p>
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-4 text-sm">
@@ -424,7 +426,9 @@ function SetupGuide({ onBack }: { onBack: () => void }) {
                     <li>Set Network Interface to "0.0.0.0" for external access</li>
                     <li>
                       Alternatively, use CLI:{' '}
-                      <code className="bg-octotask-elements-background-depth-4 px-1 rounded">lms server start --cors</code>
+                      <code className="bg-octotask-elements-background-depth-4 px-1 rounded">
+                        lms server start --cors
+                      </code>
                     </li>
                   </ol>
                 </div>
@@ -631,7 +635,9 @@ function SetupGuide({ onBack }: { onBack: () => void }) {
                     <Cable className="w-4 h-4 text-purple-500" />
                     <span className="font-medium text-octotask-elements-textPrimary">KoboldAI</span>
                   </div>
-                  <p className="text-xs text-octotask-elements-textSecondary">Focus on creative writing and storytelling</p>
+                  <p className="text-xs text-octotask-elements-textSecondary">
+                    Focus on creative writing and storytelling
+                  </p>
                 </div>
               </div>
             </div>
@@ -643,7 +649,9 @@ function SetupGuide({ onBack }: { onBack: () => void }) {
                     <Globe className="w-4 h-4 text-orange-500" />
                     <span className="font-medium text-octotask-elements-textPrimary">OpenRouter</span>
                   </div>
-                  <p className="text-xs text-octotask-elements-textSecondary">Access to 100+ models through unified API</p>
+                  <p className="text-xs text-octotask-elements-textSecondary">
+                    Access to 100+ models through unified API
+                  </p>
                 </div>
                 <div className="p-3 rounded-lg bg-octotask-elements-background-depth-3">
                   <div className="flex items-center gap-2 mb-1">
@@ -657,7 +665,9 @@ function SetupGuide({ onBack }: { onBack: () => void }) {
                     <Activity className="w-4 h-4 text-pink-500" />
                     <span className="font-medium text-octotask-elements-textPrimary">Groq</span>
                   </div>
-                  <p className="text-xs text-octotask-elements-textSecondary">Ultra-fast LPU inference for Llama models</p>
+                  <p className="text-xs text-octotask-elements-textSecondary">
+                    Ultra-fast LPU inference for Llama models
+                  </p>
                 </div>
               </div>
             </div>

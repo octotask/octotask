@@ -14,11 +14,13 @@ if (import.meta.hot) {
   import.meta.hot.data.webcontainerContext = webcontainerContext;
 }
 
-export let webcontainer: Promise<WebContainer> = new Promise(() => {
-  // noop for ssr
-});
+export let webcontainer: Promise<WebContainer> = Promise.resolve({} as WebContainer);
 
-if (!import.meta.env.SSR) {
+export function getWebContainer(): Promise<WebContainer> {
+  return webcontainer;
+}
+
+if (typeof window !== 'undefined' && !import.meta.env.SSR) {
   webcontainer =
     import.meta.hot?.data.webcontainer ??
     Promise.resolve()

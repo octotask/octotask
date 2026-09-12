@@ -49,7 +49,9 @@ export default function McpServerList({
 
                 <div className="flex-1 min-w-0 truncate">
                   {mcpServer.config.type === 'sse' || mcpServer.config.type === 'streamable-http' ? (
-                    <span className="text-xs text-octotask-elements-textSecondary truncate">{mcpServer.config.url}</span>
+                    <span className="text-xs text-octotask-elements-textSecondary truncate">
+                      {mcpServer.config.url}
+                    </span>
                   ) : (
                     <span className="text-xs text-octotask-elements-textSecondary truncate">
                       {mcpServer.config.command} {mcpServer.config.args?.join(' ')}
@@ -75,7 +77,9 @@ export default function McpServerList({
             {/* Tool list */}
             {isExpanded && isAvailable && (
               <div className="mt-2">
-                <div className="text-octotask-elements-textSecondary text-xs font-medium ml-1 mb-1.5">Available Tools:</div>
+                <div className="text-octotask-elements-textSecondary text-xs font-medium ml-1 mb-1.5">
+                  Available Tools:
+                </div>
                 {serverTools.length === 0 ? (
                   <div className="ml-4 text-xs text-octotask-elements-textSecondary">No tools available</div>
                 ) : (

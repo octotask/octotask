@@ -8,11 +8,11 @@ import { motion } from 'framer-motion';
 import { classNames } from '~/utils/classNames';
 import { toast } from 'react-toastify';
 import { providerBaseUrlEnvKeys } from '~/utils/constants';
-import { SiAmazon, SiGoogle, SiGithub, SiHuggingface, SiPerplexity, SiOpenai } from 'react-icons/si';
-import { BsRobot, BsCloud } from 'react-icons/bs';
-import { TbBrain, TbCloudComputing } from 'react-icons/tb';
+import { BsAmazon, BsCloud, BsGoogle, BsOpenai, BsRobot } from 'react-icons/bs';
+import { SiGithub, SiHuggingface, SiPerplexity } from 'react-icons/si';
 import { BiCodeBlock, BiChip } from 'react-icons/bi';
 import { FaCloud, FaBrain } from 'react-icons/fa';
+import { TbBrain, TbCloudComputing } from 'react-icons/tb';
 import type { IconType } from 'react-icons';
 
 // Add type for provider names to ensure type safety
@@ -35,17 +35,17 @@ type ProviderName =
 
 // Update the PROVIDER_ICONS type to use the ProviderName type
 const PROVIDER_ICONS: Record<ProviderName, IconType> = {
-  AmazonBedrock: SiAmazon,
+  AmazonBedrock: BsAmazon,
   Anthropic: FaBrain,
   Cohere: BiChip,
   Deepseek: BiCodeBlock,
   Github: SiGithub,
-  Google: SiGoogle,
+  Google: BsGoogle,
   Groq: BsCloud,
   HuggingFace: SiHuggingface,
   Hyperbolic: TbCloudComputing,
   Mistral: TbBrain,
-  OpenAI: SiOpenai,
+  OpenAI: BsOpenai,
   OpenRouter: FaCloud,
   Perplexity: SiPerplexity,
   Together: BsCloud,
@@ -154,7 +154,9 @@ const CloudProvidersTab = () => {
             </div>
             <div>
               <h4 className="text-md font-medium text-octotask-elements-textPrimary">Cloud Providers</h4>
-              <p className="text-sm text-octotask-elements-textSecondary">Connect to cloud-based AI models and services</p>
+              <p className="text-sm text-octotask-elements-textSecondary">
+                Connect to cloud-based AI models and services
+              </p>
             </div>
           </div>
 

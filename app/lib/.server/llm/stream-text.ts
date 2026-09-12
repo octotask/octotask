@@ -1,7 +1,7 @@
 import { convertToCoreMessages, streamText as _streamText, type Message } from 'ai';
 import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS, isReasoningModel, type FileMap } from './constants';
 import { getSystemPrompt } from '~/lib/common/prompts/prompts';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODIFICATIONS_TAG_NAME, PROVIDER_LIST, WORK_DIR } from '~/utils/constants';
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODIFICATIONS_TAG_NAME, WORK_DIR } from '~/utils/constants';
 import type { IProviderSetting } from '~/types/model';
 import { PromptLibrary } from '~/lib/common/prompt-library';
 import { allowedHTMLElements } from '~/utils/markdown';
@@ -46,7 +46,10 @@ function getCompletionTokenLimit(modelDetails: any): number {
 function sanitizeText(text: string): string {
   let sanitized = text.replace(/<div class=\\"__octotaskThought__\\">.*?<\/div>/s, '');
   sanitized = sanitized.replace(/<think>.*?<\/think>/s, '');
-  sanitized = sanitized.replace(/<octotaskAction type="file" filePath="package-lock\.json">[\s\S]*?<\/octotaskAction>/g, '');
+  sanitized = sanitized.replace(
+    /<octotaskAction type="file" filePath="package-lock\.json">[\s\S]*?<\/octotaskAction>/g,
+    '',
+  );
 
   return sanitized.trim();
 }
@@ -104,7 +107,8 @@ export async function streamText(props: {
     return newMessage;
   });
 
-  const provider = PROVIDER_LIST.find((p) => p.name === currentProvider) || DEFAULT_PROVIDER;
+  const llmManager = LLMManager.getInstance(serverEnv as any);
+  const provider = llmManager.getProvider(currentProvider) ?? llmManager.getDefaultProvider();
   const staticModels = LLMManager.getInstance().getStaticModelListFromProvider(provider);
   let modelDetails = staticModels.find((m) => m.name === currentModel);
 
@@ -274,7 +278,7 @@ export async function streamText(props: {
   );
 
   const streamParams = {
-    model: provider.getModelInstance({
+    model: await provider.getModelInstance({
       model: modelDetails.name,
       serverEnv,
       apiKeys,

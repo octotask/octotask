@@ -33,31 +33,59 @@ export class EditorStore {
   }
 
   setDocuments(files: FileMap) {
-    const previousDocuments = this.documents.value;
+    const previousDocuments = this.documents.get() ?? {};
+    const nextDocuments: EditorDocuments = { ...previousDocuments };
+    let hasChanges = false;
 
-    this.documents.set(
-      Object.fromEntries<EditorDocument>(
-        Object.entries(files)
-          .map(([filePath, dirent]) => {
-            if (dirent === undefined || dirent.type !== 'file') {
-              return undefined;
-            }
+    for (const filePath of Object.keys(previousDocuments)) {
+      if (!files[filePath]) {
+        delete nextDocuments[filePath];
+        hasChanges = true;
+      }
+    }
 
-            const previousDocument = previousDocuments?.[filePath];
+    for (const [filePath, dirent] of Object.entries(files)) {
+      if (dirent === undefined || dirent.type !== 'file') {
+        if (previousDocuments[filePath]) {
+          delete nextDocuments[filePath];
+          hasChanges = true;
+        }
 
-            return [
-              filePath,
-              {
-                value: dirent.content,
-                filePath,
-                isBinary: dirent.isBinary, // Add this line
-                scroll: previousDocument?.scroll,
-              },
-            ] as [string, EditorDocument];
-          })
-          .filter(Boolean) as Array<[string, EditorDocument]>,
-      ),
-    );
+        continue;
+      }
+
+      const previousDocument = previousDocuments[filePath];
+      const nextDocument: EditorDocument = previousDocument
+        ? {
+            ...previousDocument,
+            value: dirent.content,
+            filePath,
+            isBinary: dirent.isBinary,
+          }
+        : {
+            value: dirent.content,
+            filePath,
+            isBinary: dirent.isBinary,
+          };
+
+      const documentChanged =
+        !previousDocument ||
+        previousDocument.value !== dirent.content ||
+        previousDocument.isBinary !== dirent.isBinary ||
+        previousDocument.filePath !== filePath;
+
+      if (documentChanged) {
+        nextDocuments[filePath] = nextDocument;
+        hasChanges = true;
+      } else if (!previousDocument) {
+        nextDocuments[filePath] = nextDocument;
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges) {
+      this.documents.set(nextDocuments);
+    }
   }
 
   setSelectedFile(filePath: string | undefined) {

@@ -1,6 +1,7 @@
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
+import '@xterm/xterm/css/xterm.css';
 import { forwardRef, memo, useEffect, useImperativeHandle, useRef } from 'react';
 import type { Theme } from '~/lib/stores/theme';
 import { createScopedLogger } from '~/utils/logger';
@@ -29,6 +30,7 @@ export const Terminal = memo(
       const terminalRef = useRef<XTerm>();
       const fitAddonRef = useRef<FitAddon>();
       const resizeObserverRef = useRef<ResizeObserver>();
+      const resizeFrameRef = useRef<number>();
 
       useEffect(() => {
         const element = terminalElementRef.current!;
@@ -72,16 +74,19 @@ export const Terminal = memo(
           }, 100);
         }
 
-        const resizeObserver = new ResizeObserver((entries) => {
-          // Debounce resize events
-          if (entries.length > 0) {
+        const resizeObserver = new ResizeObserver(() => {
+          if (resizeFrameRef.current !== undefined) {
+            cancelAnimationFrame(resizeFrameRef.current);
+          }
+
+          resizeFrameRef.current = requestAnimationFrame(() => {
             try {
               fitAddon.fit();
               onTerminalResize?.(terminal.cols, terminal.rows);
             } catch (error) {
               logger.error(`Resize error [${id}]:`, error);
             }
-          }
+          });
         });
 
         resizeObserverRef.current = resizeObserver;
@@ -93,6 +98,10 @@ export const Terminal = memo(
 
         return () => {
           try {
+            if (resizeFrameRef.current !== undefined) {
+              cancelAnimationFrame(resizeFrameRef.current);
+            }
+
             resizeObserver.disconnect();
             terminal.dispose();
           } catch (error) {

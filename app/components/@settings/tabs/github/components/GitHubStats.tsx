@@ -168,7 +168,9 @@ function GitHubStatsContent({
                   <div className="text-xs text-octotask-elements-textSecondary">Total Repositories</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">{stats.totalBranches || 0}</div>
+                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">
+                    {stats.totalBranches || 0}
+                  </div>
                   <div className="text-xs text-octotask-elements-textSecondary">Total Branches</div>
                 </div>
                 <div className="text-center">

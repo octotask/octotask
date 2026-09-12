@@ -3,10 +3,8 @@
  * Preventing TS checks with files presented in the video for a better presentation.
  */
 import type { JSONValue, Message } from 'ai';
-import React, { type RefCallback, useEffect, useState } from 'react';
+import React, { lazy, Suspense, type RefCallback, useEffect, useState } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
-import { Menu } from '~/components/sidebar/Menu.client';
-import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
@@ -35,6 +33,44 @@ import type { ElementInfo } from '~/components/workbench/Inspector';
 import LlmErrorAlert from './LLMApiAlert';
 
 const TEXTAREA_MIN_HEIGHT = 76;
+const MODEL_LIST_CACHE_KEY = 'octotask-model-list';
+const MODEL_LIST_CACHE_TTL = 60 * 60 * 1000;
+
+function getCachedModelList(): ModelInfo[] | undefined {
+  if (typeof sessionStorage === 'undefined') {
+    return undefined;
+  }
+
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(MODEL_LIST_CACHE_KEY) || 'null') as {
+      models?: ModelInfo[];
+      savedAt?: number;
+    } | null;
+
+    if (cached?.models && cached.savedAt && Date.now() - cached.savedAt < MODEL_LIST_CACHE_TTL) {
+      return cached.models;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
+function cacheModelList(models: ModelInfo[]) {
+  if (typeof sessionStorage === 'undefined') {
+    return;
+  }
+
+  try {
+    sessionStorage.setItem(MODEL_LIST_CACHE_KEY, JSON.stringify({ models, savedAt: Date.now() }));
+  } catch {
+    return;
+  }
+}
+
+const Menu = lazy(async () => ({ default: (await import('~/components/sidebar/Menu.client')).Menu }));
+const Workbench = lazy(async () => ({ default: (await import('~/components/workbench/Workbench.client')).Workbench }));
 
 interface BaseChatProps {
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
@@ -137,7 +173,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(getApiKeysFromCookies());
-    const [modelList, setModelList] = useState<ModelInfo[]>([]);
+    const [modelList, setModelList] = useState<ModelInfo[]>(() => getCachedModelList() ?? []);
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
@@ -202,32 +238,57 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     }, []);
 
     useEffect(() => {
-      if (typeof window !== 'undefined') {
-        let parsedApiKeys: Record<string, string> | undefined = {};
+      let cancelled = false;
 
-        try {
-          parsedApiKeys = getApiKeysFromCookies();
-          setApiKeys(parsedApiKeys);
-        } catch (error) {
-          console.error('Error loading API keys from cookies:', error);
-          Cookies.remove('apiKeys');
+      const loadModelList = async () => {
+        const cachedModels = getCachedModelList();
+
+        if (cachedModels) {
+          setModelList(cachedModels);
+          setIsModelLoading(undefined);
+
+          return;
         }
 
-        setIsModelLoading('all');
-        fetch('/api/models')
-          .then((response) => response.json())
-          .then((data) => {
-            const typedData = data as { modelList: ModelInfo[] };
-            setModelList(typedData.modelList);
-          })
-          .catch((error) => {
+        try {
+          const response = await fetch('/api/models?static=true');
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = (await response.json()) as { modelList: ModelInfo[] };
+
+          if (!cancelled) {
+            setModelList(data.modelList);
+            cacheModelList(data.modelList);
+          }
+        } catch (error) {
+          if (!cancelled) {
             console.error('Error fetching model list:', error);
-          })
-          .finally(() => {
+          }
+        } finally {
+          if (!cancelled) {
             setIsModelLoading(undefined);
-          });
+          }
+        }
+      };
+
+      loadModelList();
+
+      return () => {
+        cancelled = true;
+      };
+    }, []);
+
+    useEffect(() => {
+      try {
+        setApiKeys(getApiKeysFromCookies());
+      } catch (error) {
+        console.error('Error loading API keys from cookies:', error);
+        Cookies.remove('apiKeys');
       }
-    }, [providerList, provider]);
+    }, []);
 
     const onApiKeysChange = async (providerName: string, apiKey: string) => {
       const newApiKeys = { ...apiKeys, [providerName]: apiKey };
@@ -246,11 +307,9 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         console.error('Error loading dynamic models for:', providerName, error);
       }
 
-      // Only update models for the specific provider
-      setModelList((prevModels) => {
-        const otherModels = prevModels.filter((model) => model.provider !== providerName);
-        return [...otherModels, ...providerModels];
-      });
+      const nextModels = [...modelList.filter((model) => model.provider !== providerName), ...providerModels];
+      setModelList(nextModels);
+      cacheModelList(nextModels);
       setIsModelLoading(undefined);
     };
 
@@ -347,7 +406,13 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         className={classNames(styles.BaseChat, 'relative flex h-full w-full overflow-hidden')}
         data-chat-visible={showChat}
       >
-        <ClientOnly>{() => <Menu />}</ClientOnly>
+        <ClientOnly>
+          {() => (
+            <Suspense fallback={null}>
+              <Menu />
+            </Suspense>
+          )}
+        </ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
@@ -494,7 +559,13 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
           </div>
           <ClientOnly>
             {() => (
-              <Workbench chatStarted={chatStarted} isStreaming={isStreaming} setSelectedElement={setSelectedElement} />
+              <Suspense fallback={null}>
+                <Workbench
+                  chatStarted={chatStarted}
+                  isStreaming={isStreaming}
+                  setSelectedElement={setSelectedElement}
+                />
+              </Suspense>
             )}
           </ClientOnly>
         </div>

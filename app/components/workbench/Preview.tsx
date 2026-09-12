@@ -455,11 +455,11 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   overflow: hidden;
                   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
                 }
-                
+
                 .device-container {
                   position: relative;
                 }
-                
+
                 .device-name {
                   position: absolute;
                   top: -30px;
@@ -469,7 +469,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   font-size: 14px;
                   color: #333;
                 }
-                
+
                 .device-frame {
                   position: relative;
                   border-radius: ${frameRadius};
@@ -478,7 +478,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                   overflow: hidden;
                 }
-                
+
                 /* Notch */
                 .device-frame:before {
                   content: '';
@@ -492,7 +492,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   border-radius: 4px;
                   z-index: 2;
                 }
-                
+
                 /* Home button */
                 .device-frame:after {
                   content: '';
@@ -506,7 +506,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                   border-radius: 50%;
                   z-index: 2;
                 }
-                
+
                 iframe {
                   border: none;
                   width: ${width}px;
@@ -743,7 +743,9 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
             icon="i-ph:cursor-click"
             onClick={toggleInspectorMode}
             className={
-              isInspectorMode ? 'bg-octotask-elements-background-depth-3 !text-octotask-elements-item-contentAccent' : ''
+              isInspectorMode
+                ? 'bg-octotask-elements-background-depth-3 !text-octotask-elements-item-contentAccent'
+                : ''
             }
             title={isInspectorMode ? 'Disable Element Inspector' : 'Enable Element Inspector'}
           />

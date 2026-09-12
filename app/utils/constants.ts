@@ -1,5 +1,7 @@
-import { LLMManager } from '~/lib/modules/llm/manager';
+import { DEFAULT_PROVIDER, PROVIDER_LIST } from '~/lib/modules/llm/client-providers';
 import type { Template } from '~/types/template';
+
+export { DEFAULT_PROVIDER, PROVIDER_LIST };
 
 export const WORK_DIR_NAME = 'project';
 export const WORK_DIR = `/home/${WORK_DIR_NAME}`;
@@ -16,18 +18,30 @@ export const TOOL_NO_EXECUTE_FUNCTION = 'Error: No execute function found on too
 export const TOOL_EXECUTION_DENIED = 'Error: User denied access to tool execution';
 export const TOOL_EXECUTION_ERROR = 'Error: An error occured while calling tool';
 
-const llmManager = LLMManager.getInstance(import.meta.env);
-
-export const PROVIDER_LIST = llmManager.getAllProviders();
-export const DEFAULT_PROVIDER = llmManager.getDefaultProvider();
-
-export const providerBaseUrlEnvKeys: Record<string, { baseUrlKey?: string; apiTokenKey?: string }> = {};
-PROVIDER_LIST.forEach((provider) => {
-  providerBaseUrlEnvKeys[provider.name] = {
-    baseUrlKey: provider.config.baseUrlKey,
-    apiTokenKey: provider.config.apiTokenKey,
-  };
-});
+export const providerBaseUrlEnvKeys: Record<string, { baseUrlKey?: string; apiTokenKey?: string }> = {
+  Anthropic: { apiTokenKey: 'ANTHROPIC_API_KEY' },
+  Cerebras: { apiTokenKey: 'CEREBRAS_API_KEY' },
+  Cohere: { apiTokenKey: 'COHERE_API_KEY' },
+  Deepseek: { apiTokenKey: 'DEEPSEEK_API_KEY' },
+  Fireworks: { apiTokenKey: 'FIREWORKS_API_KEY' },
+  Google: { apiTokenKey: 'GOOGLE_GENERATIVE_AI_API_KEY' },
+  Groq: { apiTokenKey: 'GROQ_API_KEY' },
+  HuggingFace: { apiTokenKey: 'HuggingFace_API_KEY' },
+  Hyperbolic: { apiTokenKey: 'HYPERBOLIC_API_KEY' },
+  LMStudio: { baseUrlKey: 'LMSTUDIO_API_BASE_URL' },
+  Mistral: { apiTokenKey: 'MISTRAL_API_KEY' },
+  Moonshot: { apiTokenKey: 'MOONSHOT_API_KEY' },
+  Ollama: { baseUrlKey: 'OLLAMA_API_BASE_URL' },
+  OpenAI: { apiTokenKey: 'OPENAI_API_KEY' },
+  OpenAILike: { baseUrlKey: 'OPENAI_LIKE_API_BASE_URL', apiTokenKey: 'OPENAI_LIKE_API_KEY' },
+  OpenRouter: { apiTokenKey: 'OPEN_ROUTER_API_KEY' },
+  Perplexity: { apiTokenKey: 'PERPLEXITY_API_KEY' },
+  Together: { baseUrlKey: 'TOGETHER_API_BASE_URL', apiTokenKey: 'TOGETHER_API_KEY' },
+  xAI: { apiTokenKey: 'XAI_API_KEY' },
+  AmazonBedrock: { apiTokenKey: 'AWS_BEDROCK_CONFIG' },
+  Github: { apiTokenKey: 'GITHUB_API_KEY' },
+  'Z.ai': { baseUrlKey: 'ZAI_BASE_URL', apiTokenKey: 'ZAI_API_KEY' },
+};
 
 // starter Templates
 

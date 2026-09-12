@@ -1,5 +1,6 @@
 import { type Message } from 'ai';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODEL_REGEX, PROVIDER_REGEX } from '~/utils/constants';
+import { DEFAULT_MODEL, MODEL_REGEX, PROVIDER_REGEX } from '~/utils/constants';
+import { DEFAULT_PROVIDER_NAME } from '~/lib/modules/llm/client-providers';
 import { IGNORE_PATTERNS, type FileMap } from './constants';
 import ignore from 'ignore';
 import type { ContextAnnotation } from '~/types/context';
@@ -26,7 +27,7 @@ export function extractPropertiesFromMessage(message: Omit<Message, 'id'>): {
    * Extract provider
    * const providerMatch = message.content.match(PROVIDER_REGEX);
    */
-  const provider = providerMatch ? providerMatch[1] : DEFAULT_PROVIDER.name;
+  const provider = providerMatch ? providerMatch[1] : DEFAULT_PROVIDER_NAME;
 
   const cleanedContent = Array.isArray(message.content)
     ? message.content.map((item) => {

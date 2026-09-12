@@ -31,6 +31,11 @@ export class PreviewsStore {
 
   constructor(webcontainerPromise: Promise<WebContainer>) {
     this.#webcontainer = webcontainerPromise;
+
+    if (typeof window === 'undefined' || import.meta.env.SSR) {
+      return;
+    }
+
     this.#broadcastChannel = this.#maybeCreateChannel(PREVIEW_CHANNEL);
     this.#storageChannel = this.#maybeCreateChannel('storage-sync-channel');
 

@@ -4,10 +4,10 @@ import { computed } from 'nanostores';
 import { memo, useCallback, useEffect, useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { Popover, Transition } from '@headlessui/react';
-import { diffLines, type Change } from 'diff';
 import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
 import type { FileHistory } from '~/types/actions';
 import { DiffView } from './DiffView';
+import { getFileChangeStats } from './fileChangeStats';
 import {
   type OnChangeCallback as OnEditorChange,
   type OnScrollCallback as OnEditorScroll,
@@ -74,6 +74,21 @@ const workbenchVariants = {
   },
 } satisfies Variants;
 
+const FileChangeStats = memo(({ history }: { history: FileHistory }) => {
+  const { additions, deletions } = useMemo(() => getFileChangeStats(history), [history]);
+
+  if (!additions && !deletions) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center gap-1 text-xs shrink-0">
+      {additions > 0 && <span className="text-green-500">+{additions}</span>}
+      {deletions > 0 && <span className="text-red-500">-{deletions}</span>}
+    </div>
+  );
+});
+
 const FileModifiedDropdown = memo(
   ({
     fileHistory,
@@ -82,7 +97,7 @@ const FileModifiedDropdown = memo(
     fileHistory: Record<string, FileHistory>;
     onSelectFile: (filePath: string) => void;
   }) => {
-    const modifiedFiles = Object.entries(fileHistory);
+    const modifiedFiles = useMemo(() => Object.entries(fileHistory), [fileHistory]);
     const hasChanges = modifiedFiles.length > 0;
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -182,57 +197,7 @@ const FileModifiedDropdown = memo(
                                         {filePath}
                                       </span>
                                     </div>
-                                    {(() => {
-                                      // Calculate diff stats
-                                      const { additions, deletions } = (() => {
-                                        if (!history.originalContent) {
-                                          return { additions: 0, deletions: 0 };
-                                        }
-
-                                        const normalizedOriginal = history.originalContent.replace(/\r\n/g, '\n');
-                                        const normalizedCurrent =
-                                          history.versions[history.versions.length - 1]?.content.replace(
-                                            /\r\n/g,
-                                            '\n',
-                                          ) || '';
-
-                                        if (normalizedOriginal === normalizedCurrent) {
-                                          return { additions: 0, deletions: 0 };
-                                        }
-
-                                        const changes = diffLines(normalizedOriginal, normalizedCurrent, {
-                                          newlineIsToken: false,
-                                          ignoreWhitespace: true,
-                                          ignoreCase: false,
-                                        });
-
-                                        return changes.reduce(
-                                          (acc: { additions: number; deletions: number }, change: Change) => {
-                                            if (change.added) {
-                                              acc.additions += change.value.split('\n').length;
-                                            }
-
-                                            if (change.removed) {
-                                              acc.deletions += change.value.split('\n').length;
-                                            }
-
-                                            return acc;
-                                          },
-                                          { additions: 0, deletions: 0 },
-                                        );
-                                      })();
-
-                                      const showStats = additions > 0 || deletions > 0;
-
-                                      return (
-                                        showStats && (
-                                          <div className="flex items-center gap-1 text-xs shrink-0">
-                                            {additions > 0 && <span className="text-green-500">+{additions}</span>}
-                                            {deletions > 0 && <span className="text-red-500">-{deletions}</span>}
-                                          </div>
-                                        )
-                                      );
-                                    })()}
+                                    <FileChangeStats history={history} />
                                   </div>
                                 </div>
                               </div>

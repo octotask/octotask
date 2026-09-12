@@ -3,7 +3,29 @@ import type { IProviderSetting } from '~/types/model';
 import type { LanguageModelV1 } from 'ai';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import { createOpenAI } from '@ai-sdk/openai';
-import crypto from 'node:crypto';
+
+async function hmacSha256(key: string, message: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(key);
+  const messageData = encoder.encode(message);
+
+  const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+
+  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+
+  return base64UrlEncode(new Uint8Array(signature));
+}
+
+function base64UrlEncode(data: Uint8Array): string {
+  return btoa(String.fromCharCode(...data))
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
+
+function base64Url(obj: any): string {
+  return base64UrlEncode(new TextEncoder().encode(JSON.stringify(obj)));
+}
 
 export default class ZaiProvider extends BaseProvider {
   name = 'Z.ai';
@@ -56,7 +78,7 @@ export default class ZaiProvider extends BaseProvider {
       throw new Error(`Missing Api Key configuration for ${this.name} provider`);
     }
 
-    const token = this._generateToken(apiKey);
+    const token = await this._generateToken(apiKey);
 
     if (!this._isValidToken(token)) {
       throw new Error(`Invalid API key format for ${this.name} provider`);
@@ -116,7 +138,7 @@ export default class ZaiProvider extends BaseProvider {
     }
   }
 
-  private _generateToken(apiKey: string): string {
+  private async _generateToken(apiKey: string): Promise<string> {
     try {
       const [id, secret] = apiKey.split('.');
 
@@ -133,15 +155,7 @@ export default class ZaiProvider extends BaseProvider {
 
       const header = { alg: 'HS256', sign_type: 'SIGN' };
 
-      const base64Url = (obj: any) =>
-        Buffer.from(JSON.stringify(obj)).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-      const signature = crypto
-        .createHmac('sha256', secret)
-        .update(base64Url(header) + '.' + base64Url(payload))
-        .digest('base64')
-        .replace(/=/g, '')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_');
+      const signature = await hmacSha256(secret, base64Url(header) + '.' + base64Url(payload));
 
       return `${base64Url(header)}.${base64Url(payload)}.${signature}`;
     } catch (error) {
@@ -162,12 +176,12 @@ export default class ZaiProvider extends BaseProvider {
     }
   }
 
-  getModelInstance(options: {
+  async getModelInstance(options: {
     model: string;
     serverEnv: Env;
     apiKeys?: Record<string, string>;
     providerSettings?: Record<string, IProviderSetting>;
-  }): LanguageModelV1 {
+  }): Promise<LanguageModelV1> {
     const { model, serverEnv, apiKeys, providerSettings } = options;
 
     const { baseUrl, apiKey } = this.getProviderBaseUrlAndKey({
@@ -182,7 +196,7 @@ export default class ZaiProvider extends BaseProvider {
       throw new Error(`Missing API key for ${this.name} provider`);
     }
 
-    const token = this._generateToken(apiKey);
+    const token = await this._generateToken(apiKey);
     const zaiClient = createOpenAI({
       baseURL: baseUrl,
       apiKey: token,

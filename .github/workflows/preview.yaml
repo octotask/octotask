@@ -33,7 +33,7 @@ jobs:
 
       - name: Checkout
         if: steps.check-secrets.outputs.configured == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup and Build
         if: steps.check-secrets.outputs.configured == 'true'
@@ -52,7 +52,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: octotask-diy-preview
+          projectName: octotask-preview
           directory: build/client
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
@@ -93,7 +93,7 @@ jobs:
               | Latest commit | ${{ github.sha }} |
               | Preview URL | ${deployUrl} |
 
-              Built with ❤️ by [octotask](https://octotaskcom)
+              Built with ❤️ by [octotask](https://ai.khulnasoft.com)
               `;
             } else {
               commentBody = `ℹ️ Preview deployment not configured
@@ -107,7 +107,7 @@ jobs:
               - \`CLOUDFLARE_API_TOKEN\` secret
               - \`CLOUDFLARE_ACCOUNT_ID\` secret
 
-              Built with ❤️ by [octotask](https://octotaskcom)
+              Built with ❤️ by [octotask](https://ai.khulnasoft.com)
               `;
             }
 

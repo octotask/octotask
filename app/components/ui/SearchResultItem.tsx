@@ -27,7 +27,7 @@ export function SearchResultItem({
   subtitle,
   description,
   icon,
-  iconBackground = 'bg-octo-elements-background-depth-1/80 dark:bg-octo-elements-background-depth-4/80',
+  iconBackground = 'bg-octotask-elements-background-depth-1/80 dark:bg-octotask-elements-background-depth-4/80',
   iconColor = 'text-purple-500',
   tags,
   metadata,
@@ -39,7 +39,7 @@ export function SearchResultItem({
   return (
     <motion.div
       className={classNames(
-        'p-5 rounded-xl border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark hover:border-purple-500/40 transition-all duration-300 shadow-sm hover:shadow-md bg-octo-elements-background-depth-1/50 dark:bg-octo-elements-background-depth-3/50',
+        'p-5 rounded-xl border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark hover:border-purple-500/40 transition-all duration-300 shadow-sm hover:shadow-md bg-octotask-elements-background-depth-1/50 dark:bg-octotask-elements-background-depth-3/50',
         onClick ? 'cursor-pointer' : '',
         className,
       )}
@@ -67,11 +67,11 @@ export function SearchResultItem({
             </div>
           )}
           <div>
-            <h3 className="font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark text-base">
+            <h3 className="font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark text-base">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-xs text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark flex items-center gap-1">
+              <p className="text-xs text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark flex items-center gap-1">
                 {subtitle}
               </p>
             )}
@@ -94,8 +94,8 @@ export function SearchResultItem({
       </div>
 
       {description && (
-        <div className="mb-4 bg-octo-elements-background-depth-1/50 dark:bg-octo-elements-background-depth-4/50 backdrop-blur-sm p-3 rounded-lg border border-octo-elements-borderColor/30 dark:border-octo-elements-borderColor-dark/30">
-          <p className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark line-clamp-2">
+        <div className="mb-4 bg-octotask-elements-background-depth-1/50 dark:bg-octotask-elements-background-depth-4/50 backdrop-blur-sm p-3 rounded-lg border border-octotask-elements-borderColor/30 dark:border-octotask-elements-borderColor-dark/30">
+          <p className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark line-clamp-2">
             {description}
           </p>
         </div>
@@ -112,7 +112,7 @@ export function SearchResultItem({
       )}
 
       {metadata && metadata.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 text-xs text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark">
           {metadata.map((item, index) => (
             <div key={index} className="flex items-center gap-1">
               {item.icon && <span className={classNames(item.icon, 'w-3.5 h-3.5')} />}
@@ -120,7 +120,7 @@ export function SearchResultItem({
                 {item.label}
                 {item.value !== undefined && ': '}
                 {item.value !== undefined && (
-                  <span className="text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark">
+                  <span className="text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark">
                     {item.value}
                   </span>
                 )}

@@ -51,10 +51,7 @@ export class EnhancedStreamingMessageParser extends StreamingMessageParser {
   }
 
   private _hasDetectedArtifacts(input: string): boolean {
-    const ARTIFACT_TAG_OPEN = '<octoArtifact';
-    const ARTIFACT_TAG_CLOSE = '</octoArtifact>';
-
-    return input.includes(ARTIFACT_TAG_OPEN) || input.includes(ARTIFACT_TAG_CLOSE);
+    return input.includes('<octotaskArtifact') || input.includes('</octotaskArtifact>');
   }
 
   private _detectAndWrapCodeBlocks(messageId: string, input: string): string {
@@ -207,21 +204,21 @@ export class EnhancedStreamingMessageParser extends StreamingMessageParser {
   private _wrapInArtifact(artifactId: string, filePath: string, content: string): string {
     const title = filePath.split('/').pop() || 'File';
 
-    return `<octoArtifact id="${artifactId}" title="${title}" type="bundled">
-<octoAction type="file" filePath="${filePath}">
+    return `<octotaskArtifact id="${artifactId}" title="${title}" type="bundled">
+<octotaskAction type="file" filePath="${filePath}">
 ${content}
-</octoAction>
-</octoArtifact>`;
+</octotaskAction>
+</octotaskArtifact>`;
   }
 
   private _wrapInShellAction(content: string, messageId: string): string {
     const artifactId = `artifact-${messageId}-${this._artifactCounter++}`;
 
-    return `<octoArtifact id="${artifactId}" title="Shell Command" type="shell">
-<octoAction type="shell">
+    return `<octotaskArtifact id="${artifactId}" title="Shell Command" type="shell">
+<octotaskAction type="shell">
 ${content.trim()}
-</octoAction>
-</octoArtifact>`;
+</octotaskAction>
+</octotaskArtifact>`;
   }
 
   private _normalizeFilePath(filePath: string): string {
@@ -408,14 +405,19 @@ ${content.trim()}
   }
 
   private _isCommandSequence(lines: string[]): boolean {
-    // If most lines look like individual commands, treat as command sequence
-    const commandLikeLines = lines.filter(
-      (line) =>
-        line.length > 0 && !line.startsWith('#') && (this._isSingleLineCommand(line) || this._isSimpleCommand(line)),
+    // Only consider non-comment, non-empty lines when computing the ratio.
+    const nonCommentLines = lines.filter((line) => line.length > 0 && !line.startsWith('#'));
+
+    if (nonCommentLines.length === 0) {
+      return false;
+    }
+
+    const commandLikeLines = nonCommentLines.filter(
+      (line) => this._isSingleLineCommand(line) || this._isSimpleCommand(line),
     );
 
     // If more than 70% of non-comment lines are commands, treat as command sequence
-    return commandLikeLines.length / lines.length > 0.7;
+    return commandLikeLines.length / nonCommentLines.length > 0.7;
   }
 
   private _isSimpleCommand(line: string): boolean {

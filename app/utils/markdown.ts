@@ -65,7 +65,7 @@ function remarkThinkRawContent() {
     visit(tree, (node: any) => {
       if (node.type === 'html' && node.value && node.value.startsWith('<think>')) {
         const cleanedContent = node.value.slice(7);
-        node.value = `<div class="__octoThought__">${cleanedContent}`;
+        node.value = `<div class="__octotaskThought__">${cleanedContent}`;
 
         return;
       }
@@ -86,9 +86,9 @@ const rehypeSanitizeOptions: RehypeSanitizeOptions = {
     div: [
       ...(defaultSchema.attributes?.div ?? []),
       'data*',
-      ['className', '__octoArtifact__', '__octoThought__', '__octoQuickAction', '__octoSelectedElement__'],
+      ['className', '__octotaskArtifact__', '__octotaskThought__', '__octotaskQuickAction', '__octotaskSelectedElement__'],
 
-      // ['className', '__octoThought__']
+      // ['className', '__octotaskThought__']
     ],
     button: [
       ...(defaultSchema.attributes?.button ?? []),
@@ -97,7 +97,7 @@ const rehypeSanitizeOptions: RehypeSanitizeOptions = {
       'disabled',
       'name',
       'value',
-      ['className', '__octoArtifact__', '__octoThought__', '__octoQuickAction'],
+      ['className', '__octotaskArtifact__', '__octotaskThought__', '__octotaskQuickAction'],
     ],
   },
   strip: [],

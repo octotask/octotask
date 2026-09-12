@@ -84,7 +84,7 @@ class LogStore {
       return;
     }
 
-    const savedReadLogs = localStorage.getItem('octo_read_logs');
+    const savedReadLogs = localStorage.getItem('octotask_read_logs');
 
     if (savedReadLogs) {
       try {
@@ -106,7 +106,7 @@ class LogStore {
       return;
     }
 
-    localStorage.setItem('octo_read_logs', JSON.stringify(Array.from(this._readLogs)));
+    localStorage.setItem('octotask_read_logs', JSON.stringify(Array.from(this._readLogs)));
   }
 
   private _generateId(): string {

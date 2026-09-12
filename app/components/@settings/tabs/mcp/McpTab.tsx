@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import type { MCPConfig } from '~/lib/services/mcpService';
 import { toast } from 'react-toastify';
-import { useStore } from '@nanostores/react';
-import { mcpStore, initializeMCP, updateMCPSettings, checkMCPServersAvailabilities } from '~/lib/stores/mcp';
+import { useMCPStore } from '~/lib/stores/mcp';
 import McpServerList from '~/components/@settings/tabs/mcp/McpServerList';
 
 const EXAMPLE_MCP_CONFIG: MCPConfig = {
@@ -28,10 +27,12 @@ const EXAMPLE_MCP_CONFIG: MCPConfig = {
 };
 
 export default function McpTab() {
-  const { settings, isInitialized, serverTools } = useStore(mcpStore);
-  const initialize = initializeMCP;
-  const updateSettings = updateMCPSettings;
-  const checkServersAvailabilities = checkMCPServersAvailabilities;
+  const settings = useMCPStore((state) => state.settings);
+  const isInitialized = useMCPStore((state) => state.isInitialized);
+  const serverTools = useMCPStore((state) => state.serverTools);
+  const initialize = useMCPStore((state) => state.initialize);
+  const updateSettings = useMCPStore((state) => state.updateSettings);
+  const checkServersAvailabilities = useMCPStore((state) => state.checkServersAvailabilities);
 
   const [isSaving, setIsSaving] = useState(false);
   const [mcpConfigText, setMCPConfigText] = useState('');
@@ -124,21 +125,21 @@ export default function McpTab() {
     <div className="max-w-2xl mx-auto space-y-6">
       <section aria-labelledby="server-status-heading">
         <div className="flex justify-between items-center mb-3">
-          <h2 className="text-base font-medium text-octo-elements-textPrimary">MCP Servers Configured</h2>{' '}
+          <h2 className="text-base font-medium text-octotask-elements-textPrimary">MCP Servers Configured</h2>{' '}
           <button
             onClick={checkServerAvailability}
             disabled={isCheckingServers || !parsedConfig || serverEntries.length === 0}
             className={classNames(
               'px-3 py-1.5 rounded-lg text-sm',
-              'bg-octo-elements-background-depth-3 hover:bg-octo-elements-background-depth-4',
-              'text-octo-elements-textPrimary',
+              'bg-octotask-elements-background-depth-3 hover:bg-octotask-elements-background-depth-4',
+              'text-octotask-elements-textPrimary',
               'transition-all duration-200',
               'flex items-center gap-2',
               'disabled:opacity-50 disabled:cursor-not-allowed',
             )}
           >
             {isCheckingServers ? (
-              <div className="i-svg-spinners:90-ring-with-bg w-3 h-3 text-octo-elements-loader-progress animate-spin" />
+              <div className="i-svg-spinners:90-ring-with-bg w-3 h-3 text-octotask-elements-loader-progress animate-spin" />
             ) : (
               <div className="i-ph:arrow-counter-clockwise w-3 h-3" />
             )}
@@ -154,11 +155,11 @@ export default function McpTab() {
       </section>
 
       <section aria-labelledby="config-section-heading">
-        <h2 className="text-base font-medium text-octo-elements-textPrimary mb-3">Configuration</h2>
+        <h2 className="text-base font-medium text-octotask-elements-textPrimary mb-3">Configuration</h2>
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="mcp-config" className="block text-sm text-octo-elements-textSecondary mb-2">
+            <label htmlFor="mcp-config" className="block text-sm text-octotask-elements-textSecondary mb-2">
               Configuration JSON
             </label>
             <textarea
@@ -169,15 +170,15 @@ export default function McpTab() {
                 'w-full px-3 py-2 rounded-lg text-sm font-mono h-72',
                 'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
                 'border',
-                error ? 'border-octo-elements-icon-error' : 'border-[#E5E5E5] dark:border-[#333333]',
-                'text-octo-elements-textPrimary',
-                'focus:outline-none focus:ring-1 focus:ring-octo-elements-focus',
+                error ? 'border-octotask-elements-icon-error' : 'border-[#E5E5E5] dark:border-[#333333]',
+                'text-octotask-elements-textPrimary',
+                'focus:outline-none focus:ring-1 focus:ring-octotask-elements-focus',
               )}
             />
           </div>
-          <div>{error && <p className="mt-2 mb-2 text-sm text-octo-elements-icon-error">{error}</p>}</div>
+          <div>{error && <p className="mt-2 mb-2 text-sm text-octotask-elements-icon-error">{error}</p>}</div>
           <div>
-            <label htmlFor="max-llm-steps" className="block text-sm text-octo-elements-textSecondary mb-2">
+            <label htmlFor="max-llm-steps" className="block text-sm text-octotask-elements-textSecondary mb-2">
               Maximum number of sequential LLM calls (steps)
             </label>
             <input
@@ -188,16 +189,16 @@ export default function McpTab() {
               max="20"
               value={maxLLMSteps}
               onChange={(e) => handleMaxLLMCallChange(e.target.value)}
-              className="w-full px-3 py-2 text-octo-elements-textPrimary text-sm rounded-lg bg-white dark:bg-octo-elements-background-depth-4 border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-octotask-elements-textPrimary text-sm rounded-lg bg-white dark:bg-octotask-elements-background-depth-4 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="mt-2 text-sm text-octo-elements-textSecondary">
+          <div className="mt-2 text-sm text-octotask-elements-textSecondary">
             The MCP configuration format is identical to the one used in Claude Desktop.
             <a
               href="https://modelcontextprotocol.io/examples"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-octo-elements-link hover:underline inline-flex items-center gap-1"
+              className="text-octotask-elements-link hover:underline inline-flex items-center gap-1"
             >
               View example servers
               <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -209,9 +210,9 @@ export default function McpTab() {
       <div className="flex flex-wrap justify-between gap-3 mt-6">
         <button
           onClick={handleLoadExample}
-          className="px-4 py-2 rounded-lg text-sm border border-octo-elements-borderColor
-                    bg-octo-elements-background-depth-2 text-octo-elements-textSecondary
-                    hover:bg-octo-elements-background-depth-3"
+          className="px-4 py-2 rounded-lg text-sm border border-octotask-elements-borderColor
+                    bg-octotask-elements-background-depth-2 text-octotask-elements-textSecondary
+                    hover:bg-octotask-elements-background-depth-3"
         >
           Load Example
         </button>
@@ -223,8 +224,8 @@ export default function McpTab() {
             aria-disabled={isSaving || !parsedConfig}
             className={classNames(
               'px-4 py-2 rounded-lg text-sm flex items-center gap-2',
-              'bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent',
-              'hover:bg-octo-elements-item-backgroundActive',
+              'bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent',
+              'hover:bg-octotask-elements-item-backgroundActive',
               'disabled:opacity-50 disabled:cursor-not-allowed',
             )}
           >

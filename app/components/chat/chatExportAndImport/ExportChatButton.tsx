@@ -4,18 +4,18 @@ import { classNames } from '~/utils/classNames';
 
 export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) => {
   return (
-    <div className="flex border border-octo-elements-borderColor rounded-md overflow-hidden">
+    <div className="flex border border-octotask-elements-borderColor rounded-md overflow-hidden">
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octo-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octo-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7">
+        <DropdownMenu.Trigger className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octotask-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octotask-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7">
           Export
           <span className={classNames('i-ph:caret-down transition-transform')} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
           className={classNames(
             'z-[250]',
-            'bg-octo-elements-background-depth-2',
+            'bg-octotask-elements-background-depth-2',
             'rounded-lg shadow-lg',
-            'border border-octo-elements-borderColor',
+            'border border-octotask-elements-borderColor',
             'animate-in fade-in-0 zoom-in-95',
             'py-1',
           )}
@@ -24,7 +24,7 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
         >
           <DropdownMenu.Item
             className={classNames(
-              'cursor-pointer flex items-center w-auto px-4 py-2 text-sm text-octo-elements-textPrimary hover:bg-octo-elements-item-backgroundActive gap-2 rounded-md group relative',
+              'cursor-pointer flex items-center w-auto px-4 py-2 text-sm text-octotask-elements-textPrimary hover:bg-octotask-elements-item-backgroundActive gap-2 rounded-md group relative',
             )}
             onClick={() => {
               workbenchStore.downloadZip();
@@ -35,7 +35,7 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className={classNames(
-              'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-octo-elements-textPrimary hover:bg-octo-elements-item-backgroundActive gap-2 rounded-md group relative',
+              'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-octotask-elements-textPrimary hover:bg-octotask-elements-item-backgroundActive gap-2 rounded-md group relative',
             )}
             onClick={() => exportChat?.()}
           >

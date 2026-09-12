@@ -40,7 +40,7 @@ export const DialogButton = memo(({ type, children, onClick, disabled }: DialogB
 export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.DialogTitleProps) => {
   return (
     <RadixDialog.Title
-      className={classNames('text-lg font-medium text-octo-elements-textPrimary flex items-center gap-2', className)}
+      className={classNames('text-lg font-medium text-octotask-elements-textPrimary flex items-center gap-2', className)}
       {...props}
     >
       {children}
@@ -51,7 +51,7 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
 export const DialogDescription = memo(({ className, children, ...props }: RadixDialog.DialogDescriptionProps) => {
   return (
     <RadixDialog.Description
-      className={classNames('text-sm text-octo-elements-textSecondary mt-1', className)}
+      className={classNames('text-sm text-octotask-elements-textSecondary mt-1', className)}
       {...props}
     >
       {children}
@@ -116,7 +116,7 @@ export const Dialog = memo(({ children, className, showCloseButton = true, onClo
       <RadixDialog.Content asChild>
         <motion.div
           className={classNames(
-            'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-950 rounded-lg shadow-xl border border-octo-elements-borderColor z-[9999] w-[520px] focus:outline-none',
+            'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-950 rounded-lg shadow-xl border border-octotask-elements-borderColor z-[9999] w-[520px] focus:outline-none',
             className,
           )}
           initial="closed"
@@ -130,7 +130,7 @@ export const Dialog = memo(({ children, className, showCloseButton = true, onClo
               <RadixDialog.Close asChild onClick={onClose}>
                 <IconButton
                   icon="i-ph:x"
-                  className="absolute top-3 right-3 text-octo-elements-textTertiary hover:text-octo-elements-textSecondary"
+                  className="absolute top-3 right-3 text-octotask-elements-textTertiary hover:text-octotask-elements-textSecondary"
                 />
               </RadixDialog.Close>
             )}
@@ -222,7 +222,7 @@ export function ConfirmationDialog({
               className={
                 variant === 'destructive'
                   ? 'bg-red-500 text-white hover:bg-red-600'
-                  : 'bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent hover:bg-octo-elements-button-primary-backgroundHover'
+                  : 'bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent hover:bg-octotask-elements-button-primary-backgroundHover'
               }
             >
               {isLoading ? (
@@ -347,8 +347,8 @@ export function SelectionDialog({
         className={classNames(
           'flex items-start space-x-3 p-2 rounded-md transition-colors',
           selectedItems.includes(item.id)
-            ? 'bg-octo-elements-item-backgroundAccent'
-            : 'bg-octo-elements-bg-depth-2 hover:bg-octo-elements-item-backgroundActive',
+            ? 'bg-octotask-elements-item-backgroundAccent'
+            : 'bg-octotask-elements-bg-depth-2 hover:bg-octotask-elements-item-backgroundActive',
         )}
         style={{
           ...style,
@@ -367,13 +367,13 @@ export function SelectionDialog({
             className={classNames(
               'text-sm font-medium cursor-pointer',
               selectedItems.includes(item.id)
-                ? 'text-octo-elements-item-contentAccent'
-                : 'text-octo-elements-textPrimary',
+                ? 'text-octotask-elements-item-contentAccent'
+                : 'text-octotask-elements-textPrimary',
             )}
           >
             {item.label}
           </Label>
-          {item.description && <p className="text-xs text-octo-elements-textSecondary">{item.description}</p>}
+          {item.description && <p className="text-xs text-octotask-elements-textSecondary">{item.description}</p>}
         </div>
       </div>
     );
@@ -386,26 +386,26 @@ export function SelectionDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="mt-2 mb-4">
             Select the items you want to include and click{' '}
-            <span className="text-octo-elements-item-contentAccent font-medium">{confirmLabel}</span>.
+            <span className="text-octotask-elements-item-contentAccent font-medium">{confirmLabel}</span>.
           </DialogDescription>
 
           <div className="py-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-octo-elements-textSecondary">
+              <span className="text-sm font-medium text-octotask-elements-textSecondary">
                 {selectedItems.length} of {items.length} selected
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleSelectAll}
-                className="text-xs h-8 px-2 text-octo-elements-textPrimary hover:text-octo-elements-item-contentAccent hover:bg-octo-elements-item-backgroundAccent bg-octo-elements-bg-depth-2 dark:bg-transparent"
+                className="text-xs h-8 px-2 text-octotask-elements-textPrimary hover:text-octotask-elements-item-contentAccent hover:bg-octotask-elements-item-backgroundAccent bg-octotask-elements-bg-depth-2 dark:bg-transparent"
               >
                 {selectAll ? 'Deselect All' : 'Select All'}
               </Button>
             </div>
 
             <div
-              className="pr-2 border rounded-md border-octo-elements-borderColor bg-octo-elements-bg-depth-2"
+              className="pr-2 border rounded-md border-octotask-elements-borderColor bg-octotask-elements-bg-depth-2"
               style={{
                 maxHeight,
               }}
@@ -416,12 +416,12 @@ export function SelectionDialog({
                   width="100%"
                   itemCount={items.length}
                   itemSize={60}
-                  className="scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-octo-elements-bg-depth-3"
+                  className="scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-octotask-elements-bg-depth-3"
                 >
                   {ItemRenderer}
                 </FixedSizeList>
               ) : (
-                <div className="text-center py-4 text-sm text-octo-elements-textTertiary">No items to display</div>
+                <div className="text-center py-4 text-sm text-octotask-elements-textTertiary">No items to display</div>
               )}
             </div>
           </div>
@@ -430,7 +430,7 @@ export function SelectionDialog({
             <Button
               variant="outline"
               onClick={onClose}
-              className="border-octo-elements-borderColor text-octo-elements-textPrimary hover:bg-octo-elements-item-backgroundActive"
+              className="border-octotask-elements-borderColor text-octotask-elements-textPrimary hover:bg-octotask-elements-item-backgroundActive"
             >
               Cancel
             </Button>

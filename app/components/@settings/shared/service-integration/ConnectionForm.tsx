@@ -49,7 +49,7 @@ export function ConnectionForm({
 }: ConnectionFormProps) {
   return (
     <motion.div
-      className="bg-octo-elements-background dark:bg-octo-elements-background border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg"
+      className="bg-octotask-elements-background dark:bg-octotask-elements-background border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -58,11 +58,11 @@ export function ConnectionForm({
         {!isConnected ? (
           <div className="space-y-4">
             {environmentVariable && (
-              <div className="text-xs text-octo-elements-textSecondary bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-1 p-3 rounded-lg mb-4">
+              <div className="text-xs text-octotask-elements-textSecondary bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-1 p-3 rounded-lg mb-4">
                 <p className="flex items-center gap-1 mb-1">
-                  <span className="i-ph:lightbulb w-3.5 h-3.5 text-octo-elements-icon-success dark:text-octo-elements-icon-success" />
+                  <span className="i-ph:lightbulb w-3.5 h-3.5 text-octotask-elements-icon-success dark:text-octotask-elements-icon-success" />
                   <span className="font-medium">Tip:</span> You can also set the{' '}
-                  <code className="px-1 py-0.5 bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-2 rounded">
+                  <code className="px-1 py-0.5 bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-2 rounded">
                     {environmentVariable}
                   </code>{' '}
                   environment variable to connect automatically.
@@ -73,7 +73,7 @@ export function ConnectionForm({
             <form onSubmit={onConnect} className="space-y-4">
               {tokenTypes && tokenTypes.length > 1 && onTokenTypeChange && (
                 <div>
-                  <label className="block text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary mb-2">
+                  <label className="block text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary mb-2">
                     Token Type
                   </label>
                   <select
@@ -82,10 +82,10 @@ export function ConnectionForm({
                     disabled={isConnecting}
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
-                      'bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-1',
-                      'border border-octo-elements-borderColor dark:border-octo-elements-borderColor',
-                      'text-octo-elements-textPrimary dark:text-octo-elements-textPrimary',
-                      'focus:outline-none focus:ring-1 focus:ring-octo-elements-item-contentAccent dark:focus:ring-octo-elements-item-contentAccent',
+                      'bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-1',
+                      'border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor',
+                      'text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary',
+                      'focus:outline-none focus:ring-1 focus:ring-octotask-elements-item-contentAccent dark:focus:ring-octotask-elements-item-contentAccent',
                       'disabled:opacity-50',
                     )}
                   >
@@ -96,7 +96,7 @@ export function ConnectionForm({
                     ))}
                   </select>
                   {selectedTokenType && tokenTypes.find((t) => t.value === selectedTokenType)?.description && (
-                    <p className="mt-1 text-xs text-octo-elements-textTertiary">
+                    <p className="mt-1 text-xs text-octotask-elements-textTertiary">
                       {tokenTypes.find((t) => t.value === selectedTokenType)?.description}
                     </p>
                   )}
@@ -104,7 +104,7 @@ export function ConnectionForm({
               )}
 
               <div>
-                <label className="block text-sm text-octo-elements-textSecondary mb-2">{tokenLabel}</label>
+                <label className="block text-sm text-octotask-elements-textSecondary mb-2">{tokenLabel}</label>
                 <input
                   type="password"
                   value={token}
@@ -113,19 +113,19 @@ export function ConnectionForm({
                   placeholder={tokenPlaceholder || `Enter your ${serviceName} access token`}
                   className={classNames(
                     'w-full px-3 py-2 rounded-lg text-sm',
-                    'bg-octo-elements-background-depth-1',
-                    'border border-octo-elements-borderColor',
-                    'text-octo-elements-textPrimary placeholder-octo-elements-textTertiary',
-                    'focus:outline-none focus:ring-1 focus:ring-octo-elements-borderColorActive',
+                    'bg-octotask-elements-background-depth-1',
+                    'border border-octotask-elements-borderColor',
+                    'text-octotask-elements-textPrimary placeholder-octotask-elements-textTertiary',
+                    'focus:outline-none focus:ring-1 focus:ring-octotask-elements-borderColorActive',
                     'disabled:opacity-50',
                   )}
                 />
-                <div className="mt-2 text-sm text-octo-elements-textSecondary">
+                <div className="mt-2 text-sm text-octotask-elements-textSecondary">
                   <a
                     href={getTokenUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-octo-elements-borderColorActive hover:underline inline-flex items-center gap-1"
+                    className="text-octotask-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                   >
                     Get your token
                     <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -180,7 +180,7 @@ export function ConnectionForm({
                 <div className="i-ph:plug w-4 h-4" />
                 Disconnect
               </button>
-              <span className="text-sm text-octo-elements-textSecondary flex items-center gap-1">
+              <span className="text-sm text-octotask-elements-textSecondary flex items-center gap-1">
                 <div className="i-ph:check-circle w-4 h-4 text-green-500" />
                 {connectedMessage}
               </span>

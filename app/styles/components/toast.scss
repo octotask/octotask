@@ -7,17 +7,17 @@
 .Toastify__toast {
   --at-apply: shadow-md;
 
-  background-color: var(--octo-elements-bg-depth-2);
-  color: var(--octo-elements-textPrimary);
-  border: 1px solid var(--octo-elements-borderColor);
+  background-color: var(--octotask-elements-bg-depth-2);
+  color: var(--octotask-elements-textPrimary);
+  border: 1px solid var(--octotask-elements-borderColor);
 }
 
 .Toastify__close-button {
-  color: var(--octo-elements-item-contentDefault);
+  color: var(--octotask-elements-item-contentDefault);
   opacity: 1;
   transition: none;
 
   &:hover {
-    color: var(--octo-elements-item-contentActive);
+    color: var(--octotask-elements-item-contentActive);
   }
 }

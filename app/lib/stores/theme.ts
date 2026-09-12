@@ -3,7 +3,7 @@ import { logStore } from './logs';
 
 export type Theme = 'dark' | 'light';
 
-export const kTheme = 'octo_theme';
+export const kTheme = 'octotask_theme';
 
 export function themeIsDark() {
   return themeStore.get() === 'dark';
@@ -39,12 +39,12 @@ export function toggleTheme() {
 
   // Update user profile if it exists
   try {
-    const userProfile = localStorage.getItem('octo_user_profile');
+    const userProfile = localStorage.getItem('octotask_user_profile');
 
     if (userProfile) {
       const profile = JSON.parse(userProfile);
       profile.theme = newTheme;
-      localStorage.setItem('octo_user_profile', JSON.stringify(profile));
+      localStorage.setItem('octotask_user_profile', JSON.stringify(profile));
     }
   } catch (error) {
     console.error('Error updating user profile theme:', error);

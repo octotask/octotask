@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { Dialog, DialogRoot, DialogClose, DialogTitle, DialogButton } from '~/components/ui/Dialog';
 import { IconButton } from '~/components/ui/IconButton';
-import { useStore } from '@nanostores/react';
-import { mcpStore, initializeMCP, checkMCPServersAvailabilities } from '~/lib/stores/mcp';
+import { useMCPStore } from '~/lib/stores/mcp';
 import McpServerList from '~/components/@settings/tabs/mcp/McpServerList';
 
 export function McpTools() {
-  const { isInitialized, serverTools } = useStore(mcpStore);
-  const initialize = initializeMCP;
-  const checkServersAvailabilities = checkMCPServersAvailabilities;
+  const isInitialized = useMCPStore((state) => state.isInitialized);
+  const serverTools = useMCPStore((state) => state.serverTools);
+  const initialize = useMCPStore((state) => state.initialize);
+  const checkServersAvailabilities = useMCPStore((state) => state.checkServersAvailabilities);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,9 +55,9 @@ export function McpTools() {
           className="transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {!isInitialized ? (
-            <div className="i-svg-spinners:90-ring-with-bg text-octo-elements-loader-progress text-xl animate-spin"></div>
+            <div className="i-svg-spinners:90-ring-with-bg text-octotask-elements-loader-progress text-xl animate-spin"></div>
           ) : (
-            <div className="i-octo:mcp text-xl"></div>
+            <div className="i-octotask:mcp text-xl"></div>
           )}
         </IconButton>
       </div>
@@ -67,7 +67,7 @@ export function McpTools() {
           <Dialog className="max-w-4xl w-full p-6">
             <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
               <DialogTitle>
-                <div className="i-octo:mcp text-xl"></div>
+                <div className="i-octotask:mcp text-xl"></div>
                 MCP tools
               </DialogTitle>
 
@@ -79,15 +79,15 @@ export function McpTools() {
                       disabled={isCheckingServers || serverEntries.length === 0}
                       className={classNames(
                         'px-3 py-1.5 rounded-lg text-sm',
-                        'bg-octo-elements-background-depth-3 hover:bg-octo-elements-background-depth-4',
-                        'text-octo-elements-textPrimary',
+                        'bg-octotask-elements-background-depth-3 hover:bg-octotask-elements-background-depth-4',
+                        'text-octotask-elements-textPrimary',
                         'transition-all duration-200',
                         'flex items-center gap-2',
                         'disabled:opacity-50 disabled:cursor-not-allowed',
                       )}
                     >
                       {isCheckingServers ? (
-                        <div className="i-svg-spinners:90-ring-with-bg w-3 h-3 text-octo-elements-loader-progress animate-spin" />
+                        <div className="i-svg-spinners:90-ring-with-bg w-3 h-3 text-octotask-elements-loader-progress animate-spin" />
                       ) : (
                         <div className="i-ph:arrow-counter-clockwise w-3 h-3" />
                       )}
@@ -103,14 +103,14 @@ export function McpTools() {
                       toggleServerExpanded={toggleServerExpanded}
                     />
                   ) : (
-                    <div className="py-4 text-center text-octo-elements-textSecondary">
+                    <div className="py-4 text-center text-octotask-elements-textSecondary">
                       <p>No MCP servers configured</p>
                       <p className="text-xs mt-1">Configure servers in Settings → MCP Servers</p>
                     </div>
                   )}
                 </div>
 
-                <div>{error && <p className="mt-2 text-sm text-octo-elements-icon-error">{error}</p>}</div>
+                <div>{error && <p className="mt-2 text-sm text-octotask-elements-icon-error">{error}</p>}</div>
               </div>
 
               <div className="flex justify-end gap-2 mt-6">

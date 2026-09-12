@@ -49,7 +49,7 @@ export const PortDropdown = memo(
       <div className="relative z-port-dropdown" ref={dropdownRef}>
         {/* Display the active port if available, otherwise show the plug icon */}
         <button
-          className="flex items-center group-focus-within:text-octo-elements-preview-addressBar-text bg-white group-focus-within:bg-octo-elements-preview-addressBar-background dark:bg-octo-elements-preview-addressBar-backgroundHover rounded-full px-2 py-1 gap-1.5"
+          className="flex items-center group-focus-within:text-octotask-elements-preview-addressBar-text bg-white group-focus-within:bg-octotask-elements-preview-addressBar-background dark:bg-octotask-elements-preview-addressBar-backgroundHover rounded-full px-2 py-1 gap-1.5"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <span className="i-ph:plug text-base"></span>
@@ -58,14 +58,14 @@ export const PortDropdown = memo(
           ) : null}
         </button>
         {isDropdownOpen && (
-          <div className="absolute left-0 mt-2 bg-octo-elements-background-depth-2 border border-octo-elements-borderColor rounded shadow-sm min-w-[140px] dropdown-animation">
-            <div className="px-4 py-2 border-b border-octo-elements-borderColor text-sm font-semibold text-octo-elements-textPrimary">
+          <div className="absolute left-0 mt-2 bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor rounded shadow-sm min-w-[140px] dropdown-animation">
+            <div className="px-4 py-2 border-b border-octotask-elements-borderColor text-sm font-semibold text-octotask-elements-textPrimary">
               Ports
             </div>
             {sortedPreviews.map((preview) => (
               <div
                 key={preview.port}
-                className="flex items-center px-4 py-2 cursor-pointer hover:bg-octo-elements-item-backgroundActive"
+                className="flex items-center px-4 py-2 cursor-pointer hover:bg-octotask-elements-item-backgroundActive"
                 onClick={() => {
                   setActivePreviewIndex(preview.index);
                   setIsDropdownOpen(false);
@@ -75,8 +75,8 @@ export const PortDropdown = memo(
                 <span
                   className={
                     activePreviewIndex === preview.index
-                      ? 'text-octo-elements-item-contentAccent'
-                      : 'text-octo-elements-item-contentDefault group-hover:text-octo-elements-item-contentActive'
+                      ? 'text-octotask-elements-item-contentAccent'
+                      : 'text-octotask-elements-item-contentDefault group-hover:text-octotask-elements-item-contentActive'
                   }
                 >
                   {preview.port}

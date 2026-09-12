@@ -21,7 +21,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className={`rounded-lg border border-octo-elements-borderColor bg-octo-elements-background-depth-2 p-4 mb-2`}
+        className={`rounded-lg border border-octotask-elements-borderColor bg-octotask-elements-background-depth-2 p-4 mb-2`}
       >
         <div className="flex items-start">
           {/* Icon */}
@@ -35,10 +35,10 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
               className={classNames(
                 'text-xl',
                 type === 'success'
-                  ? 'i-ph:check-circle-duotone text-octo-elements-icon-success'
+                  ? 'i-ph:check-circle-duotone text-octotask-elements-icon-success'
                   : type === 'error'
-                    ? 'i-ph:warning-duotone text-octo-elements-button-danger-text'
-                    : 'i-ph:info-duotone text-octo-elements-loader-progress',
+                    ? 'i-ph:warning-duotone text-octotask-elements-button-danger-text'
+                    : 'i-ph:info-duotone text-octotask-elements-loader-progress',
               )}
             ></div>
           </motion.div>
@@ -48,7 +48,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className={`text-sm font-medium text-octo-elements-textPrimary`}
+              className={`text-sm font-medium text-octotask-elements-textPrimary`}
             >
               {title}
             </motion.h3>
@@ -56,7 +56,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className={`mt-2 text-sm text-octo-elements-textSecondary`}
+              className={`mt-2 text-sm text-octotask-elements-textSecondary`}
             >
               <p>{description}</p>
 
@@ -70,12 +70,12 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                         className={classNames(
                           'w-6 h-6 rounded-full flex items-center justify-center',
                           buildStatus === 'running'
-                            ? 'bg-octo-elements-loader-progress'
+                            ? 'bg-octotask-elements-loader-progress'
                             : buildStatus === 'complete'
-                              ? 'bg-octo-elements-icon-success'
+                              ? 'bg-octotask-elements-icon-success'
                               : buildStatus === 'failed'
-                                ? 'bg-octo-elements-button-danger-background'
-                                : 'bg-octo-elements-textTertiary',
+                                ? 'bg-octotask-elements-button-danger-background'
+                                : 'bg-octotask-elements-textTertiary',
                         )}
                       >
                         {buildStatus === 'running' ? (
@@ -95,7 +95,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                     <div
                       className={classNames(
                         'h-0.5 w-8',
-                        buildStatus === 'complete' ? 'bg-octo-elements-icon-success' : 'bg-octo-elements-textTertiary',
+                        buildStatus === 'complete' ? 'bg-octotask-elements-icon-success' : 'bg-octotask-elements-textTertiary',
                       )}
                     ></div>
 
@@ -105,12 +105,12 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                         className={classNames(
                           'w-6 h-6 rounded-full flex items-center justify-center',
                           deployStatus === 'running'
-                            ? 'bg-octo-elements-loader-progress'
+                            ? 'bg-octotask-elements-loader-progress'
                             : deployStatus === 'complete'
-                              ? 'bg-octo-elements-icon-success'
+                              ? 'bg-octotask-elements-icon-success'
                               : deployStatus === 'failed'
-                                ? 'bg-octo-elements-button-danger-background'
-                                : 'bg-octo-elements-textTertiary',
+                                ? 'bg-octotask-elements-button-danger-background'
+                                : 'bg-octotask-elements-textTertiary',
                         )}
                       >
                         {deployStatus === 'running' ? (
@@ -130,7 +130,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
               )}
 
               {content && (
-                <div className="text-xs text-octo-elements-textSecondary p-2 bg-octo-elements-background-depth-3 rounded mt-4 mb-4">
+                <div className="text-xs text-octotask-elements-textSecondary p-2 bg-octotask-elements-background-depth-3 rounded mt-4 mb-4">
                   {content}
                 </div>
               )}
@@ -140,7 +140,7 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-octo-elements-item-contentAccent hover:underline flex items-center"
+                    className="text-octotask-elements-item-contentAccent hover:underline flex items-center"
                   >
                     <span className="mr-1">View deployed site</span>
                     <div className="i-ph:arrow-square-out"></div>
@@ -164,25 +164,25 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                     }
                     className={classNames(
                       `px-2 py-1.5 rounded-md text-sm font-medium`,
-                      'bg-octo-elements-button-primary-background',
-                      'hover:bg-octo-elements-button-primary-backgroundHover',
-                      'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-octo-elements-button-danger-background',
-                      'text-octo-elements-button-primary-text',
+                      'bg-octotask-elements-button-primary-background',
+                      'hover:bg-octotask-elements-button-primary-backgroundHover',
+                      'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-octotask-elements-button-danger-background',
+                      'text-octotask-elements-button-primary-text',
                       'flex items-center gap-1.5',
                     )}
                   >
                     <div className="i-ph:chat-circle-duotone"></div>
-                    Ask Octo
+                    Ask Octotask
                   </button>
                 )}
                 <button
                   onClick={clearAlert}
                   className={classNames(
                     `px-2 py-1.5 rounded-md text-sm font-medium`,
-                    'bg-octo-elements-button-secondary-background',
-                    'hover:bg-octo-elements-button-secondary-backgroundHover',
-                    'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-octo-elements-button-secondary-background',
-                    'text-octo-elements-button-secondary-text',
+                    'bg-octotask-elements-button-secondary-background',
+                    'hover:bg-octotask-elements-button-secondary-backgroundHover',
+                    'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-octotask-elements-button-secondary-background',
+                    'text-octotask-elements-button-secondary-text',
                   )}
                 >
                   Dismiss

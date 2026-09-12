@@ -21,18 +21,18 @@ export function HeaderActionButtons({ chatStarted: _chatStarted }: HeaderActionB
 
       {/* Debug Tools */}
       {shouldShowButtons && (
-        <div className="flex border border-octo-elements-borderColor rounded-md overflow-hidden text-sm">
+        <div className="flex border border-octotask-elements-borderColor rounded-md overflow-hidden text-sm">
           <button
             onClick={() =>
               window.open('https://github.com/octotask/octotask/issues/new?template=bug_report.yml', '_blank')
             }
-            className="rounded-l-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octo-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octo-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.5"
+            className="rounded-l-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octotask-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octotask-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.5"
             title="Report Bug"
           >
             <div className="i-ph:bug" />
             <span>Report Bug</span>
           </button>
-          <div className="w-px bg-octo-elements-borderColor" />
+          <div className="w-px bg-octotask-elements-borderColor" />
           <button
             onClick={async () => {
               try {
@@ -42,7 +42,7 @@ export function HeaderActionButtons({ chatStarted: _chatStarted }: HeaderActionB
                 console.error('Failed to download debug log:', error);
               }
             }}
-            className="rounded-r-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octo-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octo-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.5"
+            className="rounded-r-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-octotask-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-octotask-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.5"
             title="Download Debug Log"
           >
             <div className="i-ph:download" />

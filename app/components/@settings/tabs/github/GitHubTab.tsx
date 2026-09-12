@@ -94,7 +94,7 @@ export default function GitHubTab() {
       <div className="space-y-6">
         <div className="flex items-center gap-2">
           <GithubLogo />
-          <h2 className="text-lg font-medium text-octo-elements-textPrimary">GitHub Integration</h2>
+          <h2 className="text-lg font-medium text-octotask-elements-textPrimary">GitHub Integration</h2>
         </div>
         <LoadingState message="Checking GitHub connection..." />
       </div>
@@ -107,7 +107,7 @@ export default function GitHubTab() {
       <div className="space-y-6">
         <div className="flex items-center gap-2">
           <GithubLogo />
-          <h2 className="text-lg font-medium text-octo-elements-textPrimary">GitHub Integration</h2>
+          <h2 className="text-lg font-medium text-octotask-elements-textPrimary">GitHub Integration</h2>
         </div>
         <ErrorState
           title="Connection Error"
@@ -125,9 +125,9 @@ export default function GitHubTab() {
       <div className="space-y-6">
         <div className="flex items-center gap-2">
           <GithubLogo />
-          <h2 className="text-lg font-medium text-octo-elements-textPrimary">GitHub Integration</h2>
+          <h2 className="text-lg font-medium text-octotask-elements-textPrimary">GitHub Integration</h2>
         </div>
-        <p className="text-sm text-octo-elements-textSecondary">
+        <p className="text-sm text-octotask-elements-textSecondary">
           Connect your GitHub account to enable advanced repository management features, statistics, and seamless
           integration.
         </p>
@@ -148,15 +148,15 @@ export default function GitHubTab() {
         >
           <div className="flex items-center gap-2">
             <GithubLogo />
-            <h2 className="text-lg font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+            <h2 className="text-lg font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
               GitHub Integration
             </h2>
           </div>
           <div className="flex items-center gap-2">
             {connection?.rateLimit && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-octo-elements-background-depth-1 rounded-lg text-xs">
-                <div className="i-ph:cloud w-4 h-4 text-octo-elements-textSecondary" />
-                <span className="text-octo-elements-textSecondary">
+              <div className="flex items-center gap-2 px-3 py-1 bg-octotask-elements-background-depth-1 rounded-lg text-xs">
+                <div className="i-ph:cloud w-4 h-4 text-octotask-elements-textSecondary" />
+                <span className="text-octotask-elements-textSecondary">
                   API: {connection.rateLimit.remaining}/{connection.rateLimit.limit}
                 </span>
               </div>
@@ -164,7 +164,7 @@ export default function GitHubTab() {
           </div>
         </motion.div>
 
-        <p className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+        <p className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
           Manage your GitHub integration with advanced repository features and comprehensive statistics
         </p>
 
@@ -190,20 +190,20 @@ export default function GitHubTab() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="border-t border-octo-elements-borderColor pt-6"
+            className="border-t border-octotask-elements-borderColor pt-6"
           >
             <Collapsible open={isReposExpanded} onOpenChange={setIsReposExpanded}>
               <CollapsibleTrigger asChild>
-                <div className="flex items-center justify-between p-4 rounded-lg bg-octo-elements-background dark:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive/70 dark:hover:border-octo-elements-borderColorActive/70 transition-all duration-200">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-octotask-elements-background dark:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive/70 dark:hover:border-octotask-elements-borderColorActive/70 transition-all duration-200">
                   <div className="flex items-center gap-2">
-                    <div className="i-ph:folder w-4 h-4 text-octo-elements-item-contentAccent" />
-                    <span className="text-sm font-medium text-octo-elements-textPrimary">
+                    <div className="i-ph:folder w-4 h-4 text-octotask-elements-item-contentAccent" />
+                    <span className="text-sm font-medium text-octotask-elements-textPrimary">
                       All Repositories ({stats.repos.length})
                     </span>
                   </div>
                   <ChevronDown
                     className={classNames(
-                      'w-4 h-4 transform transition-transform duration-200 text-octo-elements-textSecondary',
+                      'w-4 h-4 transform transition-transform duration-200 text-octotask-elements-textSecondary',
                       isReposExpanded ? 'rotate-180' : '',
                     )}
                   />
@@ -230,7 +230,7 @@ export default function GitHubTab() {
                       <Button
                         variant="outline"
                         onClick={() => setIsReposExpanded(true)}
-                        className="text-octo-elements-textSecondary hover:text-octo-elements-textPrimary"
+                        className="text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary"
                       >
                         Show {stats.repos.length - 12} more repositories
                       </Button>
@@ -271,7 +271,7 @@ export default function GitHubTab() {
 
         {/* Cache Management Section - Only show when connected */}
         {isConnected && connection && (
-          <div className="mt-8 pt-6 border-t border-octo-elements-borderColor">
+          <div className="mt-8 pt-6 border-t border-octotask-elements-borderColor">
             <GitHubCacheManager showStats={true} />
           </div>
         )}

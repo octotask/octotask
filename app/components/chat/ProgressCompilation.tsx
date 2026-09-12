@@ -37,16 +37,16 @@ export default function ProgressCompilation({ data }: { data?: ProgressAnnotatio
     <AnimatePresence>
       <div
         className={classNames(
-          'bg-octo-elements-background-depth-2',
-          'border border-octo-elements-borderColor',
+          'bg-octotask-elements-background-depth-2',
+          'border border-octotask-elements-borderColor',
           'shadow-lg rounded-lg  relative w-full max-w-chat mx-auto z-prompt',
           'p-1',
         )}
       >
         <div
           className={classNames(
-            'bg-octo-elements-item-backgroundAccent',
-            'p-1 rounded-lg text-octo-elements-item-contentAccent',
+            'bg-octotask-elements-item-backgroundAccent',
+            'p-1 rounded-lg text-octotask-elements-item-contentAccent',
             'flex ',
           )}
         >
@@ -74,7 +74,7 @@ export default function ProgressCompilation({ data }: { data?: ProgressAnnotatio
             animate={{ width: 'auto' }}
             exit={{ width: 0 }}
             transition={{ duration: 0.15, ease: cubicEasingFn }}
-            className=" p-1 rounded-lg bg-octo-elements-item-backgroundAccent hover:bg-octo-elements-artifacts-backgroundHover"
+            className=" p-1 rounded-lg bg-octotask-elements-item-backgroundAccent hover:bg-octotask-elements-artifacts-backgroundHover"
             onClick={() => setExpanded((v) => !v)}
           >
             <div className={expanded ? 'i-ph:caret-up-bold' : 'i-ph:caret-down-bold'}></div>

@@ -1,6 +1,6 @@
 /*
  *!---------------------------------------------------------------------------------------------
- *  Copyright (c) KhulnaSoft. All rights reserved.
+ *  Copyright (c) OctoTask. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------
  */
@@ -41,7 +41,7 @@ const StickToBottomContext = createContext<StickToBottomContext | null>(null);
 
 export interface StickToBottomProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
-    StickToBottomOptions {
+  StickToBottomOptions {
   contextRef?: React.Ref<StickToBottomContext>;
   instance?: ReturnType<typeof useStickToBottom>;
   children: ((context: StickToBottomContext) => ReactNode) | ReactNode;

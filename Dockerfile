@@ -37,7 +37,7 @@ RUN pnpm prune --prod --ignore-scripts
 
 
 # ---- production stage ----
-FROM prod-deps AS octotask-production
+FROM prod-deps AS octotask-ai-production
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -50,9 +50,9 @@ ARG DEFAULT_NUM_CTX
 
 # Set non-sensitive environment variables
 ENV WRANGLER_SEND_METRICS=false \
-  VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
-  DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX} \
-  RUNNING_IN_DOCKER=true
+    VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
+    DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX} \
+    RUNNING_IN_DOCKER=true
 
 # Note: API keys should be provided at runtime via docker run -e or docker-compose
 # Example: docker run -e OPENAI_API_KEY=your_key_here ...
@@ -69,7 +69,7 @@ COPY --from=prod-deps /app/bindings.sh /app/bindings.sh
 
 # Pre-configure wrangler to disable metrics
 RUN mkdir -p /root/.config/.wrangler && \
-  echo '{"enabled":false}' > /root/.config/.wrangler/metrics.json
+    echo '{"enabled":false}' > /root/.config/.wrangler/metrics.json
 
 # Make bindings script executable
 RUN chmod +x /app/bindings.sh
@@ -85,7 +85,7 @@ CMD ["pnpm", "run", "dockerstart"]
 
 
 # ---- development stage ----
-FROM build AS octotask-development
+FROM build AS development
 
 # Non-sensitive development arguments
 ARG VITE_LOG_LEVEL=debug
@@ -93,8 +93,8 @@ ARG DEFAULT_NUM_CTX
 
 # Set non-sensitive environment variables for development
 ENV VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
-  DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX} \
-  RUNNING_IN_DOCKER=true
+    DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX} \
+    RUNNING_IN_DOCKER=true
 
 # Note: API keys should be provided at runtime via docker run -e or docker-compose
 # Example: docker run -e OPENAI_API_KEY=your_key_here ...

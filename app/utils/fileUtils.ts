@@ -106,16 +106,16 @@ export const detectProjectType = async (
 
 export const filesToArtifacts = (files: { [path: string]: { content: string } }, id: string): string => {
   return `
-<octoArtifact id="${id}" title="User Updated Files">
+<octotaskArtifact id="${id}" title="User Updated Files">
 ${Object.keys(files)
   .map(
     (filePath) => `
-<octoAction type="file" filePath="${filePath}">
+<octotaskAction type="file" filePath="${filePath}">
 ${files[filePath].content}
-</octoAction>
+</octotaskAction>
 `,
   )
   .join('\n')}
-</octoArtifact>
+</octotaskArtifact>
   `;
 };

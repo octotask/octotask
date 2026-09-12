@@ -78,7 +78,7 @@ export function StatusIndicator({ status, size = 'md', pulse = false, label, cla
       {label && (
         <span
           className={classNames(
-            'text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark',
+            'text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark',
             textSizeClass,
           )}
         >

@@ -146,20 +146,20 @@ const CloudProvidersTab = () => {
             <div
               className={classNames(
                 'w-8 h-8 flex items-center justify-center rounded-lg',
-                'bg-octo-elements-background-depth-3',
+                'bg-octotask-elements-background-depth-3',
                 'text-purple-500',
               )}
             >
               <TbCloudComputing className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-md font-medium text-octo-elements-textPrimary">Cloud Providers</h4>
-              <p className="text-sm text-octo-elements-textSecondary">Connect to cloud-based AI models and services</p>
+              <h4 className="text-md font-medium text-octotask-elements-textPrimary">Cloud Providers</h4>
+              <p className="text-sm text-octotask-elements-textSecondary">Connect to cloud-based AI models and services</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-octo-elements-textSecondary">Enable All Cloud</span>
+            <span className="text-sm text-octotask-elements-textSecondary">Enable All Cloud</span>
             <Switch checked={categoryEnabled} onCheckedChange={handleToggleCategory} />
           </div>
         </div>
@@ -169,9 +169,9 @@ const CloudProvidersTab = () => {
             <motion.div
               key={provider.name}
               className={classNames(
-                'rounded-lg border bg-octo-elements-background text-octo-elements-textPrimary shadow-sm',
-                'bg-octo-elements-background-depth-2',
-                'hover:bg-octo-elements-background-depth-3',
+                'rounded-lg border bg-octotask-elements-background text-octotask-elements-textPrimary shadow-sm',
+                'bg-octotask-elements-background-depth-2',
+                'hover:bg-octotask-elements-background-depth-3',
                 'transition-all duration-200',
                 'relative overflow-hidden group',
                 'flex flex-col',
@@ -197,9 +197,9 @@ const CloudProvidersTab = () => {
                 <motion.div
                   className={classNames(
                     'w-10 h-10 flex items-center justify-center rounded-xl',
-                    'bg-octo-elements-background-depth-3 group-hover:bg-octo-elements-background-depth-4',
+                    'bg-octotask-elements-background-depth-3 group-hover:bg-octotask-elements-background-depth-4',
                     'transition-all duration-200',
-                    provider.settings.enabled ? 'text-purple-500' : 'text-octo-elements-textSecondary',
+                    provider.settings.enabled ? 'text-purple-500' : 'text-octotask-elements-textSecondary',
                   )}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -215,10 +215,10 @@ const CloudProvidersTab = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-4 mb-2">
                     <div>
-                      <h4 className="text-sm font-medium text-octo-elements-textPrimary group-hover:text-purple-500 transition-colors">
+                      <h4 className="text-sm font-medium text-octotask-elements-textPrimary group-hover:text-purple-500 transition-colors">
                         {provider.name}
                       </h4>
-                      <p className="text-xs text-octo-elements-textSecondary mt-0.5">
+                      <p className="text-xs text-octotask-elements-textSecondary mt-0.5">
                         {PROVIDER_DESCRIPTIONS[provider.name as keyof typeof PROVIDER_DESCRIPTIONS] ||
                           (URL_CONFIGURABLE_PROVIDERS.includes(provider.name)
                             ? 'Configure custom endpoint for this provider'
@@ -246,8 +246,8 @@ const CloudProvidersTab = () => {
                             placeholder={`Enter ${provider.name} base URL`}
                             className={classNames(
                               'flex-1 px-3 py-1.5 rounded-lg text-sm',
-                              'bg-octo-elements-background-depth-3 border border-octo-elements-borderColor',
-                              'text-octo-elements-textPrimary placeholder-octo-elements-textTertiary',
+                              'bg-octotask-elements-background-depth-3 border border-octotask-elements-borderColor',
+                              'text-octotask-elements-textPrimary placeholder-octotask-elements-textTertiary',
                               'focus:outline-none focus:ring-2 focus:ring-purple-500/30',
                               'transition-all duration-200',
                             )}
@@ -266,7 +266,7 @@ const CloudProvidersTab = () => {
                             className="flex-1 px-3 py-1.5 rounded-lg text-sm cursor-pointer group/url"
                             onClick={() => setEditingProvider(provider.name)}
                           >
-                            <div className="flex items-center gap-2 text-octo-elements-textSecondary">
+                            <div className="flex items-center gap-2 text-octotask-elements-textSecondary">
                               <div className="i-ph:link text-sm" />
                               <span className="group-hover/url:text-purple-500 transition-colors">
                                 {provider.settings.baseUrl || 'Click to set base URL'}

@@ -296,7 +296,7 @@ export class GitLabApiService {
         visibility: isPrivate ? 'private' : 'public',
         initialize_with_readme: false, // Don't initialize with README to avoid conflicts
         default_branch: 'main', // Explicitly set default branch
-        description: `Project created from OctoTask`,
+        description: `Project created from Octotask`,
       }),
     });
 
@@ -443,7 +443,7 @@ export class GitLabApiService {
 
       const commitRequest: GitLabCommitRequest = {
         branch: 'main',
-        commit_message: 'Initial commit from OctoTask',
+        commit_message: 'Initial commit from Octotask',
         actions,
       };
 
@@ -476,7 +476,7 @@ export class GitLabApiService {
 
     const commitRequest: GitLabCommitRequest = {
       branch: 'main',
-      commit_message: 'Update from OctoTask',
+      commit_message: 'Update from Octotask',
       actions,
     };
 
@@ -493,7 +493,7 @@ export class GitLabApiService {
 
         const updateCommitRequest: GitLabCommitRequest = {
           branch: 'main',
-          commit_message: 'Update from OctoTask',
+          commit_message: 'Update from Octotask',
           actions: updateActions,
         };
 

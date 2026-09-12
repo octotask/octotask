@@ -29,23 +29,23 @@ describe('StreamingMessageParser', () => {
       ['Foo bar <', 'Foo bar '],
       ['Foo bar <p', 'Foo bar <p'],
       [['Foo bar <', 's', 'p', 'an>some text</span>'], 'Foo bar <span>some text</span>'],
-    ])('should correctly parse chunks and strip out octo artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out octotask artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
 
   describe('invalid or incomplete artifacts', () => {
     it.each<[string | string[], ExpectedResult | string]>([
-      ['Foo bar <o', 'Foo bar '],
-      ['Foo bar <oa', 'Foo bar <oa'],
-      ['Foo bar <oct', 'Foo bar '],
-      ['Foo bar <octo', 'Foo bar '],
-      ['Foo bar <octoa', 'Foo bar <octoa'],
-      ['Foo bar <octoA', 'Foo bar '],
-      ['Foo bar <octoArtifacs></octoArtifact>', 'Foo bar <octoArtifacs></octoArtifact>'],
-      ['Before <oltArtfiact>foo</octoArtifact> After', 'Before <oltArtfiact>foo</octoArtifact> After'],
-      ['Before <octoArtifactt>foo</octoArtifact> After', 'Before <octoArtifactt>foo</octoArtifact> After'],
-    ])('should correctly parse chunks and strip out octo artifacts (%#)', (input, expected) => {
+      ['Foo bar <b', 'Foo bar '],
+      ['Foo bar <ba', 'Foo bar <ba'],
+      ['Foo bar <bol', 'Foo bar '],
+      ['Foo bar <octotask', 'Foo bar '],
+      ['Foo bar <octotaska', 'Foo bar <octotaska'],
+      ['Foo bar <octotaskA', 'Foo bar '],
+      ['Foo bar <octotaskArtifacs></octotaskArtifact>', 'Foo bar <octotaskArtifacs></octotaskArtifact>'],
+      ['Before <oltArtfiact>foo</octotaskArtifact> After', 'Before <oltArtfiact>foo</octotaskArtifact> After'],
+      ['Before <octotaskArtifactt>foo</octotaskArtifact> After', 'Before <octotaskArtifactt>foo</octotaskArtifact> After'],
+    ])('should correctly parse chunks and strip out octotask artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -53,7 +53,7 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts without actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Some text before <octoArtifact title="Some title" id="artifact_1">foo bar</octoArtifact> Some more text',
+        'Some text before <octotaskArtifact title="Some title" id="artifact_1">foo bar</octotaskArtifact> Some more text',
         {
           output: 'Some text before  Some more text',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
@@ -61,9 +61,9 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <octoArti',
+          'Some text before <octotaskArti',
           'fact',
-          ' title="Some title" id="artifact_1" type="bundled" >foo</octoArtifact> Some more text',
+          ' title="Some title" id="artifact_1" type="bundled" >foo</octotaskArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -72,12 +72,12 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <octoArti',
+          'Some text before <octotaskArti',
           'fac',
           't title="Some title" id="artifact_1"',
           ' ',
           '>',
-          'foo</octoArtifact> Some more text',
+          'foo</octotaskArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -86,11 +86,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <octoArti',
+          'Some text before <octotaskArti',
           'fact',
           ' title="Some title" id="artifact_1"',
           ' >fo',
-          'o</octoArtifact> Some more text',
+          'o</octotaskArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -99,13 +99,13 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <octoArti',
+          'Some text before <octotaskArti',
           'fact tit',
           'le="Some ',
           'title" id="artifact_1">fo',
           'o',
           '<',
-          '/octoArtifact> Some more text',
+          '/octotaskArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -114,11 +114,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <octoArti',
+          'Some text before <octotaskArti',
           'fact title="Some title" id="artif',
           'act_1">fo',
           'o<',
-          '/octoArtifact> Some more text',
+          '/octotaskArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -126,13 +126,13 @@ describe('StreamingMessageParser', () => {
         },
       ],
       [
-        'Before <octoArtifact title="Some title" id="artifact_1">foo</octoArtifact> After',
+        'Before <octotaskArtifact title="Some title" id="artifact_1">foo</octotaskArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
         },
       ],
-    ])('should correctly parse chunks and strip out octo artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out octotask artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -140,20 +140,20 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts with actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Before <octoArtifact title="Some title" id="artifact_1"><octoAction type="shell">npm install</octoAction></octoArtifact> After',
+        'Before <octotaskArtifact title="Some title" id="artifact_1"><octotaskAction type="shell">npm install</octotaskAction></octotaskArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 1, onActionClose: 1 },
         },
       ],
       [
-        'Before <octoArtifact title="Some title" id="artifact_1"><octoAction type="shell">npm install</octoAction><octoAction type="file" filePath="index.js">some content</octoAction></octoArtifact> After',
+        'Before <octotaskArtifact title="Some title" id="artifact_1"><octotaskAction type="shell">npm install</octotaskAction><octotaskAction type="file" filePath="index.js">some content</octotaskAction></octotaskArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 2, onActionClose: 2 },
         },
       ],
-    ])('should correctly parse chunks and strip out octo artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out octotask artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -180,6 +180,41 @@ describe('EnhancedStreamingMessageParser', () => {
         action: expect.objectContaining({
           type: 'shell',
           content: 'npm install && npm run dev',
+        }),
+      }),
+    );
+  });
+
+  it('should detect a shell command sequence even when interleaved with comments', () => {
+    const callbacks = {
+      onArtifactOpen: vi.fn(),
+      onArtifactClose: vi.fn(),
+      onActionOpen: vi.fn(),
+      onActionClose: vi.fn(),
+    };
+
+    const parser = new EnhancedStreamingMessageParser({
+      callbacks,
+    });
+
+    /*
+     * 2 of 2 non-comment lines are commands (100%); comment lines must not
+     * dilute the ratio, otherwise this is misclassified as a file to write.
+     */
+    const input = [
+      '```bash',
+      '# Install dependencies',
+      'npm install',
+      '# Start the dev server',
+      'npm run dev',
+      '```',
+    ].join('\n');
+    parser.parse('test_id', input);
+
+    expect(callbacks.onActionOpen).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: expect.objectContaining({
+          type: 'shell',
         }),
       }),
     );

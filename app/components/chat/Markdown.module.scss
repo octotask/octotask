@@ -9,24 +9,10 @@ $code-font-size: 13px;
 
 .MarkdownContent {
   line-height: 1.6;
-  color: var(--octo-elements-textPrimary);
+  color: var(--octotask-elements-textPrimary);
 
   > *:not(:last-child) {
     margin-block-end: 16px;
-  }
-
-  :global {
-    .__octoArtifact__ {
-      display: none;
-    }
-
-    .__octoThought__ {
-      @apply mb-4;
-    }
-
-    .__octoQuickAction__ {
-      @apply flex items-center gap-2 flex-wrap mt-3.5;
-    }
   }
 
   :global(.artifact) {
@@ -39,19 +25,19 @@ $code-font-size: 13px;
       margin-block-end: 16px;
       font-weight: 600;
       line-height: 1.25;
-      color: var(--octo-elements-textPrimary);
+      color: var(--octotask-elements-textPrimary);
     }
   }
 
   h1 {
     font-size: 2em;
-    border-bottom: 1px solid var(--octo-elements-borderColor);
+    border-bottom: 1px solid var(--octotask-elements-borderColor);
     padding-bottom: 0.3em;
   }
 
   h2 {
     font-size: 1.5em;
-    border-bottom: 1px solid var(--octo-elements-borderColor);
+    border-bottom: 1px solid var(--octotask-elements-borderColor);
     padding-bottom: 0.3em;
   }
 
@@ -82,7 +68,7 @@ $code-font-size: 13px;
   }
 
   a {
-    color: var(--octo-elements-messages-linkColor);
+    color: var(--octotask-elements-messages-linkColor);
     text-decoration: none;
     cursor: pointer;
 
@@ -98,8 +84,8 @@ $code-font-size: 13px;
     @include not-inside-actions {
       border-radius: 6px;
       padding: 0.2em 0.4em;
-      background-color: var(--octo-elements-messages-inlineCode-background);
-      color: var(--octo-elements-messages-inlineCode-text);
+      background-color: var(--octotask-elements-messages-inlineCode-background);
+      color: var(--octotask-elements-messages-inlineCode-text);
     }
   }
 
@@ -119,8 +105,8 @@ $code-font-size: 13px;
   blockquote {
     margin: 0;
     padding: 0 1em;
-    color: var(--octo-elements-textTertiary);
-    border-left: 0.25em solid var(--octo-elements-borderColor);
+    color: var(--octotask-elements-textTertiary);
+    border-left: 0.25em solid var(--octotask-elements-borderColor);
   }
 
   :is(ul, ol) {
@@ -164,7 +150,7 @@ $code-font-size: 13px;
     height: 0.25em;
     padding: 0;
     margin: 24px 0;
-    background-color: var(--octo-elements-borderColor);
+    background-color: var(--octotask-elements-borderColor);
     border: 0;
   }
 

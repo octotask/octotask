@@ -4,6 +4,7 @@ import type { IProviderConfig } from '~/types/model';
 import type { TabVisibilityConfig, TabWindowConfig, UserTabConfig } from '~/components/@settings/core/types';
 import { DEFAULT_TAB_CONFIG } from '~/components/@settings/core/constants';
 import { toggleTheme } from './theme';
+import { create } from 'zustand';
 
 export interface Shortcut {
   key: string;
@@ -335,7 +336,7 @@ const getInitialTabConfiguration = (): TabWindowConfig => {
   }
 
   try {
-    const saved = localStorage.getItem('octo_tab_configuration');
+    const saved = localStorage.getItem('octotask_tab_configuration');
 
     if (!saved) {
       return defaultConfig;
@@ -368,30 +369,37 @@ export const resetTabConfiguration = () => {
   };
 
   tabConfigurationStore.set(defaultConfig);
-  localStorage.setItem('octo_tab_configuration', JSON.stringify(defaultConfig));
+  localStorage.setItem('octotask_tab_configuration', JSON.stringify(defaultConfig));
 };
 
 // First, let's define the SettingsStore interface
-interface SettingsState {
+interface SettingsStore {
   isOpen: boolean;
   selectedTab: string;
+  openSettings: () => void;
+  closeSettings: () => void;
+  setSelectedTab: (tab: string) => void;
 }
 
-export const settingsUIStore = map<SettingsState>({
+export const useSettingsStore = create<SettingsStore>((set) => ({
   isOpen: false,
-  selectedTab: 'user',
-});
+  selectedTab: 'user', // Default tab
 
-export const openSettings = () => {
-  settingsUIStore.setKey('isOpen', true);
-  settingsUIStore.setKey('selectedTab', 'user');
-};
+  openSettings: () => {
+    set({
+      isOpen: true,
+      selectedTab: 'user', // Always open to user tab
+    });
+  },
 
-export const closeSettings = () => {
-  settingsUIStore.setKey('isOpen', false);
-  settingsUIStore.setKey('selectedTab', 'user');
-};
+  closeSettings: () => {
+    set({
+      isOpen: false,
+      selectedTab: 'user', // Reset to user tab when closing
+    });
+  },
 
-export const setSelectedTab = (tab: string) => {
-  settingsUIStore.setKey('selectedTab', tab);
-};
+  setSelectedTab: (tab: string) => {
+    set({ selectedTab: tab });
+  },
+}));

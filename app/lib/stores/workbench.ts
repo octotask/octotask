@@ -110,8 +110,8 @@ export class WorkbenchStore {
   get showTerminal() {
     return this.#terminalStore.showTerminal;
   }
-  get octoTerminal() {
-    return this.#terminalStore.octoTerminal;
+  get octotaskTerminal() {
+    return this.#terminalStore.octotaskTerminal;
   }
   get alert() {
     return this.actionAlert;
@@ -143,8 +143,8 @@ export class WorkbenchStore {
   attachTerminal(terminal: ITerminal) {
     this.#terminalStore.attachTerminal(terminal);
   }
-  attachOctoTerminal(terminal: ITerminal) {
-    this.#terminalStore.attachOctoTerminal(terminal);
+  attachOctotaskTerminal(terminal: ITerminal) {
+    this.#terminalStore.attachOctotaskTerminal(terminal);
   }
 
   detachTerminal(terminal: ITerminal) {
@@ -483,7 +483,7 @@ export class WorkbenchStore {
       type,
       runner: new ActionRunner(
         webcontainer,
-        () => this.octoTerminal,
+        () => this.octotaskTerminal,
         (alert) => {
           if (this.#reloadedMessages.has(messageId)) {
             return;

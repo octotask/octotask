@@ -87,8 +87,8 @@ export function EmptyState({
     <div
       className={classNames(
         'flex flex-col items-center justify-center',
-        'text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark',
-        'bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3 rounded-lg',
+        'text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark',
+        'bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3 rounded-lg',
         styles.container,
         className,
       )}
@@ -96,7 +96,7 @@ export function EmptyState({
       {/* Icon */}
       <div
         className={classNames(
-          'rounded-full bg-octo-elements-background-depth-3 dark:bg-octo-elements-background-depth-4 flex items-center justify-center',
+          'rounded-full bg-octotask-elements-background-depth-3 dark:bg-octotask-elements-background-depth-4 flex items-center justify-center',
           styles.icon.container,
         )}
       >
@@ -104,7 +104,7 @@ export function EmptyState({
           className={classNames(
             icon,
             styles.icon.size,
-            'text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark',
+            'text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark',
           )}
         />
       </div>
@@ -116,7 +116,7 @@ export function EmptyState({
       {description && (
         <p
           className={classNames(
-            'text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark text-center max-w-xs',
+            'text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark text-center max-w-xs',
             styles.description,
           )}
         >

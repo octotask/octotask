@@ -1,7 +1,7 @@
 import ignore from 'ignore';
 import { useGit } from '~/lib/hooks/useGit';
 import type { Message } from 'ai';
-import { detectProjectCommands, createCommandsMessage, escapeOctoTags } from '~/utils/projectCommands';
+import { detectProjectCommands, createCommandsMessage, escapeOctotaskTags } from '~/utils/projectCommands';
 import { generateId } from '~/utils/fileUtils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -130,16 +130,16 @@ ${skippedFiles.map((f) => `- ${f}`).join('\n')}`
     : ''
 }
 
-<octoArtifact id="imported-files" title="Git Cloned Files" type="bundled">
+<octotaskArtifact id="imported-files" title="Git Cloned Files" type="bundled">
 ${fileContents
   .map(
     (file) =>
-      `<octoAction type="file" filePath="${file.path}">
-${escapeOctoTags(file.content)}
-</octoAction>`,
+      `<octotaskAction type="file" filePath="${file.path}">
+${escapeOctotaskTags(file.content)}
+</octotaskAction>`,
   )
   .join('\n')}
-</octoArtifact>`,
+</octotaskArtifact>`,
           id: generateId(),
           createdAt: new Date(),
         };
@@ -171,10 +171,10 @@ ${escapeOctoTags(file.content)}
         variant="default"
         size="lg"
         className={classNames(
-          'gap-2 bg-octo-elements-background-depth-1',
-          'text-octo-elements-textPrimary',
-          'hover:bg-octo-elements-background-depth-2',
-          'border border-octo-elements-borderColor',
+          'gap-2 bg-octotask-elements-background-depth-1',
+          'text-octotask-elements-textPrimary',
+          'hover:bg-octotask-elements-background-depth-2',
+          'border border-octotask-elements-borderColor',
           'h-10 px-4 py-2 min-w-[120px] justify-center',
           'transition-all duration-200 ease-in-out',
           className,
@@ -191,15 +191,15 @@ ${escapeOctoTags(file.content)}
       {/* Provider Selection Dialog */}
       {isDialogOpen && !selectedProvider && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octo-elements-borderColor dark:border-octo-elements-borderColor max-w-md w-full">
+          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor max-w-md w-full">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                <h3 className="text-lg font-semibold text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                   Choose Repository Provider
                 </h3>
                 <button
                   onClick={() => setIsDialogOpen(false)}
-                  className="p-2 rounded-lg bg-transparent hover:bg-octo-elements-background-depth-1 dark:hover:bg-octo-elements-background-depth-1 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary hover:text-octo-elements-textPrimary dark:hover:text-octo-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
+                  className="p-2 rounded-lg bg-transparent hover:bg-octotask-elements-background-depth-1 dark:hover:bg-octotask-elements-background-depth-1 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary dark:hover:text-octotask-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
                 >
                   <X className="w-5 h-5 transition-transform duration-200 hover:rotate-90" />
                 </button>
@@ -208,17 +208,17 @@ ${escapeOctoTags(file.content)}
               <div className="space-y-3">
                 <button
                   onClick={() => setSelectedProvider('github')}
-                  className="w-full p-4 rounded-lg bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-1 hover:bg-octo-elements-background-depth-2 dark:hover:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive dark:hover:border-octo-elements-borderColorActive transition-all duration-200 text-left group"
+                  className="w-full p-4 rounded-lg bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-1 hover:bg-octotask-elements-background-depth-2 dark:hover:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive dark:hover:border-octotask-elements-borderColorActive transition-all duration-200 text-left group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/20 dark:group-hover:bg-blue-500/30 transition-colors">
                       <Github className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <div className="font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                      <div className="font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                         GitHub
                       </div>
-                      <div className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                      <div className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                         Clone from GitHub repositories
                       </div>
                     </div>
@@ -227,17 +227,17 @@ ${escapeOctoTags(file.content)}
 
                 <button
                   onClick={() => setSelectedProvider('gitlab')}
-                  className="w-full p-4 rounded-lg bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-1 hover:bg-octo-elements-background-depth-2 dark:hover:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive dark:hover:border-octo-elements-borderColorActive transition-all duration-200 text-left group"
+                  className="w-full p-4 rounded-lg bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-1 hover:bg-octotask-elements-background-depth-2 dark:hover:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive dark:hover:border-octotask-elements-borderColorActive transition-all duration-200 text-left group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center group-hover:bg-orange-500/20 dark:group-hover:bg-orange-500/30 transition-colors">
                       <GitBranch className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                     </div>
                     <div>
-                      <div className="font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                      <div className="font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                         GitLab
                       </div>
-                      <div className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                      <div className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                         Clone from GitLab repositories
                       </div>
                     </div>
@@ -252,17 +252,17 @@ ${escapeOctoTags(file.content)}
       {/* GitHub Repository Selection */}
       {isDialogOpen && selectedProvider === 'github' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octo-elements-borderColor dark:border-octo-elements-borderColor w-full max-w-4xl max-h-[90vh] overflow-hidden">
-            <div className="p-6 border-b border-octo-elements-borderColor dark:border-octo-elements-borderColor flex items-center justify-between">
+          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div className="p-6 border-b border-octotask-elements-borderColor dark:border-octotask-elements-borderColor flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
                   <Github className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                  <h3 className="text-lg font-semibold text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                     Import GitHub Repository
                   </h3>
-                  <p className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                  <p className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                     Clone a repository from GitHub to your workspace
                   </p>
                 </div>
@@ -272,7 +272,7 @@ ${escapeOctoTags(file.content)}
                   setIsDialogOpen(false);
                   setSelectedProvider(null);
                 }}
-                className="p-2 rounded-lg bg-transparent hover:bg-octo-elements-background-depth-1 dark:hover:bg-octo-elements-background-depth-1 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary hover:text-octo-elements-textPrimary dark:hover:text-octo-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
+                className="p-2 rounded-lg bg-transparent hover:bg-octotask-elements-background-depth-1 dark:hover:bg-octotask-elements-background-depth-1 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary dark:hover:text-octotask-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 <X className="w-5 h-5 transition-transform duration-200 hover:rotate-90" />
               </button>
@@ -288,17 +288,17 @@ ${escapeOctoTags(file.content)}
       {/* GitLab Repository Selection */}
       {isDialogOpen && selectedProvider === 'gitlab' && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octo-elements-borderColor dark:border-octo-elements-borderColor w-full max-w-4xl max-h-[90vh] overflow-hidden">
-            <div className="p-6 border-b border-octo-elements-borderColor dark:border-octo-elements-borderColor flex items-center justify-between">
+          <div className="bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div className="p-6 border-b border-octotask-elements-borderColor dark:border-octotask-elements-borderColor flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center">
                   <GitBranch className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                  <h3 className="text-lg font-semibold text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                     Import GitLab Repository
                   </h3>
-                  <p className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                  <p className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                     Clone a repository from GitLab to your workspace
                   </p>
                 </div>
@@ -308,7 +308,7 @@ ${escapeOctoTags(file.content)}
                   setIsDialogOpen(false);
                   setSelectedProvider(null);
                 }}
-                className="p-2 rounded-lg bg-transparent hover:bg-octo-elements-background-depth-1 dark:hover:bg-octo-elements-background-depth-1 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary hover:text-octo-elements-textPrimary dark:hover:text-octo-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
+                className="p-2 rounded-lg bg-transparent hover:bg-octotask-elements-background-depth-1 dark:hover:bg-octotask-elements-background-depth-1 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary dark:hover:text-octotask-elements-textPrimary transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 <X className="w-5 h-5 transition-transform duration-200 hover:rotate-90" />
               </button>

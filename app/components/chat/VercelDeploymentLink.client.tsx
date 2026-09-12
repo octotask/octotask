@@ -46,7 +46,7 @@ export function VercelDeploymentLink() {
         const chatNumber = currentChatId.split('-')[0];
 
         // Find project by matching the chat number in the name
-        const project = projects.find((p: { name: string | string[] }) => p.name.includes(`octotask-${chatNumber}`));
+        const project = projects.find((p: { name: string | string[] }) => p.name.includes(`octotask-diy-${chatNumber}`));
 
         if (project) {
           // Fetch project details including deployments
@@ -135,7 +135,7 @@ export function VercelDeploymentLink() {
             href={deploymentUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-octo-elements-item-backgroundActive text-octo-elements-textSecondary hover:text-[#000000] z-50"
+            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-octotask-elements-item-backgroundActive text-octotask-elements-textSecondary hover:text-[#000000] z-50"
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -145,11 +145,11 @@ export function VercelDeploymentLink() {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
-            className="px-3 py-2 rounded bg-octo-elements-background-depth-3 text-octo-elements-textPrimary text-xs z-50"
+            className="px-3 py-2 rounded bg-octotask-elements-background-depth-3 text-octotask-elements-textPrimary text-xs z-50"
             sideOffset={5}
           >
             {deploymentUrl}
-            <Tooltip.Arrow className="fill-octo-elements-background-depth-3" />
+            <Tooltip.Arrow className="fill-octotask-elements-background-depth-3" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

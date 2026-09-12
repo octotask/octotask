@@ -4,12 +4,14 @@
  */
 import type { JSONValue, Message } from 'ai';
 import React, { type RefCallback, useEffect, useState } from 'react';
+import { ClientOnly } from 'remix-utils/client-only';
 import { Menu } from '~/components/sidebar/Menu.client';
 import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
-import { vault } from '~/lib/api/vault.client';
+import { getApiKeysFromCookies } from './APIKeyManager';
+import Cookies from 'js-cookie';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import styles from './BaseChat.module.scss';
 import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
@@ -31,7 +33,6 @@ import { ChatBox } from './ChatBox';
 import type { DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
 import LlmErrorAlert from './LLMApiAlert';
-import { OctoTaskLogo } from '~/components/header/OctoTaskLogo';
 
 const TEXTAREA_MIN_HEIGHT = 76;
 
@@ -80,6 +81,7 @@ interface BaseChatProps {
   selectedElement?: ElementInfo | null;
   setSelectedElement?: (element: ElementInfo | null) => void;
   addToolResult?: ({ toolCallId, result }: { toolCallId: string; result: any }) => void;
+  onWebSearchResult?: (result: string) => void;
 }
 
 export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
@@ -129,11 +131,12 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       addToolResult = () => {
         throw new Error('addToolResult not implemented');
       },
+      onWebSearchResult,
     },
     ref,
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
-    const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
+    const [apiKeys, setApiKeys] = useState<Record<string, string>>(getApiKeysFromCookies());
     const [modelList, setModelList] = useState<ModelInfo[]>([]);
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
@@ -200,26 +203,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
     useEffect(() => {
       if (typeof window !== 'undefined') {
-        // Load API keys from Vault
-        const loadKeys = async () => {
-          const keys: Record<string, string> = {};
+        let parsedApiKeys: Record<string, string> | undefined = {};
 
-          /*
-           * We need to iterate over known providers to fetch their keys
-           * Importing PROVIDER_LIST is required if not already imported,
-           * but providerList prop might be available or we can use the constant.
-           * BaseChat imports PROVIDER_LIST.
-           */
-          for (const p of PROVIDER_LIST) {
-            const key = await vault.getSecret(p.name);
-
-            if (key) {
-              keys[p.name] = key;
-            }
-          }
-          setApiKeys(keys);
-        };
-        loadKeys();
+        try {
+          parsedApiKeys = getApiKeysFromCookies();
+          setApiKeys(parsedApiKeys);
+        } catch (error) {
+          console.error('Error loading API keys from cookies:', error);
+          Cookies.remove('apiKeys');
+        }
 
         setIsModelLoading('all');
         fetch('/api/models')
@@ -240,7 +232,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const onApiKeysChange = async (providerName: string, apiKey: string) => {
       const newApiKeys = { ...apiKeys, [providerName]: apiKey };
       setApiKeys(newApiKeys);
-      await vault.saveSecret(providerName, apiKey);
+      Cookies.set('apiKeys', JSON.stringify(newApiKeys));
 
       setIsModelLoading(providerName);
 
@@ -355,20 +347,16 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         className={classNames(styles.BaseChat, 'relative flex h-full w-full overflow-hidden')}
         data-chat-visible={showChat}
       >
-        <Menu />
+        <ClientOnly>{() => <Menu />}</ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
-              <div
-                id="intro"
-                className="mt-[12vh] max-w-2xl mx-auto text-center px-4 lg:px-0 flex flex-col items-center"
-              >
-                <OctoTaskLogo size={80} textSize="text-6xl" className="mb-6 animate-zoom-in" />
-                <h1 className="text-4xl lg:text-7xl font-bold tracking-tight text-octo-elements-textPrimary mb-6 animate-fade-in animation-delay-300">
-                  Where ideas <span className="text-octo-elements-accent">begin</span>
+              <div id="intro" className="mt-[16vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
+                <h1 className="text-3xl lg:text-6xl font-bold text-octotask-elements-textPrimary mb-4 animate-fade-in">
+                  Where ideas begin
                 </h1>
-                <p className="text-lg lg:text-2xl font-light mb-10 text-octo-elements-textSecondary animate-fade-in animation-delay-600 max-w-lg">
-                  Unleash your creativity with the power of OctoTask.
+                <p className="text-md lg:text-xl mb-8 text-octotask-elements-textSecondary animate-fade-in animation-delay-200">
+                  Bring ideas to life in seconds or get help on existing projects.
                 </p>
               </div>
             )}
@@ -380,19 +368,23 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               initial="smooth"
             >
               <StickToBottom.Content className="flex flex-col gap-4 relative ">
-                {chatStarted ? (
-                  <Messages
-                    className="flex flex-col w-full flex-1 max-w-chat pb-4 mx-auto z-1"
-                    messages={messages}
-                    isStreaming={isStreaming}
-                    append={append}
-                    chatMode={chatMode}
-                    setChatMode={setChatMode}
-                    provider={provider}
-                    model={model}
-                    addToolResult={addToolResult}
-                  />
-                ) : null}
+                <ClientOnly>
+                  {() => {
+                    return chatStarted ? (
+                      <Messages
+                        className="flex flex-col w-full flex-1 max-w-chat pb-4 mx-auto z-1"
+                        messages={messages}
+                        isStreaming={isStreaming}
+                        append={append}
+                        chatMode={chatMode}
+                        setChatMode={setChatMode}
+                        provider={provider}
+                        model={model}
+                        addToolResult={addToolResult}
+                      />
+                    ) : null;
+                  }}
+                </ClientOnly>
                 <ScrollToBottom />
               </StickToBottom.Content>
               <div
@@ -475,6 +467,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   setDesignScheme={setDesignScheme}
                   selectedElement={selectedElement}
                   setSelectedElement={setSelectedElement}
+                  onWebSearchResult={onWebSearchResult}
                 />
               </div>
             </StickToBottom>
@@ -499,7 +492,11 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               </div>
             </div>
           </div>
-          <Workbench chatStarted={chatStarted} isStreaming={isStreaming} setSelectedElement={setSelectedElement} />
+          <ClientOnly>
+            {() => (
+              <Workbench chatStarted={chatStarted} isStreaming={isStreaming} setSelectedElement={setSelectedElement} />
+            )}
+          </ClientOnly>
         </div>
       </div>
     );
@@ -514,9 +511,9 @@ function ScrollToBottom() {
   return (
     !isAtBottom && (
       <>
-        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-octo-elements-background-depth-1 to-transparent h-20 z-10" />
+        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-octotask-elements-background-depth-1 to-transparent h-20 z-10" />
         <button
-          className="sticky z-50 bottom-0 left-0 right-0 text-4xl rounded-lg px-1.5 py-0.5 flex items-center justify-center mx-auto gap-2 bg-octo-elements-background-depth-2 border border-octo-elements-borderColor text-octo-elements-textPrimary text-sm"
+          className="sticky z-50 bottom-0 left-0 right-0 text-4xl rounded-lg px-1.5 py-0.5 flex items-center justify-center mx-auto gap-2 bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor text-octotask-elements-textPrimary text-sm"
           onClick={() => scrollToBottom()}
         >
           Go to last message

@@ -79,26 +79,26 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
 
   return (
     <>
-      <div className="artifact border border-octo-elements-borderColor flex flex-col overflow-hidden rounded-lg w-full transition-border duration-150">
+      <div className="artifact border border-octotask-elements-borderColor flex flex-col overflow-hidden rounded-lg w-full transition-border duration-150">
         <div className="flex">
           <button
-            className="flex items-stretch bg-octo-elements-artifacts-background hover:bg-octo-elements-artifacts-backgroundHover w-full overflow-hidden"
+            className="flex items-stretch bg-octotask-elements-artifacts-background hover:bg-octotask-elements-artifacts-backgroundHover w-full overflow-hidden"
             onClick={() => {
               const showWorkbench = workbenchStore.showWorkbench.get();
               workbenchStore.showWorkbench.set(!showWorkbench);
             }}
           >
             <div className="px-5 p-3.5 w-full text-left">
-              <div className="w-full text-octo-elements-textPrimary font-medium leading-5 text-sm">
+              <div className="w-full text-octotask-elements-textPrimary font-medium leading-5 text-sm">
                 {/* Use the dynamic title here */}
                 {dynamicTitle}
               </div>
-              <div className="w-full w-full text-octo-elements-textSecondary text-xs mt-0.5">
+              <div className="w-full w-full text-octotask-elements-textSecondary text-xs mt-0.5">
                 Click to open Workbench
               </div>
             </div>
           </button>
-          {artifact.type !== 'bundled' && <div className="bg-octo-elements-artifacts-borderColor w-[1px]" />}
+          {artifact.type !== 'bundled' && <div className="bg-octotask-elements-artifacts-borderColor w-[1px]" />}
           <AnimatePresence>
             {actions.length && artifact.type !== 'bundled' && (
               <motion.button
@@ -106,7 +106,7 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
                 animate={{ width: 'auto' }}
                 exit={{ width: 0 }}
                 transition={{ duration: 0.15, ease: cubicEasingFn }}
-                className="bg-octo-elements-artifacts-background hover:bg-octo-elements-artifacts-backgroundHover"
+                className="bg-octotask-elements-artifacts-background hover:bg-octotask-elements-artifacts-backgroundHover"
                 onClick={toggleActions}
               >
                 <div className="p-4">
@@ -117,7 +117,7 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
           </AnimatePresence>
         </div>
         {artifact.type === 'bundled' && (
-          <div className="flex items-center gap-1.5 p-5 bg-octo-elements-actions-background border-t border-octo-elements-artifacts-borderColor">
+          <div className="flex items-center gap-1.5 p-5 bg-octotask-elements-actions-background border-t border-octotask-elements-artifacts-borderColor">
             <div className={classNames('text-lg', getIconColor(allActionFinished ? 'complete' : 'running'))}>
               {allActionFinished ? (
                 <div className="i-ph:check"></div>
@@ -125,7 +125,7 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
                 <div className="i-svg-spinners:90-ring-with-bg"></div>
               )}
             </div>
-            <div className="text-octo-elements-textPrimary font-medium leading-5 text-sm">
+            <div className="text-octotask-elements-textPrimary font-medium leading-5 text-sm">
               {/* This status text remains the same */}
               {allActionFinished
                 ? artifact.id === 'restored-project-setup'
@@ -144,9 +144,9 @@ export const Artifact = memo(({ artifactId }: ArtifactProps) => {
               exit={{ height: '0px' }}
               transition={{ duration: 0.15 }}
             >
-              <div className="bg-octo-elements-artifacts-borderColor h-[1px]" />
+              <div className="bg-octotask-elements-artifacts-borderColor h-[1px]" />
 
-              <div className="p-5 text-left bg-octo-elements-actions-background">
+              <div className="p-5 text-left bg-octotask-elements-actions-background">
                 <ActionList actions={actions} />
               </div>
             </motion.div>
@@ -234,7 +234,7 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                   <div>
                     Create{' '}
                     <code
-                      className="bg-octo-elements-artifacts-inlineCode-background text-octo-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md text-octo-elements-item-contentAccent hover:underline cursor-pointer"
+                      className="bg-octotask-elements-artifacts-inlineCode-background text-octotask-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md text-octotask-elements-item-contentAccent hover:underline cursor-pointer"
                       onClick={() => openArtifactInWorkbench(action.filePath)}
                     >
                       {action.filePath}
@@ -275,19 +275,19 @@ const ActionList = memo(({ actions }: ActionListProps) => {
 function getIconColor(status: ActionState['status']) {
   switch (status) {
     case 'pending': {
-      return 'text-octo-elements-textTertiary';
+      return 'text-octotask-elements-textTertiary';
     }
     case 'running': {
-      return 'text-octo-elements-loader-progress';
+      return 'text-octotask-elements-loader-progress';
     }
     case 'complete': {
-      return 'text-octo-elements-icon-success';
+      return 'text-octotask-elements-icon-success';
     }
     case 'aborted': {
-      return 'text-octo-elements-textSecondary';
+      return 'text-octotask-elements-textSecondary';
     }
     case 'failed': {
-      return 'text-octo-elements-icon-error';
+      return 'text-octotask-elements-icon-error';
     }
     default: {
       return undefined;

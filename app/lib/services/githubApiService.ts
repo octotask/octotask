@@ -52,7 +52,7 @@ export class GitHubApiServiceClass {
       headers: {
         Accept: 'application/vnd.github.v3+json',
         Authorization: `${this._config.tokenType === 'classic' ? 'token' : 'Bearer'} ${this._config.token}`,
-        'User-Agent': 'octotask-app',
+        'User-Agent': 'Octotask',
         ...options.headers,
       },
       ...options,
@@ -138,7 +138,7 @@ export class GitHubApiServiceClass {
       headers: {
         Accept: 'application/vnd.github.v3+json',
         Authorization: `${this._config.tokenType === 'classic' ? 'token' : 'Bearer'} ${this._config.token}`,
-        'User-Agent': 'octotask-app',
+        'User-Agent': 'Octotask',
       },
     });
 
@@ -166,7 +166,7 @@ export class GitHubApiServiceClass {
       headers: {
         Accept: 'application/vnd.github.v3+json',
         Authorization: `${this._config.tokenType === 'classic' ? 'token' : 'Bearer'} ${this._config.token}`,
-        'User-Agent': 'octotask-app',
+        'User-Agent': 'Octotask',
       },
     });
 
@@ -194,7 +194,7 @@ export class GitHubApiServiceClass {
       headers: {
         Accept: 'application/vnd.github.v3+json',
         Authorization: `${this._config.tokenType === 'classic' ? 'token' : 'Bearer'} ${this._config.token}`,
-        'User-Agent': 'octotask-app',
+        'User-Agent': 'Octotask',
       },
     });
 
@@ -369,12 +369,12 @@ export class GitHubApiServiceClass {
         recentActivity:
           recentActivity.status === 'fulfilled'
             ? recentActivity.value.slice(0, 10).map((event: any) => ({
-                id: event.id,
-                type: event.type,
-                repo: { name: event.repo.name, url: event.repo.url },
-                created_at: event.created_at,
-                payload: event.payload || {},
-              }))
+              id: event.id,
+              type: event.type,
+              repo: { name: event.repo.name, url: event.repo.url },
+              created_at: event.created_at,
+              payload: event.payload || {},
+            }))
             : [],
         languages: stats.languages,
         totalGists: userData.public_gists || 0,

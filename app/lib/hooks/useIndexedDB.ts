@@ -13,7 +13,7 @@ export function useIndexedDB() {
       try {
         setIsLoading(true);
 
-        const request = indexedDB.open('octoDB', 1);
+        const request = indexedDB.open('octotaskDB', 1);
 
         request.onupgradeneeded = (event) => {
           const db = (event.target as IDBOpenDBRequest).result;

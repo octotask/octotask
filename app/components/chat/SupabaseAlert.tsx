@@ -99,7 +99,7 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className="max-w-chat rounded-lg border-l-2 border-l-[#098F5F] border border-octo-elements-borderColor bg-octo-elements-background-depth-2"
+        className="max-w-chat rounded-lg border-l-2 border-l-[#098F5F] border border-octotask-elements-borderColor bg-octotask-elements-background-depth-2"
       >
         {/* Header */}
         <div className="p-4 pb-2">
@@ -112,28 +112,28 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
         {/* SQL Content */}
         <div className="px-4">
           {!isConnected ? (
-            <div className="p-3 rounded-md bg-octo-elements-background-depth-3">
-              <span className="text-sm text-octo-elements-textPrimary">
+            <div className="p-3 rounded-md bg-octotask-elements-background-depth-3">
+              <span className="text-sm text-octotask-elements-textPrimary">
                 You must first connect to Supabase and select a project.
               </span>
             </div>
           ) : (
             <>
               <div
-                className="flex items-center p-2 rounded-md bg-octo-elements-background-depth-3 cursor-pointer"
+                className="flex items-center p-2 rounded-md bg-octotask-elements-background-depth-3 cursor-pointer"
                 onClick={() => setIsCollapsed(!isCollapsed)}
               >
-                <div className="i-ph:database text-octo-elements-textPrimary mr-2"></div>
-                <span className="text-sm text-octo-elements-textPrimary flex-grow">
+                <div className="i-ph:database text-octotask-elements-textPrimary mr-2"></div>
+                <span className="text-sm text-octotask-elements-textPrimary flex-grow">
                   {description || 'Create table and setup auth'}
                 </span>
                 <div
-                  className={`i-ph:caret-up text-octo-elements-textPrimary transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
+                  className={`i-ph:caret-up text-octotask-elements-textPrimary transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
                 ></div>
               </div>
 
               {!isCollapsed && content && (
-                <div className="mt-2 p-3 bg-octo-elements-background-depth-4 rounded-md overflow-auto max-h-60 font-mono text-xs text-octo-elements-textSecondary">
+                <div className="mt-2 p-3 bg-octotask-elements-background-depth-4 rounded-md overflow-auto max-h-60 font-mono text-xs text-octotask-elements-textSecondary">
                   <pre>{cleanSqlContent(content)}</pre>
                 </div>
               )}
@@ -143,7 +143,7 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
 
         {/* Message and Actions */}
         <div className="p-4">
-          <p className="text-sm text-octo-elements-textSecondary mb-4">{message}</p>
+          <p className="text-sm text-octotask-elements-textSecondary mb-4">{message}</p>
 
           <div className="flex gap-2">
             {showConnectButton ? (

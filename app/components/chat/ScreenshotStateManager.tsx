@@ -15,17 +15,17 @@ export const ScreenshotStateManager = ({
 }: ScreenshotStateManagerProps) => {
   useEffect(() => {
     if (setUploadedFiles && setImageDataList) {
-      (window as any).__OCTO_SET_UPLOADED_FILES__ = setUploadedFiles;
-      (window as any).__OCTO_SET_IMAGE_DATA_LIST__ = setImageDataList;
-      (window as any).__OCTO_UPLOADED_FILES__ = uploadedFiles;
-      (window as any).__OCTO_IMAGE_DATA_LIST__ = imageDataList;
+      (window as any).__OCTOTASK_SET_UPLOADED_FILES__ = setUploadedFiles;
+      (window as any).__OCTOTASK_SET_IMAGE_DATA_LIST__ = setImageDataList;
+      (window as any).__OCTOTASK_UPLOADED_FILES__ = uploadedFiles;
+      (window as any).__OCTOTASK_IMAGE_DATA_LIST__ = imageDataList;
     }
 
     return () => {
-      delete (window as any).__OCTO_SET_UPLOADED_FILES__;
-      delete (window as any).__OCTO_SET_IMAGE_DATA_LIST__;
-      delete (window as any).__OCTO_UPLOADED_FILES__;
-      delete (window as any).__OCTO_IMAGE_DATA_LIST__;
+      delete (window as any).__OCTOTASK_SET_UPLOADED_FILES__;
+      delete (window as any).__OCTOTASK_SET_IMAGE_DATA_LIST__;
+      delete (window as any).__OCTOTASK_UPLOADED_FILES__;
+      delete (window as any).__OCTOTASK_IMAGE_DATA_LIST__;
     };
   }, [setUploadedFiles, setImageDataList, uploadedFiles, imageDataList]);
 

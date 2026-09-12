@@ -46,7 +46,7 @@ export function FilterChip({ label, value, onRemove, active = false, icon, class
         'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all',
         active
           ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30'
-          : 'bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark',
+          : 'bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
         onRemove && 'pr-1',
         className,
       )}
@@ -63,7 +63,7 @@ export function FilterChip({ label, value, onRemove, active = false, icon, class
             className={
               active
                 ? 'text-purple-700 dark:text-purple-300 font-semibold'
-                : 'text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark'
+                : 'text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark'
             }
           >
             {value}
@@ -77,10 +77,10 @@ export function FilterChip({ label, value, onRemove, active = false, icon, class
           type="button"
           onClick={onRemove}
           className={classNames(
-            'ml-1 p-0.5 rounded-full hover:bg-octo-elements-background-depth-3 dark:hover:bg-octo-elements-background-depth-4 transition-colors',
+            'ml-1 p-0.5 rounded-full hover:bg-octotask-elements-background-depth-3 dark:hover:bg-octotask-elements-background-depth-4 transition-colors',
             active
               ? 'text-purple-600 dark:text-purple-400'
-              : 'text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark',
+              : 'text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark',
           )}
           aria-label={`Remove ${label} filter`}
         >

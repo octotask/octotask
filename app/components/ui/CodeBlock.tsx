@@ -39,24 +39,24 @@ export function CodeBlock({
   return (
     <div
       className={classNames(
-        'rounded-lg overflow-hidden border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark',
-        'bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3',
+        'rounded-lg overflow-hidden border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
+        'bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3',
         className,
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-octo-elements-background-depth-3 dark:bg-octo-elements-background-depth-4 border-b border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark">
+      <div className="flex items-center justify-between px-4 py-2 bg-octotask-elements-background-depth-3 dark:bg-octotask-elements-background-depth-4 border-b border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark">
         <div className="flex items-center gap-2">
           {filename && (
             <>
               <FileIcon filename={filename} size="sm" />
-              <span className="text-xs font-medium text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark">
+              <span className="text-xs font-medium text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark">
                 {filename}
               </span>
             </>
           )}
           {language && !filename && (
-            <span className="text-xs font-medium text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark uppercase">
+            <span className="text-xs font-medium text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark uppercase">
               {language}
             </span>
           )}
@@ -64,7 +64,7 @@ export function CodeBlock({
         <Tooltip content={copied ? 'Copied!' : 'Copy code'}>
           <motion.button
             onClick={handleCopy}
-            className="p-1.5 rounded-md text-octo-elements-textTertiary hover:text-octo-elements-textSecondary dark:text-octo-elements-textTertiary-dark dark:hover:text-octo-elements-textSecondary-dark hover:bg-octo-elements-background-depth-2 dark:hover:bg-octo-elements-background-depth-3 transition-colors"
+            className="p-1.5 rounded-md text-octotask-elements-textTertiary hover:text-octotask-elements-textSecondary dark:text-octotask-elements-textTertiary-dark dark:hover:text-octotask-elements-textSecondary-dark hover:bg-octotask-elements-background-depth-2 dark:hover:bg-octotask-elements-background-depth-3 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -82,15 +82,15 @@ export function CodeBlock({
                 key={index}
                 className={classNames(
                   highlightLines.includes(index + 1) ? 'bg-purple-500/10 dark:bg-purple-500/20' : '',
-                  'hover:bg-octo-elements-background-depth-3 dark:hover:bg-octo-elements-background-depth-4',
+                  'hover:bg-octotask-elements-background-depth-3 dark:hover:bg-octotask-elements-background-depth-4',
                 )}
               >
                 {showLineNumbers && (
-                  <td className="py-1 pl-4 pr-2 text-right select-none text-octo-elements-textTertiary dark:text-octo-elements-textTertiary-dark border-r border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark">
+                  <td className="py-1 pl-4 pr-2 text-right select-none text-octotask-elements-textTertiary dark:text-octotask-elements-textTertiary-dark border-r border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark">
                     <span className="inline-block min-w-[1.5rem] text-xs">{index + 1}</span>
                   </td>
                 )}
-                <td className="py-1 pl-4 pr-4 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark whitespace-pre">
+                <td className="py-1 pl-4 pr-4 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark whitespace-pre">
                   {line || ' '}
                 </td>
               </tr>

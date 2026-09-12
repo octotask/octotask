@@ -1,4 +1,7 @@
 export type DebugLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'none';
+import { Chalk } from 'chalk';
+
+const chalk = new Chalk({ level: 3 });
 
 type LoggerFunction = (...messages: any[]) => void;
 
@@ -11,8 +14,7 @@ interface Logger {
   setLevel: (level: DebugLevel) => void;
 }
 
-const env = import.meta.env || {};
-let currentLevel: DebugLevel = env.VITE_LOG_LEVEL || (env.DEV ? 'debug' : 'info');
+let currentLevel: DebugLevel = import.meta.env.VITE_LOG_LEVEL || (import.meta.env.DEV ? 'debug' : 'info');
 
 export const logger: Logger = {
   trace: (...messages: any[]) => logWithDebugCapture('trace', undefined, messages),
@@ -78,10 +80,10 @@ function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
     styles.push('', scopeStyles);
   }
 
-  let labelText = ` ${level.toUpperCase()} `;
+  let labelText = formatText(` ${level.toUpperCase()} `, labelTextColor, labelBackgroundColor);
 
   if (scope) {
-    labelText = `${labelText} ${scope}`;
+    labelText = `${labelText} ${formatText(` ${scope} `, '#FFFFFF', '77828D')}`;
   }
 
   if (typeof window !== 'undefined') {
@@ -89,6 +91,10 @@ function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
   } else {
     console.log(`${labelText}`, allMessages);
   }
+}
+
+function formatText(text: string, color: string, bg: string) {
+  return chalk.bgHex(bg)(chalk.hex(color)(text));
 }
 
 function getLabelStyles(color: string, textColor: string) {

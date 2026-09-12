@@ -2,28 +2,28 @@
 # These users/teams will automatically be requested for review when files are modified
 
 # Global ownership - repository maintainers
-* @octotask/maintainers
+* @octotask/octotask-maintainers
 
 # GitHub workflows and CI/CD configuration - require maintainer review
-/.github/ @octotask/maintainers
-/package.json @octotask/maintainers
-/pnpm-lock.yaml @octotask/maintainers
+/.github/ @octotask/octotask-maintainers
+/package.json @octotask/octotask-maintainers
+/pnpm-lock.yaml @octotask/octotask-maintainers
 
 # Security-sensitive configurations - require maintainer review
-/.env* @octotask/maintainers
-/wrangler.toml @octotask/maintainers  
-/Dockerfile @octotask/maintainers
-/docker-compose.yaml @octotask/maintainers
+/.env* @octotask/octotask-maintainers
+/wrangler.toml @octotask/octotask-maintainers
+/Dockerfile @octotask/octotask-maintainers
+/docker-compose.yaml @octotask/octotask-maintainers
 
 # Core application architecture - require maintainer review
-/app/lib/.server/ @octotask/maintainers
-/app/routes/api.* @octotask/maintainers
+/app/lib/.server/ @octotask/octotask-maintainers
+/app/routes/api.* @octotask/octotask-maintainers
 
 # Build and deployment configuration - require maintainer review
-/vite*.config.ts @octotask/maintainers
-/tsconfig.json @octotask/maintainers
-/uno.config.ts @octotask/maintainers
-/eslint.config.mjs @octotask/maintainers
+/vite*.config.ts @octotask/octotask-maintainers
+/tsconfig.json @octotask/octotask-maintainers
+/uno.config.ts @octotask/octotask-maintainers
+/eslint.config.mjs @octotask/octotask-maintainers
 
 # Documentation (optional review)
 /*.md

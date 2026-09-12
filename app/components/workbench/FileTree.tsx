@@ -216,7 +216,7 @@ function ContextMenuItem({ onSelect, children }: { onSelect?: () => void; childr
   return (
     <ContextMenu.Item
       onSelect={onSelect}
-      className="flex items-center gap-2 px-2 py-1.5 outline-0 text-sm text-octo-elements-textPrimary cursor-pointer ws-nowrap text-octo-elements-item-contentDefault hover:text-octo-elements-item-contentActive hover:bg-octo-elements-item-backgroundActive rounded-md"
+      className="flex items-center gap-2 px-2 py-1.5 outline-0 text-sm text-octotask-elements-textPrimary cursor-pointer ws-nowrap text-octotask-elements-item-contentDefault hover:text-octotask-elements-item-contentActive hover:bg-octotask-elements-item-backgroundActive rounded-md"
     >
       <span className="size-4 shrink-0"></span>
       <span>{children}</span>
@@ -256,14 +256,14 @@ function InlineInput({ depth, placeholder, initialValue = '', onSubmit, onCancel
 
   return (
     <div
-      className="flex items-center w-full px-2 bg-octo-elements-background-depth-4 border border-octo-elements-item-contentAccent py-0.5 text-octo-elements-textPrimary"
+      className="flex items-center w-full px-2 bg-octotask-elements-background-depth-4 border border-octotask-elements-item-contentAccent py-0.5 text-octotask-elements-textPrimary"
       style={{ paddingLeft: `${6 + depth * NODE_PADDING_LEFT}px` }}
     >
-      <div className="scale-120 shrink-0 i-ph:file-plus text-octo-elements-textTertiary" />
+      <div className="scale-120 shrink-0 i-ph:file-plus text-octotask-elements-textTertiary" />
       <input
         ref={inputRef}
         type="text"
-        className="ml-2 flex-1 bg-transparent border-none outline-none py-0.5 text-sm text-octo-elements-textPrimary placeholder:text-octo-elements-textTertiary min-w-0"
+        className="ml-2 flex-1 bg-transparent border-none outline-none py-0.5 text-sm text-octotask-elements-textPrimary placeholder:text-octotask-elements-textTertiary min-w-0"
         placeholder={placeholder}
         onKeyDown={handleKeyDown}
         onBlur={() => {
@@ -491,7 +491,7 @@ function FileContextMenu({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={classNames('relative', {
-              'bg-octo-elements-background-depth-2 border border-dashed border-octo-elements-item-contentAccent rounded-md':
+              'bg-octotask-elements-background-depth-2 border border-dashed border-octotask-elements-item-contentAccent rounded-md':
                 isDragging,
             })}
           >
@@ -501,9 +501,9 @@ function FileContextMenu({
         <ContextMenu.Portal>
           <ContextMenu.Content
             style={{ zIndex: 998 }}
-            className="border border-octo-elements-borderColor rounded-md z-context-menu bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-2 data-[state=open]:animate-in animate-duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-98 w-56"
+            className="border border-octotask-elements-borderColor rounded-md z-context-menu bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-2 data-[state=open]:animate-in animate-duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-98 w-56"
           >
-            <ContextMenu.Group className="p-1 border-b-px border-solid border-octo-elements-borderColor">
+            <ContextMenu.Group className="p-1 border-b-px border-solid border-octotask-elements-borderColor">
               <ContextMenuItem onSelect={() => setIsCreatingFile(true)}>
                 <div className="flex items-center gap-2">
                   <div className="i-ph:file-plus" />
@@ -522,7 +522,7 @@ function FileContextMenu({
               <ContextMenuItem onSelect={onCopyRelativePath}>Copy relative path</ContextMenuItem>
             </ContextMenu.Group>
             {/* Add lock/unlock options for files and folders */}
-            <ContextMenu.Group className="p-1 border-t-px border-solid border-octo-elements-borderColor">
+            <ContextMenu.Group className="p-1 border-t-px border-solid border-octotask-elements-borderColor">
               {!isFolder ? (
                 <>
                   <ContextMenuItem onSelect={handleLockFile}>
@@ -556,7 +556,7 @@ function FileContextMenu({
               )}
             </ContextMenu.Group>
             {/* Add delete option in a new group */}
-            <ContextMenu.Group className="p-1 border-t-px border-solid border-octo-elements-borderColor">
+            <ContextMenu.Group className="p-1 border-t-px border-solid border-octotask-elements-borderColor">
               <ContextMenuItem onSelect={handleDelete}>
                 <div className="flex items-center gap-2 text-red-500">
                   <div className="i-ph:trash" />
@@ -595,9 +595,9 @@ function Folder({ folder, collapsed, selected = false, onCopyPath, onCopyRelativ
     <FileContextMenu onCopyPath={onCopyPath} onCopyRelativePath={onCopyRelativePath} fullPath={folder.fullPath}>
       <NodeButton
         className={classNames('group', {
-          'bg-transparent text-octo-elements-item-contentDefault hover:text-octo-elements-item-contentActive hover:bg-octo-elements-item-backgroundActive':
+          'bg-transparent text-octotask-elements-item-contentDefault hover:text-octotask-elements-item-contentActive hover:bg-octotask-elements-item-backgroundActive':
             !selected,
-          'bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent': selected,
+          'bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent': selected,
         })}
         depth={folder.depth}
         iconClasses={classNames({
@@ -687,19 +687,19 @@ function File({
     <FileContextMenu onCopyPath={onCopyPath} onCopyRelativePath={onCopyRelativePath} fullPath={fullPath}>
       <NodeButton
         className={classNames('group', {
-          'bg-transparent hover:bg-octo-elements-item-backgroundActive text-octo-elements-item-contentDefault':
+          'bg-transparent hover:bg-octotask-elements-item-backgroundActive text-octotask-elements-item-contentDefault':
             !selected,
-          'bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent': selected,
+          'bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent': selected,
         })}
         depth={depth}
         iconClasses={classNames('i-ph:file-duotone scale-98', {
-          'group-hover:text-octo-elements-item-contentActive': !selected,
+          'group-hover:text-octotask-elements-item-contentActive': !selected,
         })}
         onClick={onClick}
       >
         <div
           className={classNames('flex items-center', {
-            'group-hover:text-octo-elements-item-contentActive': !selected,
+            'group-hover:text-octotask-elements-item-contentActive': !selected,
           })}
         >
           <div className="flex-1 truncate pr-2">{name}</div>

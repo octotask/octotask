@@ -14,7 +14,7 @@ export function NetlifyDeploymentLink() {
     }
   }, [connection.token, currentChatId]);
 
-  const deployedSite = connection.stats?.sites?.find((site) => site.name.includes(`octotask-${currentChatId}`));
+  const deployedSite = connection.stats?.sites?.find((site) => site.name.includes(`octotask-diy-${currentChatId}`));
 
   if (!deployedSite) {
     return null;
@@ -28,7 +28,7 @@ export function NetlifyDeploymentLink() {
             href={deployedSite.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-octo-elements-item-backgroundActive text-octo-elements-textSecondary hover:text-[#00AD9F] z-50"
+            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-octotask-elements-item-backgroundActive text-octotask-elements-textSecondary hover:text-[#00AD9F] z-50"
             onClick={(e) => {
               e.stopPropagation(); // This is to prevent click from bubbling up
             }}
@@ -38,11 +38,11 @@ export function NetlifyDeploymentLink() {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
-            className="px-3 py-2 rounded bg-octo-elements-background-depth-3 text-octo-elements-textPrimary text-xs z-50"
+            className="px-3 py-2 rounded bg-octotask-elements-background-depth-3 text-octotask-elements-textPrimary text-xs z-50"
             sideOffset={5}
           >
             {deployedSite.url}
-            <Tooltip.Arrow className="fill-octo-elements-background-depth-3" />
+            <Tooltip.Arrow className="fill-octotask-elements-background-depth-3" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

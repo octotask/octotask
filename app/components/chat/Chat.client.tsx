@@ -26,7 +26,7 @@ import { supabaseConnection } from '~/lib/stores/supabase';
 import { defaultDesignScheme, type DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
 import type { TextUIPart, FileUIPart, Attachment } from '@ai-sdk/ui-utils';
-import { mcpStore } from '~/lib/stores/mcp';
+import { useMCPStore } from '~/lib/stores/mcp';
 import type { LlmErrorAlertType } from '~/types/actions';
 
 const logger = createScopedLogger('Chat');
@@ -115,7 +115,7 @@ export const ChatImpl = memo(
     const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
     const [chatMode, setChatMode] = useState<'discuss' | 'build'>('build');
     const [selectedElement, setSelectedElement] = useState<ElementInfo | null>(null);
-    const { settings: mcpSettings } = useStore(mcpStore);
+    const mcpSettings = useMCPStore((state) => state.settings);
 
     const {
       messages,
@@ -403,7 +403,7 @@ export const ChatImpl = memo(
       if (selectedElement) {
         console.log('Selected Element:', selectedElement);
 
-        const elementInfo = `<div class=\"__octoSelectedElement__\" data-element='${JSON.stringify(selectedElement)}'>${JSON.stringify(`${selectedElement.displayText}`)}</div>`;
+        const elementInfo = `<div class=\"__octotaskSelectedElement__\" data-element='${JSON.stringify(selectedElement)}'>${JSON.stringify(`${selectedElement.displayText}`)}</div>`;
         finalMessageContent = messageContent + elementInfo;
       }
 
@@ -594,6 +594,20 @@ export const ChatImpl = memo(
       Cookies.set('selectedProvider', newProvider.name, { expires: 30 });
     };
 
+    const handleWebSearchResult = useCallback(
+      (result: string) => {
+        const currentInput = input || '';
+        const newInput = currentInput.length > 0 ? `${result}\n\n${currentInput}` : result;
+
+        // Update the input via the same mechanism as handleInputChange
+        const syntheticEvent = {
+          target: { value: newInput },
+        } as React.ChangeEvent<HTMLTextAreaElement>;
+        handleInputChange(syntheticEvent);
+      },
+      [input, handleInputChange],
+    );
+
     return (
       <BaseChat
         ref={animationScope}
@@ -664,6 +678,7 @@ export const ChatImpl = memo(
         selectedElement={selectedElement}
         setSelectedElement={setSelectedElement}
         addToolResult={addToolResult}
+        onWebSearchResult={handleWebSearchResult}
       />
     );
   },

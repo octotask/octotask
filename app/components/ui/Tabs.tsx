@@ -11,7 +11,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={classNames(
-      'inline-flex h-10 items-center justify-center rounded-md bg-octo-elements-background-depth-1 dark:bg-octo-elements-background-depth-3-dark p-1 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark',
+      'inline-flex h-10 items-center justify-center rounded-md bg-octotask-elements-background-depth-1 dark:bg-octotask-elements-background-depth-3-dark p-1 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
       className,
     )}
     {...props}
@@ -26,7 +26,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={classNames(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-octo-elements-background dark:ring-offset-octo-elements-background-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octo-elements-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-octo-elements-background-depth-0 dark:data-[state=active]:bg-octo-elements-background-depth-2-dark data-[state=active]:text-octo-elements-textPrimary dark:data-[state=active]:text-octo-elements-textPrimary-dark data-[state=active]:shadow-sm',
+      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-octotask-elements-background dark:ring-offset-octotask-elements-background-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octotask-elements-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-octotask-elements-background-depth-0 dark:data-[state=active]:bg-octotask-elements-background-depth-2-dark data-[state=active]:text-octotask-elements-textPrimary dark:data-[state=active]:text-octotask-elements-textPrimary-dark data-[state=active]:shadow-sm',
       className,
     )}
     {...props}
@@ -41,7 +41,7 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={classNames(
-      'mt-2 ring-offset-octo-elements-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octo-elements-ring focus-visible:ring-offset-2',
+      'mt-2 ring-offset-octotask-elements-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-octotask-elements-ring focus-visible:ring-offset-2',
       className,
     )}
     {...props}

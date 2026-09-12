@@ -1,27 +1,25 @@
-'use client';
-
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { classNames } from '~/utils/classNames';
 
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-octo-elements-ring focus:ring-offset-2',
+  'inline-flex items-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-octotask-elements-ring focus:ring-offset-2',
   {
     variants: {
       variant: {
         default:
-          'border-transparent bg-octo-elements-background text-octo-elements-textPrimary hover:bg-octo-elements-background/80',
+          'border-transparent bg-octotask-elements-background text-octotask-elements-textPrimary hover:bg-octotask-elements-background/80',
         secondary:
-          'border-transparent bg-octo-elements-background text-octo-elements-textSecondary hover:bg-octo-elements-background/80',
+          'border-transparent bg-octotask-elements-background text-octotask-elements-textSecondary hover:bg-octotask-elements-background/80',
         destructive: 'border-transparent bg-red-500/10 text-red-500 hover:bg-red-500/20',
-        outline: 'text-octo-elements-textPrimary',
+        outline: 'text-octotask-elements-textPrimary',
         primary: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
         success: 'bg-green-500/10 text-green-600 dark:text-green-400',
         warning: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
         danger: 'bg-red-500/10 text-red-600 dark:text-red-400',
         info: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
         subtle:
-          'border border-octo-elements-borderColor/30 dark:border-octo-elements-borderColor-dark/30 bg-white/50 dark:bg-octo-elements-background-depth-4/50 backdrop-blur-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark',
+          'border border-octotask-elements-borderColor/30 dark:border-octotask-elements-borderColor-dark/30 bg-white/50 dark:bg-octotask-elements-background-depth-4/50 backdrop-blur-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark',
       },
       size: {
         default: 'rounded-full px-2.5 py-0.5 text-xs font-semibold',

@@ -56,16 +56,16 @@ function GitHubStatsContent({
 }) {
   if (!stats) {
     return (
-      <div className="mt-6 border-t border-octo-elements-borderColor dark:border-octo-elements-borderColor pt-6">
+      <div className="mt-6 border-t border-octotask-elements-borderColor dark:border-octotask-elements-borderColor pt-6">
         <div className="flex items-center justify-center p-8">
           <div className="flex items-center gap-2">
             {isLoading ? (
               <>
                 <div className="i-ph:spinner-gap-bold animate-spin w-4 h-4" />
-                <span className="text-octo-elements-textSecondary">Loading GitHub stats...</span>
+                <span className="text-octotask-elements-textSecondary">Loading GitHub stats...</span>
               </>
             ) : (
-              <span className="text-octo-elements-textSecondary">No stats available</span>
+              <span className="text-octotask-elements-textSecondary">No stats available</span>
             )}
           </div>
         </div>
@@ -74,15 +74,15 @@ function GitHubStatsContent({
   }
 
   return (
-    <div className="mt-6 border-t border-octo-elements-borderColor dark:border-octo-elements-borderColor pt-6">
+    <div className="mt-6 border-t border-octotask-elements-borderColor dark:border-octotask-elements-borderColor pt-6">
       <Collapsible open={isExpanded} onOpenChange={onToggleExpanded}>
         <CollapsibleTrigger asChild>
-          <div className="flex items-center justify-between p-4 rounded-lg bg-octo-elements-background dark:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive/70 dark:hover:border-octo-elements-borderColorActive/70 transition-all duration-200">
+          <div className="flex items-center justify-between p-4 rounded-lg bg-octotask-elements-background dark:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive/70 dark:hover:border-octotask-elements-borderColorActive/70 transition-all duration-200">
             <div className="flex items-center gap-2">
-              <div className="i-ph:chart-bar w-4 h-4 text-octo-elements-item-contentAccent" />
-              <span className="text-sm font-medium text-octo-elements-textPrimary">
+              <div className="i-ph:chart-bar w-4 h-4 text-octotask-elements-item-contentAccent" />
+              <span className="text-sm font-medium text-octotask-elements-textPrimary">
                 GitHub Stats
-                {isStale && <span className="text-octo-elements-textTertiary ml-1">(Stale)</span>}
+                {isStale && <span className="text-octotask-elements-textTertiary ml-1">(Stale)</span>}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -110,7 +110,7 @@ function GitHubStatsContent({
               </Button>
               <div
                 className={classNames(
-                  'i-ph:caret-down w-4 h-4 transform transition-transform duration-200 text-octo-elements-textSecondary',
+                  'i-ph:caret-down w-4 h-4 transform transition-transform duration-200 text-octotask-elements-textSecondary',
                   isExpanded ? 'rotate-180' : '',
                 )}
               />
@@ -122,21 +122,21 @@ function GitHubStatsContent({
           <div className="space-y-4 mt-4">
             {/* Languages Section */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-octo-elements-textPrimary mb-3">Top Languages</h4>
+              <h4 className="text-sm font-medium text-octotask-elements-textPrimary mb-3">Top Languages</h4>
               {stats.mostUsedLanguages && stats.mostUsedLanguages.length > 0 ? (
                 <div className="space-y-3">
                   <div className="flex flex-wrap gap-2">
                     {stats.mostUsedLanguages.slice(0, 15).map(({ language, bytes, repos }) => (
                       <span
                         key={language}
-                        className="px-3 py-1 text-xs rounded-full bg-octo-elements-sidebar-buttonBackgroundDefault text-octo-elements-sidebar-buttonText"
+                        className="px-3 py-1 text-xs rounded-full bg-octotask-elements-sidebar-buttonBackgroundDefault text-octotask-elements-sidebar-buttonText"
                         title={`${language}: ${(bytes / 1024 / 1024).toFixed(2)}MB across ${repos} repos`}
                       >
                         {language} ({repos})
                       </span>
                     ))}
                   </div>
-                  <div className="text-xs text-octo-elements-textSecondary">
+                  <div className="text-xs text-octotask-elements-textSecondary">
                     Based on actual codebase size across repositories
                   </div>
                 </div>
@@ -148,7 +148,7 @@ function GitHubStatsContent({
                     .map(([language]) => (
                       <span
                         key={language}
-                        className="px-3 py-1 text-xs rounded-full bg-octo-elements-sidebar-buttonBackgroundDefault text-octo-elements-sidebar-buttonText"
+                        className="px-3 py-1 text-xs rounded-full bg-octotask-elements-sidebar-buttonBackgroundDefault text-octotask-elements-sidebar-buttonText"
                       >
                         {language}
                       </span>
@@ -158,70 +158,70 @@ function GitHubStatsContent({
             </div>
 
             {/* GitHub Overview Summary */}
-            <div className="mb-6 p-4 bg-octo-elements-background-depth-1 rounded-lg border border-octo-elements-borderColor">
-              <h4 className="text-sm font-medium text-octo-elements-textPrimary mb-3">GitHub Overview</h4>
+            <div className="mb-6 p-4 bg-octotask-elements-background-depth-1 rounded-lg border border-octotask-elements-borderColor">
+              <h4 className="text-sm font-medium text-octotask-elements-textPrimary mb-3">GitHub Overview</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-octo-elements-textPrimary">
+                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">
                     {(stats.publicRepos || 0) + (stats.privateRepos || 0)}
                   </div>
-                  <div className="text-xs text-octo-elements-textSecondary">Total Repositories</div>
+                  <div className="text-xs text-octotask-elements-textSecondary">Total Repositories</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-octo-elements-textPrimary">{stats.totalBranches || 0}</div>
-                  <div className="text-xs text-octo-elements-textSecondary">Total Branches</div>
+                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">{stats.totalBranches || 0}</div>
+                  <div className="text-xs text-octotask-elements-textSecondary">Total Branches</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-octo-elements-textPrimary">
+                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">
                     {stats.organizations?.length || 0}
                   </div>
-                  <div className="text-xs text-octo-elements-textSecondary">Organizations</div>
+                  <div className="text-xs text-octotask-elements-textSecondary">Organizations</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-octo-elements-textPrimary">
+                  <div className="text-2xl font-bold text-octotask-elements-textPrimary">
                     {Object.keys(stats.languages).length}
                   </div>
-                  <div className="text-xs text-octo-elements-textSecondary">Languages Used</div>
+                  <div className="text-xs text-octotask-elements-textSecondary">Languages Used</div>
                 </div>
               </div>
             </div>
 
             {/* Activity Summary */}
             <div className="mb-6">
-              <h5 className="text-sm font-medium text-octo-elements-textPrimary mb-2">Activity Summary</h5>
+              <h5 className="text-sm font-medium text-octotask-elements-textPrimary mb-2">Activity Summary</h5>
               <div className="grid grid-cols-4 gap-4">
                 {[
                   {
                     label: 'Total Branches',
                     value: stats.totalBranches || 0,
                     icon: 'i-ph:git-branch',
-                    iconColor: 'text-octo-elements-icon-info',
+                    iconColor: 'text-octotask-elements-icon-info',
                   },
                   {
                     label: 'Contributors',
                     value: stats.totalContributors || 0,
                     icon: 'i-ph:users',
-                    iconColor: 'text-octo-elements-icon-success',
+                    iconColor: 'text-octotask-elements-icon-success',
                   },
                   {
                     label: 'Issues',
                     value: stats.totalIssues || 0,
                     icon: 'i-ph:circle',
-                    iconColor: 'text-octo-elements-icon-warning',
+                    iconColor: 'text-octotask-elements-icon-warning',
                   },
                   {
                     label: 'Pull Requests',
                     value: stats.totalPullRequests || 0,
                     icon: 'i-ph:git-pull-request',
-                    iconColor: 'text-octo-elements-icon-accent',
+                    iconColor: 'text-octotask-elements-icon-accent',
                   },
                 ].map((stat, index) => (
                   <div
                     key={index}
-                    className="flex flex-col p-3 rounded-lg bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor"
+                    className="flex flex-col p-3 rounded-lg bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor"
                   >
-                    <span className="text-xs text-octo-elements-textSecondary">{stat.label}</span>
-                    <span className="text-lg font-medium text-octo-elements-textPrimary flex items-center gap-1">
+                    <span className="text-xs text-octotask-elements-textSecondary">{stat.label}</span>
+                    <span className="text-lg font-medium text-octotask-elements-textPrimary flex items-center gap-1">
                       <div className={`${stat.icon} w-4 h-4 ${stat.iconColor}`} />
                       {stat.value.toLocaleString()}
                     </span>
@@ -233,7 +233,7 @@ function GitHubStatsContent({
             {/* Organizations Section */}
             {stats.organizations && stats.organizations.length > 0 && (
               <div>
-                <h5 className="text-sm font-medium text-octo-elements-textPrimary mb-2">Organizations</h5>
+                <h5 className="text-sm font-medium text-octotask-elements-textPrimary mb-2">Organizations</h5>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {stats.organizations.map((org) => (
                     <a
@@ -241,23 +241,23 @@ function GitHubStatsContent({
                       href={org.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive dark:hover:border-octo-elements-borderColorActive transition-all duration-200"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive dark:hover:border-octotask-elements-borderColorActive transition-all duration-200"
                     >
                       <img
                         src={org.avatar_url}
                         alt={org.login}
-                        className="w-8 h-8 rounded-full border border-octo-elements-borderColor"
+                        className="w-8 h-8 rounded-full border border-octotask-elements-borderColor"
                       />
                       <div className="flex-1 min-w-0">
-                        <h6 className="text-sm font-medium text-octo-elements-textPrimary truncate">
+                        <h6 className="text-sm font-medium text-octotask-elements-textPrimary truncate">
                           {org.name || org.login}
                         </h6>
-                        <p className="text-xs text-octo-elements-textSecondary truncate">{org.login}</p>
+                        <p className="text-xs text-octotask-elements-textSecondary truncate">{org.login}</p>
                         {org.description && (
-                          <p className="text-xs text-octo-elements-textTertiary truncate">{org.description}</p>
+                          <p className="text-xs text-octotask-elements-textTertiary truncate">{org.description}</p>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-octo-elements-textSecondary">
+                      <div className="flex items-center gap-2 text-xs text-octotask-elements-textSecondary">
                         {org.public_repos && (
                           <span className="flex items-center gap-1">
                             <div className="i-ph:folder w-3 h-3" />
@@ -278,8 +278,8 @@ function GitHubStatsContent({
             )}
 
             {/* Last Updated */}
-            <div className="pt-2 border-t border-octo-elements-borderColor">
-              <span className="text-xs text-octo-elements-textSecondary">
+            <div className="pt-2 border-t border-octotask-elements-borderColor">
+              <span className="text-xs text-octotask-elements-textSecondary">
                 Last updated: {stats.lastUpdated ? new Date(stats.lastUpdated).toLocaleString() : 'Never'}
               </span>
             </div>

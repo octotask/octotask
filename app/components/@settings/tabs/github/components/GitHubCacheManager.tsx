@@ -224,14 +224,14 @@ export function GitHubCacheManager({ className = '', showStats = true }: GitHubC
   return (
     <div
       className={classNames(
-        'space-y-4 p-4 bg-octo-elements-background-depth-1 border border-octo-elements-borderColor rounded-lg',
+        'space-y-4 p-4 bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor rounded-lg',
         className,
       )}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Database className="w-4 h-4 text-octo-elements-item-contentAccent" />
-          <h3 className="text-sm font-medium text-octo-elements-textPrimary">GitHub Cache Management</h3>
+          <Database className="w-4 h-4 text-octotask-elements-item-contentAccent" />
+          <h3 className="text-sm font-medium text-octotask-elements-textPrimary">GitHub Cache Management</h3>
         </div>
 
         <div className="flex items-center gap-2">
@@ -243,38 +243,38 @@ export function GitHubCacheManager({ className = '', showStats = true }: GitHubC
 
       {showStats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-octo-elements-background-depth-2 p-3 rounded-lg">
+          <div className="bg-octotask-elements-background-depth-2 p-3 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
-              <HardDrive className="w-3 h-3 text-octo-elements-textSecondary" />
-              <span className="text-xs font-medium text-octo-elements-textSecondary">Total Size</span>
+              <HardDrive className="w-3 h-3 text-octotask-elements-textSecondary" />
+              <span className="text-xs font-medium text-octotask-elements-textSecondary">Total Size</span>
             </div>
-            <p className="text-sm font-semibold text-octo-elements-textPrimary">
+            <p className="text-sm font-semibold text-octotask-elements-textPrimary">
               {CacheManagerService.formatSize(cacheStats.totalSize)}
             </p>
           </div>
 
-          <div className="bg-octo-elements-background-depth-2 p-3 rounded-lg">
+          <div className="bg-octotask-elements-background-depth-2 p-3 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
-              <Database className="w-3 h-3 text-octo-elements-textSecondary" />
-              <span className="text-xs font-medium text-octo-elements-textSecondary">Entries</span>
+              <Database className="w-3 h-3 text-octotask-elements-textSecondary" />
+              <span className="text-xs font-medium text-octotask-elements-textSecondary">Entries</span>
             </div>
-            <p className="text-sm font-semibold text-octo-elements-textPrimary">{cacheStats.totalEntries}</p>
+            <p className="text-sm font-semibold text-octotask-elements-textPrimary">{cacheStats.totalEntries}</p>
           </div>
 
-          <div className="bg-octo-elements-background-depth-2 p-3 rounded-lg">
+          <div className="bg-octotask-elements-background-depth-2 p-3 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
-              <Clock className="w-3 h-3 text-octo-elements-textSecondary" />
-              <span className="text-xs font-medium text-octo-elements-textSecondary">Oldest</span>
+              <Clock className="w-3 h-3 text-octotask-elements-textSecondary" />
+              <span className="text-xs font-medium text-octotask-elements-textSecondary">Oldest</span>
             </div>
-            <p className="text-xs text-octo-elements-textSecondary">
+            <p className="text-xs text-octotask-elements-textSecondary">
               {cacheStats.oldestEntry ? new Date(cacheStats.oldestEntry).toLocaleDateString() : 'N/A'}
             </p>
           </div>
 
-          <div className="bg-octo-elements-background-depth-2 p-3 rounded-lg">
+          <div className="bg-octotask-elements-background-depth-2 p-3 rounded-lg">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle className="w-3 h-3 text-octo-elements-textSecondary" />
-              <span className="text-xs font-medium text-octo-elements-textSecondary">Status</span>
+              <CheckCircle className="w-3 h-3 text-octotask-elements-textSecondary" />
+              <span className="text-xs font-medium text-octotask-elements-textSecondary">Status</span>
             </div>
             <p className="text-xs text-green-600 dark:text-green-400">
               {cacheStats.totalEntries > 0 ? 'Active' : 'Empty'}
@@ -285,7 +285,7 @@ export function GitHubCacheManager({ className = '', showStats = true }: GitHubC
 
       {cacheEntries.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-xs font-medium text-octo-elements-textSecondary">
+          <h4 className="text-xs font-medium text-octotask-elements-textSecondary">
             Cache Entries ({cacheEntries.length})
           </h4>
 
@@ -293,13 +293,13 @@ export function GitHubCacheManager({ className = '', showStats = true }: GitHubC
             {cacheEntries.map((entry) => (
               <div
                 key={entry.key}
-                className="flex items-center justify-between p-2 bg-octo-elements-background-depth-2 rounded border border-octo-elements-borderColor"
+                className="flex items-center justify-between p-2 bg-octotask-elements-background-depth-2 rounded border border-octotask-elements-borderColor"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-octo-elements-textPrimary truncate">
+                  <p className="text-xs font-medium text-octotask-elements-textPrimary truncate">
                     {entry.key.replace('github_', '')}
                   </p>
-                  <p className="text-xs text-octo-elements-textSecondary">
+                  <p className="text-xs text-octotask-elements-textSecondary">
                     {CacheManagerService.formatSize(entry.size)} • {new Date(entry.lastAccessed).toLocaleString()}
                   </p>
                 </div>
@@ -319,7 +319,7 @@ export function GitHubCacheManager({ className = '', showStats = true }: GitHubC
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2 pt-2 border-t border-octo-elements-borderColor">
+      <div className="flex flex-wrap gap-2 pt-2 border-t border-octotask-elements-borderColor">
         <Button
           variant="outline"
           size="sm"

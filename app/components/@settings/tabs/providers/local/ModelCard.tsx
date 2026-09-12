@@ -14,12 +14,12 @@ interface ModelCardProps {
 
 function ModelCard({ model, onUpdate, onDelete }: ModelCardProps) {
   return (
-    <Card className="bg-octo-elements-background-depth-3 hover:bg-octo-elements-background-depth-4 transition-all duration-200 shadow-sm hover:shadow-md border border-octo-elements-borderColor hover:border-purple-500/20">
+    <Card className="bg-octotask-elements-background-depth-3 hover:bg-octotask-elements-background-depth-4 transition-all duration-200 shadow-sm hover:shadow-md border border-octotask-elements-borderColor hover:border-purple-500/20">
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <h4 className="text-sm font-medium text-octo-elements-textPrimary font-mono">{model.name}</h4>
+              <h4 className="text-sm font-medium text-octotask-elements-textPrimary font-mono">{model.name}</h4>
               {model.status && model.status !== 'idle' && (
                 <span
                   className={classNames('px-2 py-0.5 rounded-full text-xs font-medium', {
@@ -34,7 +34,7 @@ function ModelCard({ model, onUpdate, onDelete }: ModelCardProps) {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-4 text-xs text-octo-elements-textSecondary">
+            <div className="flex items-center gap-4 text-xs text-octotask-elements-textSecondary">
               <div className="flex items-center gap-1">
                 <Code className="w-3 h-3" />
                 <span>{model.digest.substring(0, 8)}</span>
@@ -91,7 +91,7 @@ function ModelCard({ model, onUpdate, onDelete }: ModelCardProps) {
         </div>
         {model.progress && (
           <div className="mt-3 space-y-2">
-            <div className="flex justify-between text-xs text-octo-elements-textSecondary">
+            <div className="flex justify-between text-xs text-octotask-elements-textSecondary">
               <span>{model.progress.status}</span>
               <span>{Math.round((model.progress.current / model.progress.total) * 100)}%</span>
             </div>

@@ -43,22 +43,22 @@ export class GitHubErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="flex flex-col items-center justify-center p-8 text-center space-y-4 bg-octo-elements-background-depth-1 border border-octo-elements-borderColor rounded-lg">
+        <div className="flex flex-col items-center justify-center p-8 text-center space-y-4 bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor rounded-lg">
           <div className="w-12 h-12 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
             <AlertTriangle className="w-6 h-6 text-red-500" />
           </div>
 
           <div>
-            <h3 className="text-lg font-medium text-octo-elements-textPrimary mb-2">GitHub Integration Error</h3>
-            <p className="text-sm text-octo-elements-textSecondary mb-4 max-w-md">
+            <h3 className="text-lg font-medium text-octotask-elements-textPrimary mb-2">GitHub Integration Error</h3>
+            <p className="text-sm text-octotask-elements-textSecondary mb-4 max-w-md">
               Something went wrong while loading GitHub data. This could be due to network issues, API limits, or a
               temporary problem.
             </p>
 
             {this.state.error && (
-              <details className="text-xs text-octo-elements-textTertiary mb-4">
-                <summary className="cursor-pointer hover:text-octo-elements-textSecondary">Show error details</summary>
-                <pre className="mt-2 p-2 bg-octo-elements-background-depth-2 rounded text-left overflow-auto">
+              <details className="text-xs text-octotask-elements-textTertiary mb-4">
+                <summary className="cursor-pointer hover:text-octotask-elements-textSecondary">Show error details</summary>
+                <pre className="mt-2 p-2 bg-octotask-elements-background-depth-2 rounded text-left overflow-auto">
                   {this.state.error.message}
                 </pre>
               </details>

@@ -3,7 +3,7 @@ import { createScopedLogger } from '~/utils/logger';
 const logger = createScopedLogger('LockedFiles');
 
 // Key for storing locked files in localStorage
-export const LOCKED_FILES_KEY = 'octo.lockedFiles';
+export const LOCKED_FILES_KEY = 'octotask.lockedFiles';
 
 export interface LockedItem {
   chatId: string; // Chat ID to scope locks to a specific project

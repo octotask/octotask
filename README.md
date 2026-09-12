@@ -1,18 +1,4 @@
-# OctoTask
-
-<div align="center">
-  <img src="./public/logo.svg" alt="OctoTask Logo" width="600" />
-  <p align="center">
-    <strong>The Elite Open-Source AI Full-Stack Web Development Platform.</strong>
-  </p>
-  
-  <p align="center">
-    <a href="https://github.com/octotask/octotask/tree/stable"><img src="https://img.shields.io/badge/branch-stable-green?style=flat-square" alt="Stable Branch"></a>
-    <a href="https://github.com/octotask/octotask/tree/main"><img src="https://img.shields.io/badge/branch-main-blue?style=flat-square" alt="Main Branch"></a>
-    <a href="https://github.com/octotask/octotask/releases"><img src="https://img.shields.io/github/v/release/octotask/octotask?style=flat-square" alt="Latest Release"></a>
-    <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
-  </p>
-</div>
+# octotask.diy
 
 Welcome to **OctoTask**, the definitive open-source platform for AI-assisted high-performance development. Engineered for professionals and built for the community, OctoTask empowers you to harness the world's most sophisticated LLMs to architect, deploy, and scale complex web applications directly within your browser.
 
@@ -74,32 +60,3 @@ Run OctoTask in a standardized, isolated environment:
 ```bash
 docker compose --profile production up -d
 ```
-
-## 🌿 Branching Strategy
-
-OctoTask uses a Git Flow-inspired branching model:
-
-- **`stable`**: Production-ready releases (protected)
-- **`main`**: Active development (protected)
-- **`feature/*`**: New features
-- **`bugfix/*`**: Bug fixes
-- **`hotfix/*`**: Critical production fixes
-
-For detailed branching guidelines, see [BRANCHING.md](./BRANCHING.md).
-
-## 🤝 Join the Ecosystem
-We are a community driven by innovation. Your contributions keep OctoTask at the cutting edge.
-- **Discord**: [KhulnaSoft Community](https://discord.gg/khulnasoft)
-- **Think Tank**: [oTTomator Discussion Board](https://thinktank.ottomator.ai)
-- **AI Expert**: [OctoTask Studio](https://studio.ottomator.ai/)
-
-## 📄 Licensing & Terms
-Distributed under the **MIT License**.
-
-> [!IMPORTANT]
-> Use of WebContainer API for high-scale commercial operations requires a [commercial license](https://webcontainers.io/enterprise).
-
------
-<div align="center">
-  Crafted with passion by <a href="https://khulnasoft.com">KhulnaSoft</a> and our Incredible Community.
-</div>

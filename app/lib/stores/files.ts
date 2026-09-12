@@ -1,6 +1,7 @@
 import type { PathWatcherEvent, WebContainer } from '@webcontainer/api';
+import { getEncoding } from 'istextorbinary';
 import { map, type MapStore } from 'nanostores';
-import { Buffer } from 'buffer/';
+import { Buffer } from 'node:buffer';
 import { path } from '~/utils/path';
 import { bufferWatchEvents } from '~/utils/buffer';
 import { WORK_DIR } from '~/utils/constants';
@@ -78,7 +79,7 @@ export class FilesStore {
     // Load deleted paths from localStorage if available
     try {
       if (typeof localStorage !== 'undefined') {
-        const deletedPathsJson = localStorage.getItem('octo-deleted-paths');
+        const deletedPathsJson = localStorage.getItem('octotask-deleted-paths');
 
         if (deletedPathsJson) {
           const deletedPaths = JSON.parse(deletedPathsJson);
@@ -923,7 +924,7 @@ export class FilesStore {
   #persistDeletedPaths() {
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('octo-deleted-paths', JSON.stringify([...this.#deletedPaths]));
+        localStorage.setItem('octotask-deleted-paths', JSON.stringify([...this.#deletedPaths]));
       }
     } catch (error) {
       logger.error('Failed to persist deleted paths to localStorage', error);
@@ -936,14 +937,15 @@ function isBinaryFile(buffer: Uint8Array | undefined) {
     return false;
   }
 
-  // A simple heuristic to detect binary files is to check for null bytes.
-  const sample = buffer.slice(0, 100);
+  return getEncoding(convertToBuffer(buffer), { chunkLength: 100 }) === 'binary';
+}
 
-  for (let i = 0; i < sample.length; i++) {
-    if (sample[i] === 0) {
-      return true;
-    }
-  }
-
-  return false;
+/**
+ * Converts a `Uint8Array` into a Node.js `Buffer` by copying the prototype.
+ * The goal is to  avoid expensive copies. It does create a new typed array
+ * but that's generally cheap as long as it uses the same underlying
+ * array buffer.
+ */
+function convertToBuffer(view: Uint8Array): Buffer {
+  return Buffer.from(view.buffer, view.byteOffset, view.byteLength);
 }

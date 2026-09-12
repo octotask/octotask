@@ -90,12 +90,12 @@ export function extractRelativePath(filePath: string) {
  * Example:
  *
  * ```html
- * <octo_file_modifications>
+ * <octotask_file_modifications>
  * <diff path="/home/project/index.js">
  * - console.log('Hello, World!');
- * + console.log('Hello, Octo!');
+ * + console.log('Hello, Octotask!');
  * </diff>
- * </octo_file_modifications>
+ * </octotask_file_modifications>
  * ```
  */
 export function fileModificationsToHTML(modifications: FileModifications) {

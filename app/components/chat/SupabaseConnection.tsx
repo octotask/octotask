@@ -77,12 +77,12 @@ export function SupabaseConnection() {
 
   return (
     <div className="relative">
-      <div className="flex border border-octo-elements-borderColor rounded-md overflow-hidden mr-2 text-sm">
+      <div className="flex border border-octotask-elements-borderColor rounded-md overflow-hidden mr-2 text-sm">
         <Button
           active
           disabled={connecting}
           onClick={() => setIsDialogOpen(!isDialogOpen)}
-          className="hover:bg-octo-elements-item-backgroundActive !text-white flex items-center gap-2"
+          className="hover:bg-octotask-elements-item-backgroundActive !text-white flex items-center gap-2"
         >
           <img
             className="w-4 h-4"
@@ -114,7 +114,7 @@ export function SupabaseConnection() {
                 </DialogTitle>
 
                 <div>
-                  <label className="block text-sm text-octo-elements-textSecondary mb-2">Access Token</label>
+                  <label className="block text-sm text-octotask-elements-textSecondary mb-2">Access Token</label>
                   <input
                     type="password"
                     value={supabaseConn.token}
@@ -125,12 +125,12 @@ export function SupabaseConnection() {
                       'w-full px-3 py-2 rounded-lg text-sm',
                       'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
                       'border border-[#E5E5E5] dark:border-[#333333]',
-                      'text-octo-elements-textPrimary placeholder-octo-elements-textTertiary',
+                      'text-octotask-elements-textPrimary placeholder-octotask-elements-textTertiary',
                       'focus:outline-none focus:ring-1 focus:ring-[#3ECF8E]',
                       'disabled:opacity-50',
                     )}
                   />
-                  <div className="mt-2 text-sm text-octo-elements-textSecondary">
+                  <div className="mt-2 text-sm text-octotask-elements-textSecondary">
                     <a
                       href="https://app.supabase.com/account/tokens"
                       target="_blank"
@@ -188,13 +188,13 @@ export function SupabaseConnection() {
 
                 <div className="flex items-center gap-4 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg">
                   <div>
-                    <h4 className="text-sm font-medium text-octo-elements-textPrimary">{supabaseConn.user?.email}</h4>
-                    <p className="text-xs text-octo-elements-textSecondary">Role: {supabaseConn.user?.role}</p>
+                    <h4 className="text-sm font-medium text-octotask-elements-textPrimary">{supabaseConn.user?.email}</h4>
+                    <p className="text-xs text-octotask-elements-textSecondary">Role: {supabaseConn.user?.role}</p>
                   </div>
                 </div>
 
                 {fetchingStats ? (
-                  <div className="flex items-center gap-2 text-sm text-octo-elements-textSecondary">
+                  <div className="flex items-center gap-2 text-sm text-octotask-elements-textSecondary">
                     <div className="i-ph:spinner-gap w-4 h-4 animate-spin" />
                     Fetching projects...
                   </div>
@@ -203,7 +203,7 @@ export function SupabaseConnection() {
                     <div className="flex items-center justify-between mb-2">
                       <button
                         onClick={() => setIsProjectsExpanded(!isProjectsExpanded)}
-                        className="bg-transparent text-left text-sm font-medium text-octo-elements-textPrimary flex items-center gap-2"
+                        className="bg-transparent text-left text-sm font-medium text-octotask-elements-textPrimary flex items-center gap-2"
                       >
                         <div className="i-ph:database w-4 h-4" />
                         Your Projects ({supabaseConn.stats?.totalProjects || 0})
@@ -217,7 +217,7 @@ export function SupabaseConnection() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => fetchSupabaseStats(supabaseConn.token)}
-                          className="px-2 py-1 rounded-md text-xs bg-[#F0F0F0] dark:bg-[#252525] text-octo-elements-textSecondary hover:bg-[#E5E5E5] dark:hover:bg-[#333333] flex items-center gap-1"
+                          className="px-2 py-1 rounded-md text-xs bg-[#F0F0F0] dark:bg-[#252525] text-octotask-elements-textSecondary hover:bg-[#E5E5E5] dark:hover:bg-[#333333] flex items-center gap-1"
                           title="Refresh projects list"
                         >
                           <div className="i-ph:arrows-clockwise w-3 h-3" />
@@ -236,7 +236,7 @@ export function SupabaseConnection() {
                     {isProjectsExpanded && (
                       <>
                         {!supabaseConn.selectedProjectId && (
-                          <div className="mb-2 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg text-sm text-octo-elements-textSecondary">
+                          <div className="mb-2 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg text-sm text-octotask-elements-textSecondary">
                             Select a project or create a new one for this chat
                           </div>
                         )}
@@ -250,11 +250,11 @@ export function SupabaseConnection() {
                               >
                                 <div className="flex items-center justify-between">
                                   <div>
-                                    <h5 className="text-sm font-medium text-octo-elements-textPrimary flex items-center gap-1">
+                                    <h5 className="text-sm font-medium text-octotask-elements-textPrimary flex items-center gap-1">
                                       <div className="i-ph:database w-3 h-3 text-[#3ECF8E]" />
                                       {project.name}
                                     </h5>
-                                    <div className="text-xs text-octo-elements-textSecondary mt-1">
+                                    <div className="text-xs text-octotask-elements-textSecondary mt-1">
                                       {project.region}
                                     </div>
                                   </div>
@@ -264,7 +264,7 @@ export function SupabaseConnection() {
                                       'px-3 py-1 rounded-md text-xs',
                                       supabaseConn.selectedProjectId === project.id
                                         ? 'bg-[#3ECF8E] text-white'
-                                        : 'bg-[#F0F0F0] dark:bg-[#252525] text-octo-elements-textSecondary hover:bg-[#3ECF8E] hover:text-white',
+                                        : 'bg-[#F0F0F0] dark:bg-[#252525] text-octotask-elements-textSecondary hover:bg-[#3ECF8E] hover:text-white',
                                     )}
                                   >
                                     {supabaseConn.selectedProjectId === project.id ? (
@@ -281,7 +281,7 @@ export function SupabaseConnection() {
                             ))}
                           </div>
                         ) : (
-                          <div className="text-sm text-octo-elements-textSecondary flex items-center gap-2">
+                          <div className="text-sm text-octotask-elements-textSecondary flex items-center gap-2">
                             <div className="i-ph:info w-4 h-4" />
                             No projects found
                           </div>
@@ -323,10 +323,10 @@ function Button({ active = false, disabled = false, children, onClick, className
       className={classNames(
         'flex items-center p-1.5',
         {
-          'bg-octo-elements-item-backgroundDefault hover:bg-octo-elements-item-backgroundActive text-octo-elements-textTertiary hover:text-octo-elements-textPrimary':
+          'bg-octotask-elements-item-backgroundDefault hover:bg-octotask-elements-item-backgroundActive text-octotask-elements-textTertiary hover:text-octotask-elements-textPrimary':
             !active,
-          'bg-octo-elements-item-backgroundDefault text-octo-elements-item-contentAccent': active && !disabled,
-          'bg-octo-elements-item-backgroundDefault text-alpha-gray-20 dark:text-alpha-white-20 cursor-not-allowed':
+          'bg-octotask-elements-item-backgroundDefault text-octotask-elements-item-contentAccent': active && !disabled,
+          'bg-octotask-elements-item-backgroundDefault text-alpha-gray-20 dark:text-alpha-white-20 cursor-not-allowed':
             disabled,
         },
         className,

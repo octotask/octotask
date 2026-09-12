@@ -47,10 +47,10 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
             className="w-[90vw] md:w-[500px]"
           >
             <Dialog.Content
-              className="bg-white dark:bg-octo-elements-background-depth-1 rounded-lg p-6 border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark shadow-xl"
+              className="bg-white dark:bg-octotask-elements-background-depth-1 rounded-lg p-6 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark shadow-xl"
               aria-describedby="gitlab-auth-description"
             >
-              <Dialog.Title className="text-lg font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark mb-4">
+              <Dialog.Title className="text-lg font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark mb-4">
                 Connect to GitLab
               </Dialog.Title>
 
@@ -64,12 +64,12 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-base font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark">
+                  <h3 className="text-base font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark">
                     GitLab Connection
                   </h3>
                   <p
                     id="gitlab-auth-description"
-                    className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark"
+                    className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark"
                   >
                     Connect your GitLab account to deploy your projects
                   </p>
@@ -78,7 +78,7 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
 
               <form onSubmit={handleConnect} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark mb-2">
+                  <label className="block text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark mb-2">
                     GitLab URL
                   </label>
                   <input
@@ -89,10 +89,10 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
                     placeholder="https://gitlab.com"
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
-                      'bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3',
-                      'border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark',
-                      'text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark',
-                      'placeholder-octo-elements-textTertiary dark:placeholder-octo-elements-textTertiary-dark',
+                      'bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3',
+                      'border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
+                      'text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark',
+                      'placeholder-octotask-elements-textTertiary dark:placeholder-octotask-elements-textTertiary-dark',
                       'focus:outline-none focus:ring-2 focus:ring-orange-500',
                       'disabled:opacity-50 disabled:cursor-not-allowed',
                     )}
@@ -100,7 +100,7 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark mb-2">
+                  <label className="block text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark mb-2">
                     Access Token
                   </label>
                   <input
@@ -111,16 +111,16 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
                     placeholder="Enter your GitLab access token"
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
-                      'bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3',
-                      'border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark',
-                      'text-octo-elements-textPrimary dark:text-octo-elements-textPrimary-dark',
-                      'placeholder-octo-elements-textTertiary dark:placeholder-octo-elements-textTertiary-dark',
+                      'bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3',
+                      'border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark',
+                      'text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary-dark',
+                      'placeholder-octotask-elements-textTertiary dark:placeholder-octotask-elements-textTertiary-dark',
                       'focus:outline-none focus:ring-2 focus:ring-orange-500',
                       'disabled:opacity-50 disabled:cursor-not-allowed',
                     )}
                     required
                   />
-                  <div className="mt-2 text-xs text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark">
+                  <div className="mt-2 text-xs text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark">
                     <a
                       href={`${gitlabUrl}/-/user_settings/personal_access_tokens`}
                       target="_blank"
@@ -145,7 +145,7 @@ export function GitLabAuthDialog({ isOpen, onClose }: GitLabAuthDialogProps) {
                   <motion.button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 rounded-lg bg-octo-elements-background-depth-2 dark:bg-octo-elements-background-depth-3 text-octo-elements-textSecondary dark:text-octo-elements-textSecondary-dark hover:bg-octo-elements-background-depth-3 dark:hover:bg-octo-elements-background-depth-4 text-sm border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark"
+                    className="px-4 py-2 rounded-lg bg-octotask-elements-background-depth-2 dark:bg-octotask-elements-background-depth-3 text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary-dark hover:bg-octotask-elements-background-depth-3 dark:hover:bg-octotask-elements-background-depth-4 text-sm border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={isConnecting}

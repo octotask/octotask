@@ -18,7 +18,7 @@ export const SpeechRecognitionButton = ({
       title={isListening ? 'Stop listening' : 'Start speech recognition'}
       disabled={disabled}
       className={classNames('transition-all', {
-        'text-octo-elements-item-contentAccent': isListening,
+        'text-octotask-elements-item-contentAccent': isListening,
       })}
       onClick={isListening ? onStop : onStart}
     >

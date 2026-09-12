@@ -65,7 +65,7 @@ export function useGit() {
       const headers: {
         [x: string]: string;
       } = {
-        'User-Agent': 'octotask-app',
+        'User-Agent': 'octotask',
       };
 
       const auth = lookupSavedPassword(url);

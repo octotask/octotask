@@ -72,7 +72,7 @@ export function GradientCard({
         'p-5 rounded-xl bg-gradient-to-br',
         gradientClass,
         borderEffect
-          ? 'border border-octo-elements-borderColor dark:border-octo-elements-borderColor-dark hover:border-purple-500/40'
+          ? 'border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor-dark hover:border-purple-500/40'
           : '',
         'transition-all duration-300 shadow-sm',
         hoverEffect ? 'hover:shadow-md' : '',

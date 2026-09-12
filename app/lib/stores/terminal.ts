@@ -1,13 +1,13 @@
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom, type WritableAtom } from 'nanostores';
 import type { ITerminal } from '~/types/terminal';
-import { newOctoShellProcess, newShellProcess } from '~/utils/shell';
+import { newOctotaskShellProcess, newShellProcess } from '~/utils/shell';
 import { coloredText } from '~/utils/terminal';
 
 export class TerminalStore {
   #webcontainer: Promise<WebContainer>;
   #terminals: Array<{ terminal: ITerminal; process: WebContainerProcess }> = [];
-  #octoTerminal = newOctoShellProcess();
+  #octotaskTerminal = newOctotaskShellProcess();
 
   showTerminal: WritableAtom<boolean> = import.meta.hot?.data.showTerminal ?? atom(true);
 
@@ -18,19 +18,19 @@ export class TerminalStore {
       import.meta.hot.data.showTerminal = this.showTerminal;
     }
   }
-  get octoTerminal() {
-    return this.#octoTerminal;
+  get octotaskTerminal() {
+    return this.#octotaskTerminal;
   }
 
   toggleTerminal(value?: boolean) {
     this.showTerminal.set(value !== undefined ? value : !this.showTerminal.get());
   }
-  async attachOctoTerminal(terminal: ITerminal) {
+  async attachOctotaskTerminal(terminal: ITerminal) {
     try {
       const wc = await this.#webcontainer;
-      await this.#octoTerminal.init(wc, terminal);
+      await this.#octotaskTerminal.init(wc, terminal);
     } catch (error: any) {
-      terminal.write(coloredText.red('Failed to spawn octo shell\n\n') + error.message);
+      terminal.write(coloredText.red('Failed to spawn octotask shell\n\n') + error.message);
       return;
     }
   }

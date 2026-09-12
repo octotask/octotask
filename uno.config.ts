@@ -5,7 +5,7 @@ import { defineConfig, presetIcons, presetUno, transformerDirectives } from 'uno
 
 const iconPaths = globSync('./icons/*.svg');
 
-const collectionName = 'octo';
+const collectionName = 'octotask';
 
 const customIconCollection = iconPaths.reduce(
   (acc, iconPath) => {
@@ -98,11 +98,11 @@ const COLOR_PRIMITIVES = {
 };
 
 export default defineConfig({
-  safelist: [...Object.keys(customIconCollection[collectionName] || {}).map((x) => `i-octo:${x}`)],
+  safelist: [...Object.keys(customIconCollection[collectionName] || {}).map((x) => `i-octotask:${x}`)],
   shortcuts: {
-    'octo-ease-cubic-bezier': 'ease-[cubic-bezier(0.4,0,0.2,1)]',
-    'transition-theme': 'transition-[background-color,border-color,color] duration-150 octo-ease-cubic-bezier',
-    kdb: 'bg-octo-elements-code-background text-octo-elements-code-text py-1 px-1.5 rounded-md',
+    'octotask-ease-cubic-bezier': 'ease-[cubic-bezier(0.4,0,0.2,1)]',
+    'transition-theme': 'transition-[background-color,border-color,color] duration-150 octotask-ease-cubic-bezier',
+    kdb: 'bg-octotask-elements-code-background text-octotask-elements-code-text py-1 px-1.5 rounded-md',
     'max-w-chat': 'max-w-[var(--chat-max-width)]',
   },
   rules: [
@@ -115,115 +115,115 @@ export default defineConfig({
   theme: {
     colors: {
       ...COLOR_PRIMITIVES,
-      octo: {
+      octotask: {
         elements: {
-          borderColor: 'var(--octo-elements-borderColor)',
-          borderColorActive: 'var(--octo-elements-borderColorActive)',
+          borderColor: 'var(--octotask-elements-borderColor)',
+          borderColorActive: 'var(--octotask-elements-borderColorActive)',
           background: {
             depth: {
-              1: 'var(--octo-elements-bg-depth-1)',
-              2: 'var(--octo-elements-bg-depth-2)',
-              3: 'var(--octo-elements-bg-depth-3)',
-              4: 'var(--octo-elements-bg-depth-4)',
+              1: 'var(--octotask-elements-bg-depth-1)',
+              2: 'var(--octotask-elements-bg-depth-2)',
+              3: 'var(--octotask-elements-bg-depth-3)',
+              4: 'var(--octotask-elements-bg-depth-4)',
             },
           },
-          textPrimary: 'var(--octo-elements-textPrimary)',
-          textSecondary: 'var(--octo-elements-textSecondary)',
-          textTertiary: 'var(--octo-elements-textTertiary)',
+          textPrimary: 'var(--octotask-elements-textPrimary)',
+          textSecondary: 'var(--octotask-elements-textSecondary)',
+          textTertiary: 'var(--octotask-elements-textTertiary)',
           code: {
-            background: 'var(--octo-elements-code-background)',
-            text: 'var(--octo-elements-code-text)',
+            background: 'var(--octotask-elements-code-background)',
+            text: 'var(--octotask-elements-code-text)',
           },
           button: {
             primary: {
-              background: 'var(--octo-elements-button-primary-background)',
-              backgroundHover: 'var(--octo-elements-button-primary-backgroundHover)',
-              text: 'var(--octo-elements-button-primary-text)',
+              background: 'var(--octotask-elements-button-primary-background)',
+              backgroundHover: 'var(--octotask-elements-button-primary-backgroundHover)',
+              text: 'var(--octotask-elements-button-primary-text)',
             },
             secondary: {
-              background: 'var(--octo-elements-button-secondary-background)',
-              backgroundHover: 'var(--octo-elements-button-secondary-backgroundHover)',
-              text: 'var(--octo-elements-button-secondary-text)',
+              background: 'var(--octotask-elements-button-secondary-background)',
+              backgroundHover: 'var(--octotask-elements-button-secondary-backgroundHover)',
+              text: 'var(--octotask-elements-button-secondary-text)',
             },
             danger: {
-              background: 'var(--octo-elements-button-danger-background)',
-              backgroundHover: 'var(--octo-elements-button-danger-backgroundHover)',
-              text: 'var(--octo-elements-button-danger-text)',
+              background: 'var(--octotask-elements-button-danger-background)',
+              backgroundHover: 'var(--octotask-elements-button-danger-backgroundHover)',
+              text: 'var(--octotask-elements-button-danger-text)',
             },
           },
           item: {
-            contentDefault: 'var(--octo-elements-item-contentDefault)',
-            contentActive: 'var(--octo-elements-item-contentActive)',
-            contentAccent: 'var(--octo-elements-item-contentAccent)',
-            contentDanger: 'var(--octo-elements-item-contentDanger)',
-            backgroundDefault: 'var(--octo-elements-item-backgroundDefault)',
-            backgroundActive: 'var(--octo-elements-item-backgroundActive)',
-            backgroundAccent: 'var(--octo-elements-item-backgroundAccent)',
-            backgroundDanger: 'var(--octo-elements-item-backgroundDanger)',
+            contentDefault: 'var(--octotask-elements-item-contentDefault)',
+            contentActive: 'var(--octotask-elements-item-contentActive)',
+            contentAccent: 'var(--octotask-elements-item-contentAccent)',
+            contentDanger: 'var(--octotask-elements-item-contentDanger)',
+            backgroundDefault: 'var(--octotask-elements-item-backgroundDefault)',
+            backgroundActive: 'var(--octotask-elements-item-backgroundActive)',
+            backgroundAccent: 'var(--octotask-elements-item-backgroundAccent)',
+            backgroundDanger: 'var(--octotask-elements-item-backgroundDanger)',
           },
           actions: {
-            background: 'var(--octo-elements-actions-background)',
+            background: 'var(--octotask-elements-actions-background)',
             code: {
-              background: 'var(--octo-elements-actions-code-background)',
+              background: 'var(--octotask-elements-actions-code-background)',
             },
           },
           artifacts: {
-            background: 'var(--octo-elements-artifacts-background)',
-            backgroundHover: 'var(--octo-elements-artifacts-backgroundHover)',
-            borderColor: 'var(--octo-elements-artifacts-borderColor)',
+            background: 'var(--octotask-elements-artifacts-background)',
+            backgroundHover: 'var(--octotask-elements-artifacts-backgroundHover)',
+            borderColor: 'var(--octotask-elements-artifacts-borderColor)',
             inlineCode: {
-              background: 'var(--octo-elements-artifacts-inlineCode-background)',
-              text: 'var(--octo-elements-artifacts-inlineCode-text)',
+              background: 'var(--octotask-elements-artifacts-inlineCode-background)',
+              text: 'var(--octotask-elements-artifacts-inlineCode-text)',
             },
           },
           messages: {
-            background: 'var(--octo-elements-messages-background)',
-            linkColor: 'var(--octo-elements-messages-linkColor)',
+            background: 'var(--octotask-elements-messages-background)',
+            linkColor: 'var(--octotask-elements-messages-linkColor)',
             code: {
-              background: 'var(--octo-elements-messages-code-background)',
+              background: 'var(--octotask-elements-messages-code-background)',
             },
             inlineCode: {
-              background: 'var(--octo-elements-messages-inlineCode-background)',
-              text: 'var(--octo-elements-messages-inlineCode-text)',
+              background: 'var(--octotask-elements-messages-inlineCode-background)',
+              text: 'var(--octotask-elements-messages-inlineCode-text)',
             },
           },
           icon: {
-            success: 'var(--octo-elements-icon-success)',
-            error: 'var(--octo-elements-icon-error)',
-            primary: 'var(--octo-elements-icon-primary)',
-            secondary: 'var(--octo-elements-icon-secondary)',
-            tertiary: 'var(--octo-elements-icon-tertiary)',
+            success: 'var(--octotask-elements-icon-success)',
+            error: 'var(--octotask-elements-icon-error)',
+            primary: 'var(--octotask-elements-icon-primary)',
+            secondary: 'var(--octotask-elements-icon-secondary)',
+            tertiary: 'var(--octotask-elements-icon-tertiary)',
           },
           preview: {
             addressBar: {
-              background: 'var(--octo-elements-preview-addressBar-background)',
-              backgroundHover: 'var(--octo-elements-preview-addressBar-backgroundHover)',
-              backgroundActive: 'var(--octo-elements-preview-addressBar-backgroundActive)',
-              text: 'var(--octo-elements-preview-addressBar-text)',
-              textActive: 'var(--octo-elements-preview-addressBar-textActive)',
+              background: 'var(--octotask-elements-preview-addressBar-background)',
+              backgroundHover: 'var(--octotask-elements-preview-addressBar-backgroundHover)',
+              backgroundActive: 'var(--octotask-elements-preview-addressBar-backgroundActive)',
+              text: 'var(--octotask-elements-preview-addressBar-text)',
+              textActive: 'var(--octotask-elements-preview-addressBar-textActive)',
             },
           },
           terminals: {
-            background: 'var(--octo-elements-terminals-background)',
-            buttonBackground: 'var(--octo-elements-terminals-buttonBackground)',
+            background: 'var(--octotask-elements-terminals-background)',
+            buttonBackground: 'var(--octotask-elements-terminals-buttonBackground)',
           },
-          dividerColor: 'var(--octo-elements-dividerColor)',
+          dividerColor: 'var(--octotask-elements-dividerColor)',
           loader: {
-            background: 'var(--octo-elements-loader-background)',
-            progress: 'var(--octo-elements-loader-progress)',
+            background: 'var(--octotask-elements-loader-background)',
+            progress: 'var(--octotask-elements-loader-progress)',
           },
           prompt: {
-            background: 'var(--octo-elements-prompt-background)',
+            background: 'var(--octotask-elements-prompt-background)',
           },
           sidebar: {
-            dropdownShadow: 'var(--octo-elements-sidebar-dropdownShadow)',
-            buttonBackgroundDefault: 'var(--octo-elements-sidebar-buttonBackgroundDefault)',
-            buttonBackgroundHover: 'var(--octo-elements-sidebar-buttonBackgroundHover)',
-            buttonText: 'var(--octo-elements-sidebar-buttonText)',
+            dropdownShadow: 'var(--octotask-elements-sidebar-dropdownShadow)',
+            buttonBackgroundDefault: 'var(--octotask-elements-sidebar-buttonBackgroundDefault)',
+            buttonBackgroundHover: 'var(--octotask-elements-sidebar-buttonBackgroundHover)',
+            buttonText: 'var(--octotask-elements-sidebar-buttonText)',
           },
           cta: {
-            background: 'var(--octo-elements-cta-background)',
-            text: 'var(--octo-elements-cta-text)',
+            background: 'var(--octotask-elements-cta-background)',
+            text: 'var(--octotask-elements-cta-text)',
           },
         },
       },

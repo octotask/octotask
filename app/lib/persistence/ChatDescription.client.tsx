@@ -24,7 +24,7 @@ export function ChatDescription() {
         <form onSubmit={handleSubmit} className="flex items-center justify-center">
           <input
             type="text"
-            className="bg-octo-elements-background-depth-1 text-octo-elements-textPrimary rounded px-2 mr-2 w-fit"
+            className="bg-octotask-elements-background-depth-1 text-octotask-elements-textPrimary rounded px-2 mr-2 w-fit"
             autoFocus
             value={currentDescription}
             onChange={handleChange}
@@ -34,10 +34,10 @@ export function ChatDescription() {
           />
           <TooltipProvider>
             <WithTooltip tooltip="Save title">
-              <div className="flex justify-between items-center p-2 rounded-md bg-octo-elements-item-backgroundAccent">
+              <div className="flex justify-between items-center p-2 rounded-md bg-octotask-elements-item-backgroundAccent">
                 <button
                   type="submit"
-                  className="i-ph:check-bold scale-110 hover:text-octo-elements-item-contentAccent"
+                  className="i-ph:check-bold scale-110 hover:text-octotask-elements-item-contentAccent"
                   onMouseDown={handleSubmit}
                 />
               </div>
@@ -51,7 +51,7 @@ export function ChatDescription() {
             <WithTooltip tooltip="Rename chat">
               <button
                 type="button"
-                className="ml-2 i-ph:pencil-fill scale-110 hover:text-octo-elements-item-contentAccent"
+                className="ml-2 i-ph:pencil-fill scale-110 hover:text-octotask-elements-item-contentAccent"
                 onClick={(event) => {
                   event.preventDefault();
                   toggleEditMode();

@@ -1,10 +1,10 @@
 services:
   app-prod:
-    image: octotask:production
+    image: octotask-ai:production
     build:
       context: .
       dockerfile: Dockerfile
-      target: octotask-production
+      target: octotask-ai-production
     ports:
       - '5173:5173'
     env_file:
@@ -36,11 +36,11 @@ services:
       - production
 
   app-dev:
-    image: octotask:development
+    image: octotask-ai:development
     build:
       context: .
       dockerfile: Dockerfile
-      target: octotask-development
+      target: development
     env_file:
       - '.env'
       - '.env.local'
@@ -77,10 +77,10 @@ services:
     ports:
       - '5173:5173'
     command: pnpm run dev --host 0.0.0.0
-    profiles: [ 'development', 'default' ]
+    profiles: ['development', 'default']
 
   app-prebuild:
-    image: ghcr.io/khulnasoft/octotask:latest
+    image: ghcr.io/octotask/octotask:latest
     ports:
       - '5173:5173'
     environment:

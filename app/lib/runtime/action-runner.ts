@@ -1,24 +1,24 @@
 import type { WebContainer } from '@webcontainer/api';
 import { path as nodePath } from '~/utils/path';
 import { atom, map, type MapStore } from 'nanostores';
-import type { ActionAlert, OctoAction, DeployAlert, FileHistory, SupabaseAction, SupabaseAlert } from '~/types/actions';
+import type { ActionAlert, OctotaskAction, DeployAlert, FileHistory, SupabaseAction, SupabaseAlert } from '~/types/actions';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
 import type { ActionCallbackData } from './message-parser';
-import type { OctoShell } from '~/utils/shell';
+import type { OctotaskShell } from '~/utils/shell';
 
 const logger = createScopedLogger('ActionRunner');
 
 export type ActionStatus = 'pending' | 'running' | 'complete' | 'aborted' | 'failed';
 
-export type BaseActionState = OctoAction & {
+export type BaseActionState = OctotaskAction & {
   status: Exclude<ActionStatus, 'failed'>;
   abort: () => void;
   executed: boolean;
   abortSignal: AbortSignal;
 };
 
-export type FailedActionState = OctoAction &
+export type FailedActionState = OctotaskAction &
   Omit<BaseActionState, 'status'> & {
     status: Extract<ActionStatus, 'failed'>;
     error: string;
@@ -66,7 +66,7 @@ class ActionCommandError extends Error {
 export class ActionRunner {
   #webcontainer: Promise<WebContainer>;
   #currentExecutionPromise: Promise<void> = Promise.resolve();
-  #shellTerminal: () => OctoShell;
+  #shellTerminal: () => OctotaskShell;
   runnerId = atom<string>(`${Date.now()}`);
   actions: ActionsMap = map({});
   onAlert?: (alert: ActionAlert) => void;
@@ -76,7 +76,7 @@ export class ActionRunner {
 
   constructor(
     webcontainerPromise: Promise<WebContainer>,
-    getShellTerminal: () => OctoShell,
+    getShellTerminal: () => OctotaskShell,
     onAlert?: (alert: ActionAlert) => void,
     onSupabaseAlert?: (alert: SupabaseAlert) => void,
     onDeployAlert?: (alert: DeployAlert) => void,
@@ -395,7 +395,7 @@ export class ActionRunner {
     const buildProcess = await webcontainer.spawn('npm', ['run', 'build']);
 
     let output = '';
-    buildProcess.output.pipeTo(
+    const outputPromise = buildProcess.output.pipeTo(
       new WritableStream({
         write(data) {
           output += data;
@@ -404,8 +404,21 @@ export class ActionRunner {
     );
 
     const exitCode = await buildProcess.exit;
+    await outputPromise.catch(() => {
+      // Ignore output piping errors; we still have whatever was captured
+    });
+
+    let buildDir = '';
 
     if (exitCode !== 0) {
+      const buildResult = {
+        path: buildDir,
+        exitCode,
+        output,
+      };
+
+      this.buildOutput = buildResult;
+
       // Trigger build failed alert
       this.onDeployAlert?.({
         type: 'error',
@@ -435,8 +448,6 @@ export class ActionRunner {
     // Check for common build directories
     const commonBuildDirs = ['dist', 'build', 'out', 'output', '.next', 'public'];
 
-    let buildDir = '';
-
     // Try to find the first existing build directory
     for (const dir of commonBuildDirs) {
       const dirPath = nodePath.join(webcontainer.workdir, dir);
@@ -455,11 +466,15 @@ export class ActionRunner {
       buildDir = nodePath.join(webcontainer.workdir, 'dist');
     }
 
-    return {
+    const buildResult = {
       path: buildDir,
       exitCode,
       output,
     };
+
+    this.buildOutput = buildResult;
+
+    return buildResult;
   }
   async handleSupabaseAction(action: SupabaseAction) {
     const { operation, content, filePath } = action;

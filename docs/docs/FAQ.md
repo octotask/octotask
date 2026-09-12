@@ -189,7 +189,7 @@ octotask provides comprehensive Git and GitHub integration:
 Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to get involved!
 
 ??? question "What are the future plans for octotask?"
-Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
+Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.
  New features and improvements are on the way!
 
 ??? question "Why are there so many open issues/pull requests?"
@@ -402,7 +402,7 @@ If your custom LLM provider isn't appearing:
 ## Get Help & Support
 
 !!! tip "Community Support"
-[Join the octotask Community](https://thinktank.ottomator.ai/c/octotask/17){target=\_blank} for discussions and help
+[Join the octotask Community](https://thinktank.ottomator.ai/c/octotask-diy/17){target=\_blank} for discussions and help
 
 !!! bug "Report Issues"
 [Open an Issue](https://github.com/octotask/octotask/issues/19){target=\_blank} in our GitHub Repository

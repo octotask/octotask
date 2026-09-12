@@ -62,13 +62,13 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
   const renderColorSection = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-octo-elements-textPrimary flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-octo-elements-item-contentAccent"></div>
+        <h3 className="text-lg font-semibold text-octotask-elements-textPrimary flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-octotask-elements-item-contentAccent"></div>
           Color Palette
         </h3>
         <button
           onClick={handleReset}
-          className="text-sm bg-transparent hover:bg-octo-elements-bg-depth-2 text-octo-elements-textSecondary hover:text-octo-elements-textPrimary rounded-lg flex items-center gap-2 transition-all duration-200"
+          className="text-sm bg-transparent hover:bg-octotask-elements-bg-depth-2 text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary rounded-lg flex items-center gap-2 transition-all duration-200"
         >
           <span className="i-ph:arrow-clockwise text-sm" />
           Reset
@@ -79,11 +79,11 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
         {paletteRoles.map((role) => (
           <div
             key={role.key}
-            className="group flex items-center gap-4 p-4 rounded-xl bg-octo-elements-bg-depth-3 hover:bg-octo-elements-bg-depth-2 border border-transparent hover:border-octo-elements-borderColor transition-all duration-200"
+            className="group flex items-center gap-4 p-4 rounded-xl bg-octotask-elements-bg-depth-3 hover:bg-octotask-elements-bg-depth-2 border border-transparent hover:border-octotask-elements-borderColor transition-all duration-200"
           >
             <div className="relative flex-shrink-0">
               <div
-                className="w-12 h-12 rounded-xl shadow-md cursor-pointer transition-all duration-200 hover:scale-110 ring-2 ring-transparent hover:ring-octo-elements-borderColorActive"
+                className="w-12 h-12 rounded-xl shadow-md cursor-pointer transition-all duration-200 hover:scale-110 ring-2 ring-transparent hover:ring-octotask-elements-borderColorActive"
                 style={{ backgroundColor: palette[role.key] }}
                 onClick={() => document.getElementById(`color-input-${role.key}`)?.click()}
                 role="button"
@@ -98,16 +98,16 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 tabIndex={-1}
               />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-octo-elements-bg-depth-1 rounded-full flex items-center justify-center shadow-sm">
-                <span className="i-ph:pencil-simple text-xs text-octo-elements-textSecondary" />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-octotask-elements-bg-depth-1 rounded-full flex items-center justify-center shadow-sm">
+                <span className="i-ph:pencil-simple text-xs text-octotask-elements-textSecondary" />
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-octo-elements-textPrimary transition-colors">{role.label}</div>
-              <div className="text-sm text-octo-elements-textSecondary line-clamp-2 leading-relaxed">
+              <div className="font-semibold text-octotask-elements-textPrimary transition-colors">{role.label}</div>
+              <div className="text-sm text-octotask-elements-textSecondary line-clamp-2 leading-relaxed">
                 {role.description}
               </div>
-              <div className="text-xs text-octo-elements-textTertiary font-mono mt-1 px-2 py-1 bg-octo-elements-bg-depth-1 rounded-md inline-block">
+              <div className="text-xs text-octotask-elements-textTertiary font-mono mt-1 px-2 py-1 bg-octotask-elements-bg-depth-1 rounded-md inline-block">
                 {palette[role.key]}
               </div>
             </div>
@@ -119,8 +119,8 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const renderTypographySection = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-octo-elements-textPrimary flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-octo-elements-item-contentAccent"></div>
+      <h3 className="text-lg font-semibold text-octotask-elements-textPrimary flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-octotask-elements-item-contentAccent"></div>
         Typography
       </h3>
 
@@ -130,16 +130,16 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
             key={f.key}
             type="button"
             onClick={() => handleFontToggle(f.key)}
-            className={`group p-4 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-octo-elements-borderColorActive ${
+            className={`group p-4 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-octotask-elements-borderColorActive ${
               font.includes(f.key)
-                ? 'bg-octo-elements-item-backgroundAccent border-octo-elements-borderColorActive shadow-lg'
-                : 'bg-octo-elements-background-depth-3 border-octo-elements-borderColor hover:border-octo-elements-borderColorActive hover:bg-octo-elements-bg-depth-2'
+                ? 'bg-octotask-elements-item-backgroundAccent border-octotask-elements-borderColorActive shadow-lg'
+                : 'bg-octotask-elements-background-depth-3 border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive hover:bg-octotask-elements-bg-depth-2'
             }`}
           >
             <div className="text-center space-y-2">
               <div
                 className={`text-2xl font-medium transition-colors ${
-                  font.includes(f.key) ? 'text-octo-elements-item-contentAccent' : 'text-octo-elements-textPrimary'
+                  font.includes(f.key) ? 'text-octotask-elements-item-contentAccent' : 'text-octotask-elements-textPrimary'
                 }`}
                 style={{ fontFamily: f.key }}
               >
@@ -147,13 +147,13 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
               </div>
               <div
                 className={`text-sm font-medium transition-colors ${
-                  font.includes(f.key) ? 'text-octo-elements-item-contentAccent' : 'text-octo-elements-textSecondary'
+                  font.includes(f.key) ? 'text-octotask-elements-item-contentAccent' : 'text-octotask-elements-textSecondary'
                 }`}
               >
                 {f.label}
               </div>
               {font.includes(f.key) && (
-                <div className="w-6 h-6 mx-auto bg-octo-elements-item-contentAccent rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 mx-auto bg-octotask-elements-item-contentAccent rounded-full flex items-center justify-center">
                   <span className="i-ph:check text-white text-sm" />
                 </div>
               )}
@@ -166,8 +166,8 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const renderFeaturesSection = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-octo-elements-textPrimary flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-octo-elements-item-contentAccent"></div>
+      <h3 className="text-lg font-semibold text-octotask-elements-textPrimary flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-octotask-elements-item-contentAccent"></div>
         Design Features
       </h3>
 
@@ -180,7 +180,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
               <button
                 type="button"
                 onClick={() => handleFeatureToggle(f.key)}
-                className={`group relative w-full p-6 text-sm font-medium transition-all duration-200 bg-octo-elements-background-depth-3 text-octo-elements-item-textSecondary ${
+                className={`group relative w-full p-6 text-sm font-medium transition-all duration-200 bg-octotask-elements-background-depth-3 text-octotask-elements-item-textSecondary ${
                   f.key === 'rounded'
                     ? isSelected
                       ? 'rounded-3xl'
@@ -191,25 +191,25 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 } ${
                   f.key === 'border'
                     ? isSelected
-                      ? 'border-3 border-octo-elements-borderColorActive bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent'
-                      : 'border-2 border-octo-elements-borderColor hover:border-octo-elements-borderColorActive text-octo-elements-textSecondary'
+                      ? 'border-3 border-octotask-elements-borderColorActive bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent'
+                      : 'border-2 border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive text-octotask-elements-textSecondary'
                     : f.key === 'gradient'
                       ? ''
                       : isSelected
-                        ? 'bg-octo-elements-item-backgroundAccent text-octo-elements-item-contentAccent shadow-lg'
-                        : 'bg-octo-elements-bg-depth-3 hover:bg-octo-elements-bg-depth-2 text-octo-elements-textSecondary hover:text-octo-elements-textPrimary'
+                        ? 'bg-octotask-elements-item-backgroundAccent text-octotask-elements-item-contentAccent shadow-lg'
+                        : 'bg-octotask-elements-bg-depth-3 hover:bg-octotask-elements-bg-depth-2 text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary'
                 } ${f.key === 'shadow' ? (isSelected ? 'shadow-xl' : 'shadow-lg') : 'shadow-md'}`}
                 style={{
                   ...(f.key === 'gradient' && {
                     background: isSelected
                       ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                      : 'var(--octo-elements-bg-depth-3)',
-                    color: isSelected ? 'white' : 'var(--octo-elements-textSecondary)',
+                      : 'var(--octotask-elements-bg-depth-3)',
+                    color: isSelected ? 'white' : 'var(--octotask-elements-textSecondary)',
                   }),
                 }}
               >
                 <div className="flex flex-col items-center gap-4">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-octo-elements-bg-depth-1 bg-opacity-20">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-octotask-elements-bg-depth-1 bg-opacity-20">
                     {f.key === 'rounded' && (
                       <div
                         className={`w-6 h-6 bg-current transition-all duration-200 ${
@@ -280,17 +280,17 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
         <Dialog>
           <div className="py-4 px-4 min-w-[480px] max-w-[90vw] max-h-[85vh] flex flex-col gap-6 overflow-hidden">
             <div className="">
-              <DialogTitle className="text-2xl font-bold text-octo-elements-textPrimary">
+              <DialogTitle className="text-2xl font-bold text-octotask-elements-textPrimary">
                 Design Palette & Features
               </DialogTitle>
-              <DialogDescription className="text-octo-elements-textSecondary leading-relaxed">
+              <DialogDescription className="text-octotask-elements-textSecondary leading-relaxed">
                 Customize your color palette, typography, and design features. These preferences will guide the AI in
                 creating designs that match your style.
               </DialogDescription>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-1 p-1 bg-octo-elements-bg-depth-3 rounded-xl">
+            <div className="flex gap-1 p-1 bg-octotask-elements-bg-depth-3 rounded-xl">
               {[
                 { key: 'colors', label: 'Colors', icon: 'i-ph:palette' },
                 { key: 'typography', label: 'Typography', icon: 'i-ph:text-aa' },
@@ -301,8 +301,8 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                   onClick={() => setActiveSection(tab.key as any)}
                   className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                     activeSection === tab.key
-                      ? 'bg-octo-elements-background-depth-3 text-octo-elements-textPrimary shadow-md'
-                      : 'bg-octo-elements-background-depth-2 text-octo-elements-textSecondary hover:text-octo-elements-textPrimary hover:bg-octo-elements-bg-depth-2'
+                      ? 'bg-octotask-elements-background-depth-3 text-octotask-elements-textPrimary shadow-md'
+                      : 'bg-octotask-elements-background-depth-2 text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary hover:bg-octotask-elements-bg-depth-2'
                   }`}
                 >
                   <span className={`${tab.icon} text-lg`} />
@@ -320,7 +320,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
             {/* Action Buttons */}
             <div className="flex justify-between items-center">
-              <div className="text-sm text-octo-elements-textSecondary">
+              <div className="text-sm text-octotask-elements-textSecondary">
                 {Object.keys(palette).length} colors • {font.length} fonts • {features.length} features
               </div>
               <div className="flex gap-3">
@@ -330,7 +330,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 <Button
                   variant="ghost"
                   onClick={handleSave}
-                  className="bg-octo-elements-button-primary-background hover:bg-octo-elements-button-primary-backgroundHover text-octo-elements-button-primary-text"
+                  className="bg-octotask-elements-button-primary-background hover:bg-octotask-elements-button-primary-backgroundHover text-octotask-elements-button-primary-text"
                 >
                   Save Changes
                 </Button>
@@ -343,7 +343,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
       <style>{`
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: var(--octo-elements-textTertiary) transparent;
+          scrollbar-color: var(--octotask-elements-textTertiary) transparent;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
@@ -352,11 +352,11 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: var(--octo-elements-textTertiary);
+          background-color: var(--octotask-elements-textTertiary);
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: var(--octo-elements-textSecondary);
+          background-color: var(--octotask-elements-textSecondary);
         }
         .line-clamp-2 {
           display: -webkit-box;

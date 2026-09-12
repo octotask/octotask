@@ -812,7 +812,7 @@ class DebugLogger {
     try {
       if (typeof window !== 'undefined') {
         // Access stores if available
-        const workbenchStore = (window as any).__octo_workbench_store;
+        const workbenchStore = (window as any).__octotask_workbench_store;
 
         if (workbenchStore) {
           const state = workbenchStore.get?.() || {};
@@ -858,7 +858,7 @@ class DebugLogger {
     try {
       // Try to get from localStorage or environment
       if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('octo_current_model');
+        const stored = localStorage.getItem('octotask_current_model');
 
         if (stored) {
           return stored;
@@ -874,7 +874,7 @@ class DebugLogger {
   private _getCurrentProvider(): string {
     try {
       if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('octo_current_provider');
+        const stored = localStorage.getItem('octotask_current_provider');
 
         if (stored) {
           return stored;
@@ -890,7 +890,7 @@ class DebugLogger {
   private _getProjectType(): string {
     try {
       if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('octo_project_type');
+        const stored = localStorage.getItem('octotask_project_type');
 
         if (stored) {
           return stored;
@@ -941,7 +941,7 @@ class DebugLogger {
   private _getGitInfoFallback(): AppInfo['gitInfo'] {
     try {
       // Try to get from localStorage (could be set by the app)
-      const stored = localStorage.getItem('octo_git_info');
+      const stored = localStorage.getItem('octotask_git_info');
 
       if (stored) {
         return JSON.parse(stored);
@@ -1018,7 +1018,7 @@ class DebugLogger {
 
     try {
       if (typeof window !== 'undefined') {
-        const workbenchStore = (window as any).__octo_workbench_store;
+        const workbenchStore = (window as any).__octotask_workbench_store;
 
         if (workbenchStore) {
           const state = workbenchStore.get?.() || {};
@@ -1141,7 +1141,7 @@ export async function downloadDebugLog(filename?: string): Promise<void> {
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = filename || `octo-debug-${new Date().toISOString().split('T')[0]}.txt`;
+    link.download = filename || `octotask-debug-${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1157,7 +1157,7 @@ export async function downloadDebugLog(filename?: string): Promise<void> {
 // Create a human-readable summary of the debug data
 function createDebugSummary(data: DebugLogData): string {
   const summary = [
-    '=== octotask DEBUG LOG SUMMARY ===',
+    '=== OCTOTASK DIY DEBUG LOG SUMMARY ===',
     `Generated: ${new Date(data.timestamp).toLocaleString()}`,
     `Session ID: ${data.sessionId}`,
     '',

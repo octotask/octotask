@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { IconButton } from '~/components/ui/IconButton';
 import type { ProviderInfo } from '~/types/model';
-import { vault } from '~/lib/api/vault.client';
+import Cookies from 'js-cookie';
 
 interface APIKeyManagerProps {
   provider: ProviderInfo;
@@ -14,6 +14,23 @@ interface APIKeyManagerProps {
 // cache which stores whether the provider's API key is set via environment variable
 const providerEnvKeyStatusCache: Record<string, boolean> = {};
 
+const apiKeyMemoizeCache: { [k: string]: Record<string, string> } = {};
+
+export function getApiKeysFromCookies() {
+  const storedApiKeys = Cookies.get('apiKeys');
+  let parsedKeys: Record<string, string> = {};
+
+  if (storedApiKeys) {
+    parsedKeys = apiKeyMemoizeCache[storedApiKeys];
+
+    if (!parsedKeys) {
+      parsedKeys = apiKeyMemoizeCache[storedApiKeys] = JSON.parse(storedApiKeys);
+    }
+  }
+
+  return parsedKeys;
+}
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, setApiKey }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -22,23 +39,13 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
 
   // Reset states and load saved key when provider changes
   useEffect(() => {
-    let mounted = true;
+    // Load saved API key from cookies for this provider
+    const savedKeys = getApiKeysFromCookies();
+    const savedKey = savedKeys[provider.name] || '';
 
-    async function loadKey() {
-      const savedKey = await vault.getSecret(provider.name);
-
-      if (mounted && savedKey) {
-        setTempKey(savedKey);
-        setApiKey(savedKey);
-        setIsEditing(false);
-      }
-    }
-
-    loadKey();
-
-    return () => {
-      mounted = false;
-    };
+    setTempKey(savedKey);
+    setApiKey(savedKey);
+    setIsEditing(false);
   }, [provider.name]);
 
   const checkEnvApiKey = useCallback(async () => {
@@ -66,12 +73,14 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
     checkEnvApiKey();
   }, [checkEnvApiKey]);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     // Save to parent state
     setApiKey(tempKey);
 
-    // Save to Vault
-    await vault.saveSecret(provider.name, tempKey);
+    // Save to cookies
+    const currentKeys = getApiKeysFromCookies();
+    const newKeys = { ...currentKeys, [provider.name]: tempKey };
+    Cookies.set('apiKeys', JSON.stringify(newKeys));
 
     setIsEditing(false);
   };
@@ -80,7 +89,7 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
     <div className="flex items-center justify-between py-3 px-1">
       <div className="flex items-center gap-2 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-octo-elements-textSecondary">{provider?.name} API Key:</span>
+          <span className="text-sm font-medium text-octotask-elements-textSecondary">{provider?.name} API Key:</span>
           {!isEditing && (
             <div className="flex items-center gap-2">
               {apiKey ? (
@@ -112,9 +121,9 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
               value={tempKey}
               placeholder="Enter API Key"
               onChange={(e) => setTempKey(e.target.value)}
-              className="w-[300px] px-3 py-1.5 text-sm rounded border border-octo-elements-borderColor 
-                        bg-octo-elements-prompt-background text-octo-elements-textPrimary 
-                        focus:outline-none focus:ring-2 focus:ring-octo-elements-focus"
+              className="w-[300px] px-3 py-1.5 text-sm rounded border border-octotask-elements-borderColor 
+                        bg-octotask-elements-prompt-background text-octotask-elements-textPrimary 
+                        focus:outline-none focus:ring-2 focus:ring-octotask-elements-focus"
             />
             <IconButton
               onClick={handleSave}

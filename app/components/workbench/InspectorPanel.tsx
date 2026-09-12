@@ -63,17 +63,17 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
   };
 
   return (
-    <div className="fixed right-4 top-20 w-80 bg-octo-elements-bg-depth-1 border border-octo-elements-borderColor rounded-lg shadow-lg z-40 max-h-[calc(100vh-6rem)] overflow-hidden">
+    <div className="fixed right-4 top-20 w-80 bg-octotask-elements-bg-depth-1 border border-octotask-elements-borderColor rounded-lg shadow-lg z-40 max-h-[calc(100vh-6rem)] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-octo-elements-borderColor">
-        <h3 className="font-medium text-octo-elements-textPrimary">Element Inspector</h3>
-        <button onClick={onClose} className="text-octo-elements-textSecondary hover:text-octo-elements-textPrimary">
+      <div className="flex items-center justify-between p-3 border-b border-octotask-elements-borderColor">
+        <h3 className="font-medium text-octotask-elements-textPrimary">Element Inspector</h3>
+        <button onClick={onClose} className="text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary">
           ✕
         </button>
       </div>
 
       {/* Element Info */}
-      <div className="p-3 border-b border-octo-elements-borderColor">
+      <div className="p-3 border-b border-octotask-elements-borderColor">
         <div className="text-sm">
           <div className="font-mono text-blue-500">
             {selectedElement.tagName.toLowerCase()}
@@ -83,7 +83,7 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
             )}
           </div>
           {selectedElement.textContent && (
-            <div className="mt-1 text-octo-elements-textSecondary text-xs truncate">
+            <div className="mt-1 text-octotask-elements-textSecondary text-xs truncate">
               "{selectedElement.textContent}"
             </div>
           )}
@@ -91,7 +91,7 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-octo-elements-borderColor">
+      <div className="flex border-b border-octotask-elements-borderColor">
         {(['styles', 'computed', 'box'] as const).map((tab) => (
           <button
             key={tab}
@@ -99,7 +99,7 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
             className={`px-3 py-2 text-sm capitalize ${
               activeTab === tab
                 ? 'border-b-2 border-blue-500 text-blue-500'
-                : 'text-octo-elements-textSecondary hover:text-octo-elements-textPrimary'
+                : 'text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary'
             }`}
           >
             {tab}
@@ -113,8 +113,8 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
           <div className="space-y-2">
             {Object.entries(getRelevantStyles(selectedElement.styles)).map(([prop, value]) => (
               <div key={prop} className="flex justify-between text-sm">
-                <span className="text-octo-elements-textSecondary">{prop}:</span>
-                <span className="text-octo-elements-textPrimary font-mono">{value}</span>
+                <span className="text-octotask-elements-textSecondary">{prop}:</span>
+                <span className="text-octotask-elements-textPrimary font-mono">{value}</span>
               </div>
             ))}
           </div>
@@ -123,20 +123,20 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
         {activeTab === 'box' && (
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-octo-elements-textSecondary">Width:</span>
-              <span className="text-octo-elements-textPrimary">{Math.round(selectedElement.rect.width)}px</span>
+              <span className="text-octotask-elements-textSecondary">Width:</span>
+              <span className="text-octotask-elements-textPrimary">{Math.round(selectedElement.rect.width)}px</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-octo-elements-textSecondary">Height:</span>
-              <span className="text-octo-elements-textPrimary">{Math.round(selectedElement.rect.height)}px</span>
+              <span className="text-octotask-elements-textSecondary">Height:</span>
+              <span className="text-octotask-elements-textPrimary">{Math.round(selectedElement.rect.height)}px</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-octo-elements-textSecondary">Top:</span>
-              <span className="text-octo-elements-textPrimary">{Math.round(selectedElement.rect.top)}px</span>
+              <span className="text-octotask-elements-textSecondary">Top:</span>
+              <span className="text-octotask-elements-textPrimary">{Math.round(selectedElement.rect.top)}px</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-octo-elements-textSecondary">Left:</span>
-              <span className="text-octo-elements-textPrimary">{Math.round(selectedElement.rect.left)}px</span>
+              <span className="text-octotask-elements-textSecondary">Left:</span>
+              <span className="text-octotask-elements-textPrimary">{Math.round(selectedElement.rect.left)}px</span>
             </div>
           </div>
         )}

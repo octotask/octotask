@@ -541,16 +541,16 @@ export default function NetlifyConnection() {
       <div className="mt-6">
         <Collapsible open={isStatsOpen} onOpenChange={setIsStatsOpen}>
           <CollapsibleTrigger asChild>
-            <div className="flex items-center justify-between p-4 rounded-lg bg-octo-elements-background dark:bg-octo-elements-background-depth-2 border border-octo-elements-borderColor dark:border-octo-elements-borderColor hover:border-octo-elements-borderColorActive/70 dark:hover:border-octo-elements-borderColorActive/70 transition-all duration-200">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-octotask-elements-background dark:bg-octotask-elements-background-depth-2 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive/70 dark:hover:border-octotask-elements-borderColorActive/70 transition-all duration-200">
               <div className="flex items-center gap-2">
-                <div className="i-ph:chart-bar w-4 h-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
-                <span className="text-sm font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                <div className="i-ph:chart-bar w-4 h-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                <span className="text-sm font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                   Netlify Stats
                 </span>
               </div>
               <div
                 className={classNames(
-                  'i-ph:caret-down w-4 h-4 transform transition-transform duration-200 text-octo-elements-textSecondary',
+                  'i-ph:caret-down w-4 h-4 transform transition-transform duration-200 text-octotask-elements-textSecondary',
                   isStatsOpen ? 'rotate-180' : '',
                 )}
               />
@@ -561,34 +561,34 @@ export default function NetlifyConnection() {
               <div className="flex flex-wrap items-center gap-4">
                 <Badge
                   variant="outline"
-                  className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                 >
-                  <BuildingLibraryIcon className="h-4 w-4 text-octo-elements-item-contentAccent" />
+                  <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent" />
                   <span>{connection.stats.totalSites} Sites</span>
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                 >
-                  <RocketLaunchIcon className="h-4 w-4 text-octo-elements-item-contentAccent" />
+                  <RocketLaunchIcon className="h-4 w-4 text-octotask-elements-item-contentAccent" />
                   <span>{deploymentCount} Deployments</span>
                 </Badge>
                 {lastUpdated && (
                   <Badge
                     variant="outline"
-                    className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                    className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                   >
-                    <ClockIcon className="h-4 w-4 text-octo-elements-item-contentAccent" />
+                    <ClockIcon className="h-4 w-4 text-octotask-elements-item-contentAccent" />
                     <span>Updated {formatDistanceToNow(new Date(lastUpdated))} ago</span>
                   </Badge>
                 )}
               </div>
               {sites.length > 0 && (
                 <div className="mt-4 space-y-4">
-                  <div className="bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg p-4">
+                  <div className="bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-sm font-medium flex items-center gap-2 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
-                        <BuildingLibraryIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                      <h4 className="text-sm font-medium flex items-center gap-2 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
+                        <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                         Your Sites
                       </h4>
                       <Button
@@ -596,11 +596,11 @@ export default function NetlifyConnection() {
                         size="sm"
                         onClick={() => fetchNetlifyStats(connection.token)}
                         disabled={fetchingStats}
-                        className="flex items-center gap-2 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary hover:bg-octo-elements-item-backgroundActive/10"
+                        className="flex items-center gap-2 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary hover:bg-octotask-elements-item-backgroundActive/10"
                       >
                         <ArrowPathIcon
                           className={classNames(
-                            'h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent',
+                            'h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent',
                             { 'animate-spin': fetchingStats },
                           )}
                         />
@@ -612,10 +612,10 @@ export default function NetlifyConnection() {
                         <div
                           key={site.id}
                           className={classNames(
-                            'bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border rounded-lg p-4 transition-all',
+                            'bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border rounded-lg p-4 transition-all',
                             activeSiteIndex === index
-                              ? 'border-octo-elements-item-contentAccent bg-octo-elements-item-backgroundActive/10'
-                              : 'border-octo-elements-borderColor hover:border-octo-elements-borderColorActive/70',
+                              ? 'border-octotask-elements-item-contentAccent bg-octotask-elements-item-backgroundActive/10'
+                              : 'border-octotask-elements-borderColor hover:border-octotask-elements-borderColorActive/70',
                           )}
                           onClick={() => {
                             setActiveSiteIndex(index);
@@ -623,22 +623,22 @@ export default function NetlifyConnection() {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <CloudIcon className="h-5 w-5 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
-                              <span className="font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                              <CloudIcon className="h-5 w-5 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                              <span className="font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                                 {site.name}
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
                               <Badge
                                 variant={site.published_deploy?.state === 'ready' ? 'default' : 'destructive'}
-                                className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                                className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                               >
                                 {site.published_deploy?.state === 'ready' ? (
                                   <CheckCircleIcon className="h-4 w-4 text-green-500" />
                                 ) : (
                                   <XCircleIcon className="h-4 w-4 text-red-500" />
                                 )}
-                                <span className="text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                                <span className="text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                                   {site.published_deploy?.state || 'Unknown'}
                                 </span>
                               </Badge>
@@ -650,10 +650,10 @@ export default function NetlifyConnection() {
                               href={site.ssl_url || site.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-sm flex items-center gap-1 transition-colors text-octo-elements-link-text hover:text-octo-elements-link-textHover dark:text-white dark:hover:text-octo-elements-link-textHover"
+                              className="text-sm flex items-center gap-1 transition-colors text-octotask-elements-link-text hover:text-octotask-elements-link-textHover dark:text-white dark:hover:text-octotask-elements-link-textHover"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <CloudIcon className="h-3 w-3 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                              <CloudIcon className="h-3 w-3 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                               <span className="underline decoration-1 underline-offset-2">
                                 {site.ssl_url || site.url}
                               </span>
@@ -662,7 +662,7 @@ export default function NetlifyConnection() {
 
                           {activeSiteIndex === index && (
                             <>
-                              <div className="mt-4 pt-3 border-t border-octo-elements-borderColor">
+                              <div className="mt-4 pt-3 border-t border-octotask-elements-borderColor">
                                 <div className="flex items-center gap-2">
                                   {siteActions.map((action) => (
                                     <Button
@@ -683,9 +683,9 @@ export default function NetlifyConnection() {
                                         setIsActionLoading(false);
                                       }}
                                       disabled={isActionLoading}
-                                      className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                                      className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                                     >
-                                      <action.icon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                                      <action.icon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                                       {action.name}
                                     </Button>
                                   ))}
@@ -694,15 +694,15 @@ export default function NetlifyConnection() {
                               {site.published_deploy && (
                                 <div className="mt-3 text-sm">
                                   <div className="flex items-center gap-1">
-                                    <ClockIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
-                                    <span className="text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                                    <ClockIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                    <span className="text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                                       Published {formatDistanceToNow(new Date(site.published_deploy.published_at))} ago
                                     </span>
                                   </div>
                                   {site.published_deploy.branch && (
                                     <div className="flex items-center gap-1 mt-1">
-                                      <CodeBracketIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
-                                      <span className="text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                                      <CodeBracketIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                      <span className="text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                                         Branch: {site.published_deploy.branch}
                                       </span>
                                     </div>
@@ -716,10 +716,10 @@ export default function NetlifyConnection() {
                     </div>
                   </div>
                   {activeSiteIndex !== -1 && deploys.length > 0 && (
-                    <div className="bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg p-4">
+                    <div className="bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-sm font-medium flex items-center gap-2 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
-                          <BuildingLibraryIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                        <h4 className="text-sm font-medium flex items-center gap-2 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
+                          <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                           Recent Deployments
                         </h4>
                       </div>
@@ -727,7 +727,7 @@ export default function NetlifyConnection() {
                         {deploys.map((deploy) => (
                           <div
                             key={deploy.id}
-                            className="bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg p-3"
+                            className="bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg p-3"
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
@@ -746,21 +746,21 @@ export default function NetlifyConnection() {
                                   ) : deploy.state === 'error' ? (
                                     <XCircleIcon className="h-4 w-4 text-red-500" />
                                   ) : (
-                                    <BuildingLibraryIcon className="h-4 w-4 text-octo-elements-item-contentAccent" />
+                                    <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent" />
                                   )}
-                                  <span className="text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                                  <span className="text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                                     {deploy.state}
                                   </span>
                                 </Badge>
                               </div>
-                              <span className="text-xs text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                              <span className="text-xs text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                                 {formatDistanceToNow(new Date(deploy.created_at))} ago
                               </span>
                             </div>
                             {deploy.branch && (
-                              <div className="mt-2 text-xs text-octo-elements-textSecondary dark:text-octo-elements-textSecondary flex items-center gap-1">
-                                <CodeBracketIcon className="h-3 w-3 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
-                                <span className="text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                              <div className="mt-2 text-xs text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary flex items-center gap-1">
+                                <CodeBracketIcon className="h-3 w-3 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                <span className="text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                                   Branch: {deploy.branch}
                                 </span>
                               </div>
@@ -771,10 +771,10 @@ export default function NetlifyConnection() {
                                   href={deploy.deploy_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center gap-1 transition-colors text-octo-elements-link-text hover:text-octo-elements-link-textHover dark:text-white dark:hover:text-octo-elements-link-textHover"
+                                  className="flex items-center gap-1 transition-colors text-octotask-elements-link-text hover:text-octotask-elements-link-textHover dark:text-white dark:hover:text-octotask-elements-link-textHover"
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  <CloudIcon className="h-3 w-3 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                                  <CloudIcon className="h-3 w-3 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                                   <span className="underline decoration-1 underline-offset-2">{deploy.deploy_url}</span>
                                 </a>
                               </div>
@@ -785,9 +785,9 @@ export default function NetlifyConnection() {
                                 size="sm"
                                 onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'publish')}
                                 disabled={isActionLoading}
-                                className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                                className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                               >
-                                <BuildingLibraryIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                                <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                                 Publish
                               </Button>
                               {deploy.state === 'ready' ? (
@@ -796,9 +796,9 @@ export default function NetlifyConnection() {
                                   size="sm"
                                   onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'lock')}
                                   disabled={isActionLoading}
-                                  className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                                 >
-                                  <LockClosedIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                                  <LockClosedIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                                   Lock
                                 </Button>
                               ) : (
@@ -807,9 +807,9 @@ export default function NetlifyConnection() {
                                   size="sm"
                                   onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'unlock')}
                                   disabled={isActionLoading}
-                                  className="flex items-center gap-1 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary"
+                                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
                                 >
-                                  <LockOpenIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                                  <LockOpenIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                                   Unlock
                                 </Button>
                               )}
@@ -820,10 +820,10 @@ export default function NetlifyConnection() {
                     </div>
                   )}
                   {activeSiteIndex !== -1 && builds.length > 0 && (
-                    <div className="bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg p-4">
+                    <div className="bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-sm font-medium flex items-center gap-2 text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
-                          <CodeBracketIcon className="h-4 w-4 text-octo-elements-item-contentAccent dark:text-octo-elements-item-contentAccent" />
+                        <h4 className="text-sm font-medium flex items-center gap-2 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
+                          <CodeBracketIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
                           Recent Builds
                         </h4>
                       </div>
@@ -831,7 +831,7 @@ export default function NetlifyConnection() {
                         {builds.map((build) => (
                           <div
                             key={build.id}
-                            className="bg-octo-elements-background dark:bg-octo-elements-background-depth-1 border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg p-3"
+                            className="bg-octotask-elements-background dark:bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg p-3"
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
@@ -848,18 +848,18 @@ export default function NetlifyConnection() {
                                   ) : (
                                     <CodeBracketIcon className="h-4 w-4" />
                                   )}
-                                  <span className="text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+                                  <span className="text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
                                     {build.done ? (build.error ? 'Failed' : 'Completed') : 'In Progress'}
                                   </span>
                                 </Badge>
                               </div>
-                              <span className="text-xs text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+                              <span className="text-xs text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
                                 {formatDistanceToNow(new Date(build.created_at))} ago
                               </span>
                             </div>
                             {build.error && (
-                              <div className="mt-2 text-xs text-octo-elements-textDestructive dark:text-octo-elements-textDestructive flex items-center gap-1">
-                                <XCircleIcon className="h-3 w-3 text-octo-elements-textDestructive dark:text-octo-elements-textDestructive" />
+                              <div className="mt-2 text-xs text-octotask-elements-textDestructive dark:text-octotask-elements-textDestructive flex items-center gap-1">
+                                <XCircleIcon className="h-3 w-3 text-octotask-elements-textDestructive dark:text-octotask-elements-textDestructive" />
                                 Error: {build.error}
                               </div>
                             )}
@@ -878,20 +878,20 @@ export default function NetlifyConnection() {
   };
 
   return (
-    <div className="space-y-6 bg-octo-elements-background dark:bg-octo-elements-background border border-octo-elements-borderColor dark:border-octo-elements-borderColor rounded-lg">
+    <div className="space-y-6 bg-octotask-elements-background dark:bg-octotask-elements-background border border-octotask-elements-borderColor dark:border-octotask-elements-borderColor rounded-lg">
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="text-[#00AD9F]">
               <NetlifyLogo />
             </div>
-            <h2 className="text-lg font-medium text-octo-elements-textPrimary">Netlify Connection</h2>
+            <h2 className="text-lg font-medium text-octotask-elements-textPrimary">Netlify Connection</h2>
           </div>
         </div>
 
         {!connection.user ? (
           <div className="mt-4">
-            <label className="block text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary mb-2">
+            <label className="block text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary mb-2">
               API Token
             </label>
             <input
@@ -903,17 +903,17 @@ export default function NetlifyConnection() {
                 'w-full px-3 py-2 rounded-lg text-sm',
                 'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
                 'border border-[#E5E5E5] dark:border-[#333333]',
-                'text-octo-elements-textPrimary placeholder-octo-elements-textTertiary',
-                'focus:outline-none focus:ring-1 focus:ring-octo-elements-borderColorActive',
+                'text-octotask-elements-textPrimary placeholder-octotask-elements-textTertiary',
+                'focus:outline-none focus:ring-1 focus:ring-octotask-elements-borderColorActive',
                 'disabled:opacity-50',
               )}
             />
-            <div className="mt-2 text-sm text-octo-elements-textSecondary">
+            <div className="mt-2 text-sm text-octotask-elements-textSecondary">
               <a
                 href="https://app.netlify.com/user/applications#personal-access-tokens"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-octo-elements-borderColorActive hover:underline inline-flex items-center gap-1"
+                className="text-octotask-elements-borderColorActive hover:underline inline-flex items-center gap-1"
               >
                 Get your token
                 <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -976,7 +976,7 @@ export default function NetlifyConnection() {
                 <div className="i-ph:plug w-4 h-4" />
                 Disconnect
               </button>
-              <span className="text-sm text-octo-elements-textSecondary flex items-center gap-1">
+              <span className="text-sm text-octotask-elements-textSecondary flex items-center gap-1">
                 <div className="i-ph:check-circle w-4 h-4 text-green-500" />
                 Connected to Netlify
               </span>

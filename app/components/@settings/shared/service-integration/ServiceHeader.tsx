@@ -32,7 +32,7 @@ export const ServiceHeader = memo(
         >
           <div className="flex items-center gap-2">
             <Icon className="w-5 h-5" />
-            <h2 className="text-lg font-medium text-octo-elements-textPrimary dark:text-octo-elements-textPrimary">
+            <h2 className="text-lg font-medium text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary">
               {title}
             </h2>
           </div>
@@ -43,7 +43,7 @@ export const ServiceHeader = memo(
                 onClick={onTestConnection}
                 disabled={isTestingConnection}
                 variant="outline"
-                className="flex items-center gap-2 hover:bg-octo-elements-item-backgroundActive/10 hover:text-octo-elements-textPrimary dark:hover:bg-octo-elements-item-backgroundActive/10 dark:hover:text-octo-elements-textPrimary transition-colors"
+                className="flex items-center gap-2 hover:bg-octotask-elements-item-backgroundActive/10 hover:text-octotask-elements-textPrimary dark:hover:bg-octotask-elements-item-backgroundActive/10 dark:hover:text-octotask-elements-textPrimary transition-colors"
               >
                 {isTestingConnection ? (
                   <>
@@ -62,7 +62,7 @@ export const ServiceHeader = memo(
         </motion.div>
 
         {description && (
-          <p className="text-sm text-octo-elements-textSecondary dark:text-octo-elements-textSecondary">
+          <p className="text-sm text-octotask-elements-textSecondary dark:text-octotask-elements-textSecondary">
             {description}
           </p>
         )}

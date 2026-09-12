@@ -56,7 +56,7 @@ export const checkForUpdates = async (): Promise<UpdateCheckResult> => {
      * Using raw.githubusercontent.com which doesn't require authentication
      */
     const latestPackageResponse = await fetch(
-      'https://raw.githubusercontent.com/KhulnaSoft/octotask/main/package.json',
+      'https://raw.githubusercontent.com/octotask/octotask/main/package.json',
     );
 
     if (!latestPackageResponse.ok) {

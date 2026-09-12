@@ -42,13 +42,13 @@ extra:
       link: https://github.com/octotask/octotask
       name: octotask
     - icon: fontawesome/brands/discourse
-      link: https://discourse.khulnasoft.com
+      link: https://thinktank.ottomator.ai/
       name: octotask Discourse
     - icon: fontawesome/brands/x-twitter
-      link: https://x.com/khulnasoft
+      link: https://x.com/octotask_diy
       name: octotask on X
     - icon: fontawesome/brands/bluesky
-      link: https://bsky.app/profile/khulnasoft
+      link: https://bsky.app/profile/octotask
       name: octotask on Bluesky
 
 markdown_extensions:

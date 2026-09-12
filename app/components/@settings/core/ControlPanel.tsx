@@ -236,9 +236,9 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
             <div
               className={classNames(
                 'w-[1200px] h-[90vh]',
-                'bg-octo-elements-background-depth-1',
+                'bg-octotask-elements-background-depth-1',
                 'rounded-2xl shadow-2xl',
-                'border border-octo-elements-borderColor',
+                'border border-octotask-elements-borderColor',
                 'flex flex-col overflow-hidden',
                 'relative',
                 'transform transition-all duration-200 ease-out',

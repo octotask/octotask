@@ -105,7 +105,7 @@ export function useDataOperations({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'octo-settings.json';
+      a.download = 'octotask-settings.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -200,7 +200,7 @@ export function useDataOperations({
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `octo-settings-${categoryIds.join('-')}.json`;
+        a.download = `octotask-settings-${categoryIds.join('-')}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -326,7 +326,7 @@ export function useDataOperations({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'octo-chats.json';
+      a.download = 'octotask-chats.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -437,7 +437,7 @@ export function useDataOperations({
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'octo-selected-chats.json';
+        a.download = 'octotask-selected-chats.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -936,7 +936,7 @@ export function useDataOperations({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'octo-api-keys-template.json';
+      a.download = 'octotask-api-keys-template.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1011,7 +1011,7 @@ export function useDataOperations({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'octo-api-keys.json';
+      a.download = 'octotask-api-keys.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

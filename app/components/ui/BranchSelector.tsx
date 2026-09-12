@@ -136,26 +136,26 @@ export function BranchSelector({
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
           className={classNames(
-            'bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octo-elements-borderColor max-w-md w-full max-h-[80vh] flex flex-col',
+            'bg-white dark:bg-gray-950 rounded-xl shadow-xl border border-octotask-elements-borderColor max-w-md w-full max-h-[80vh] flex flex-col',
             className,
           )}
         >
           {/* Header */}
-          <div className="p-6 border-b border-octo-elements-borderColor flex items-center justify-between">
+          <div className="p-6 border-b border-octotask-elements-borderColor flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
                 <GitBranch className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-octo-elements-textPrimary">Select Branch</h3>
-                <p className="text-sm text-octo-elements-textSecondary">
+                <h3 className="text-lg font-semibold text-octotask-elements-textPrimary">Select Branch</h3>
+                <p className="text-sm text-octotask-elements-textSecondary">
                   {repoOwner}/{repoName}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-octo-elements-background-depth-1 text-octo-elements-textSecondary hover:text-octo-elements-textPrimary transition-all"
+              className="p-2 rounded-lg hover:bg-octotask-elements-background-depth-1 text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -165,8 +165,8 @@ export function BranchSelector({
           <div className="flex-1 overflow-hidden flex flex-col">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-8 space-y-4">
-                <div className="animate-spin w-8 h-8 border-2 border-octo-elements-borderColorActive border-t-transparent rounded-full" />
-                <p className="text-sm text-octo-elements-textSecondary">Loading branches...</p>
+                <div className="animate-spin w-8 h-8 border-2 border-octotask-elements-borderColorActive border-t-transparent rounded-full" />
+                <p className="text-sm text-octotask-elements-textSecondary">Loading branches...</p>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center justify-center p-8 space-y-4">
@@ -183,13 +183,13 @@ export function BranchSelector({
               <>
                 {/* Search */}
                 {branches.length > 10 && (
-                  <div className="p-4 border-b border-octo-elements-borderColor">
+                  <div className="p-4 border-b border-octotask-elements-borderColor">
                     <input
                       type="text"
                       placeholder="Search branches..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-octo-elements-background-depth-1 border border-octo-elements-borderColor text-octo-elements-textPrimary placeholder-octo-elements-textTertiary focus:outline-none focus:ring-1 focus:ring-octo-elements-borderColorActive"
+                      className="w-full px-3 py-2 rounded-lg bg-octotask-elements-background-depth-1 border border-octotask-elements-borderColor text-octotask-elements-textPrimary placeholder-octotask-elements-textTertiary focus:outline-none focus:ring-1 focus:ring-octotask-elements-borderColorActive"
                     />
                   </div>
                 )}
@@ -206,13 +206,13 @@ export function BranchSelector({
                             'w-full text-left p-3 rounded-lg transition-all duration-200 border',
                             selectedBranch === branch.name
                               ? 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-100'
-                              : 'bg-octo-elements-background-depth-1 border-transparent hover:bg-octo-elements-background-depth-2',
+                              : 'bg-octotask-elements-background-depth-1 border-transparent hover:bg-octotask-elements-background-depth-2',
                           )}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 min-w-0">
-                              <GitBranch className="w-4 h-4 flex-shrink-0 text-octo-elements-textSecondary" />
-                              <span className="font-medium text-octo-elements-textPrimary truncate">{branch.name}</span>
+                              <GitBranch className="w-4 h-4 flex-shrink-0 text-octotask-elements-textSecondary" />
+                              <span className="font-medium text-octotask-elements-textPrimary truncate">{branch.name}</span>
                               <div className="flex items-center gap-1 flex-shrink-0">
                                 {branch.isDefault && <Star className="w-3 h-3 text-yellow-500" />}
                                 {branch.protected && <Shield className="w-3 h-3 text-red-500" />}
@@ -220,7 +220,7 @@ export function BranchSelector({
                             </div>
                             {selectedBranch === branch.name && <Check className="w-4 h-4 text-blue-600" />}
                           </div>
-                          <div className="text-xs text-octo-elements-textSecondary mt-1 truncate">
+                          <div className="text-xs text-octotask-elements-textSecondary mt-1 truncate">
                             {branch.sha.substring(0, 8)}
                           </div>
                         </button>
@@ -228,7 +228,7 @@ export function BranchSelector({
                     </div>
                   ) : (
                     <div className="flex items-center justify-center p-8">
-                      <p className="text-sm text-octo-elements-textSecondary">
+                      <p className="text-sm text-octotask-elements-textSecondary">
                         {searchQuery ? 'No branches found matching your search.' : 'No branches available.'}
                       </p>
                     </div>
@@ -240,8 +240,8 @@ export function BranchSelector({
 
           {/* Footer */}
           {!isLoading && !error && branches.length > 0 && (
-            <div className="p-6 border-t border-octo-elements-borderColor flex items-center justify-between">
-              <div className="text-sm text-octo-elements-textSecondary">
+            <div className="p-6 border-t border-octotask-elements-borderColor flex items-center justify-between">
+              <div className="text-sm text-octotask-elements-textSecondary">
                 {selectedBranch && (
                   <>
                     Selected: <span className="font-medium">{selectedBranch}</span>

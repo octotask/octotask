@@ -1,5 +1,5 @@
-appId: com.khulnasoft.octotask
-productName: OctoTask Desktop
+appId: com.octotask.octotask
+productName: Octotask Local
 directories:
   buildResources: build
   output: dist
@@ -55,8 +55,8 @@ npmRebuild: false
 
 publish:
   provider: github
-  owner: octotask
-  repo: octotask
+  owner: Derek-X-Wang
+  repo: octotask.local
   private: true
   releaseType: release
 

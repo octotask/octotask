@@ -116,12 +116,12 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
 
   if (commands.setupCommand) {
     commandString += `
-<octoAction type="shell">${commands.setupCommand}</octoAction>`;
+<octotaskAction type="shell">${commands.setupCommand}</octotaskAction>`;
   }
 
   if (commands.startCommand) {
     commandString += `
-<octoAction type="start">${commands.startCommand}</octoAction>
+<octotaskAction type="start">${commands.startCommand}</octotaskAction>
 `;
   }
 
@@ -129,17 +129,17 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
     role: 'assistant',
     content: `
 ${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}
-<octoArtifact id="project-setup" title="Project Setup">
+<octotaskArtifact id="project-setup" title="Project Setup">
 ${commandString}
-</octoArtifact>`,
+</octotaskArtifact>`,
     id: generateId(),
     createdAt: new Date(),
   };
 }
 
-export function escapeOctoArtifactTags(input: string) {
-  // Regular expression to match octoArtifact tags and their content
-  const regex = /(<octoArtifact[^>]*>)([\s\S]*?)(<\/octoArtifact>)/g;
+export function escapeOctotaskArtifactTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskArtifact[^>]*>)([\s\S]*?)(<\/octotaskArtifact>)/g;
 
   return input.replace(regex, (match, openTag, content, closeTag) => {
     // Escape the opening tag
@@ -153,9 +153,9 @@ export function escapeOctoArtifactTags(input: string) {
   });
 }
 
-export function escapeOctoActionTags(input: string) {
-  // Regular expression to match octoArtifact tags and their content
-  const regex = /(<octoAction[^>]*>)([\s\S]*?)(<\/octoAction>)/g;
+export function escapeOctotaskAActionTags(input: string) {
+  // Regular expression to match octotaskArtifact tags and their content
+  const regex = /(<octotaskAction[^>]*>)([\s\S]*?)(<\/octotaskAction>)/g;
 
   return input.replace(regex, (match, openTag, content, closeTag) => {
     // Escape the opening tag
@@ -169,8 +169,8 @@ export function escapeOctoActionTags(input: string) {
   });
 }
 
-export function escapeOctoTags(input: string) {
-  return escapeOctoArtifactTags(escapeOctoActionTags(input));
+export function escapeOctotaskTags(input: string) {
+  return escapeOctotaskArtifactTags(escapeOctotaskAActionTags(input));
 }
 
 // We have this seperate function to simplify the restore snapshot process in to one single artifact.
@@ -184,12 +184,12 @@ export function createCommandActionsString(commands: ProjectCommands): string {
 
   if (commands.setupCommand) {
     commandString += `
-<octoAction type="shell">${commands.setupCommand}</octoAction>`;
+<octotaskAction type="shell">${commands.setupCommand}</octotaskAction>`;
   }
 
   if (commands.startCommand) {
     commandString += `
-<octoAction type="start">${commands.startCommand}</octoAction>
+<octotaskAction type="start">${commands.startCommand}</octotaskAction>
 `;
   }
 

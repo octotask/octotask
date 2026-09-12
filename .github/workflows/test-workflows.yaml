@@ -131,14 +131,14 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '20.18.0'
-
+    
       - name: Install pnpm
         uses: pnpm/action-setup@v5
         with:
           version: '9.14.4'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+    
+      - name: Test setup-and-build action
+        uses: ./.github/actions/setup-and-build
 
       - name: Test dependency audit (non-blocking)
         run: |

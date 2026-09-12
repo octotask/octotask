@@ -245,19 +245,19 @@ export async function streamText(props: {
   const filteredOptions =
     isReasoning && options
       ? Object.fromEntries(
-        Object.entries(options).filter(
-          ([key]) =>
-            ![
-              'temperature',
-              'topP',
-              'presencePenalty',
-              'frequencyPenalty',
-              'logprobs',
-              'topLogprobs',
-              'logitBias',
-            ].includes(key),
-        ),
-      )
+          Object.entries(options).filter(
+            ([key]) =>
+              ![
+                'temperature',
+                'topP',
+                'presencePenalty',
+                'frequencyPenalty',
+                'logprobs',
+                'topLogprobs',
+                'logitBias',
+              ].includes(key),
+          ),
+        )
       : options || {};
 
   // DEBUG: Log filtered options

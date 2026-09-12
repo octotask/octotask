@@ -57,16 +57,16 @@ export class EditorStore {
       const previousDocument = previousDocuments[filePath];
       const nextDocument: EditorDocument = previousDocument
         ? {
-          ...previousDocument,
-          value: dirent.content,
-          filePath,
-          isBinary: dirent.isBinary,
-        }
+            ...previousDocument,
+            value: dirent.content,
+            filePath,
+            isBinary: dirent.isBinary,
+          }
         : {
-          value: dirent.content,
-          filePath,
-          isBinary: dirent.isBinary,
-        };
+            value: dirent.content,
+            filePath,
+            isBinary: dirent.isBinary,
+          };
 
       const documentChanged =
         !previousDocument ||

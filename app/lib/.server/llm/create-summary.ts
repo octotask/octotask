@@ -171,10 +171,10 @@ Below is the chat after that:
 ---
 <new_chats>
 ${slicedMessages
-        .map((x) => {
-          return `---\n[${x.role}] ${extractTextContent(x)}\n---`;
-        })
-        .join('\n')}
+  .map((x) => {
+    return `---\n[${x.role}] ${extractTextContent(x)}\n---`;
+  })
+  .join('\n')}
 </new_chats>
 ---
 

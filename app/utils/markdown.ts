@@ -4,18 +4,6 @@ import type { PluggableList, Plugin } from 'unified';
 import rehypeSanitize, { defaultSchema, type Options as RehypeSanitizeOptions } from 'rehype-sanitize';
 import { SKIP, visit } from 'unist-util-visit';
 
-type MarkdownNode = {
-  type: string;
-  value?: string;
-  position?: { start: { offset: number }; end: { offset: number } };
-  children?: MarkdownNode[];
-  [key: string]: any;
-};
-
-type MarkdownParent = MarkdownNode & {
-  children: MarkdownNode[];
-};
-
 export const allowedHTMLElements = [
   'a',
   'b',

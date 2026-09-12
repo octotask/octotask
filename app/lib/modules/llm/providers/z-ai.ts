@@ -9,15 +9,10 @@ async function hmacSha256(key: string, message: string): Promise<string> {
   const keyData = encoder.encode(key);
   const messageData = encoder.encode(message);
 
-  const cryptoKey = await crypto.subtle.importKey(
-    'raw',
-    keyData,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
+  const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
 
   const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+
   return base64UrlEncode(new Uint8Array(signature));
 }
 

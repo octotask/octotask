@@ -245,19 +245,19 @@ export async function streamText(props: {
   const filteredOptions =
     isReasoning && options
       ? Object.fromEntries(
-          Object.entries(options).filter(
-            ([key]) =>
-              ![
-                'temperature',
-                'topP',
-                'presencePenalty',
-                'frequencyPenalty',
-                'logprobs',
-                'topLogprobs',
-                'logitBias',
-              ].includes(key),
-          ),
-        )
+        Object.entries(options).filter(
+          ([key]) =>
+            ![
+              'temperature',
+              'topP',
+              'presencePenalty',
+              'frequencyPenalty',
+              'logprobs',
+              'topLogprobs',
+              'logitBias',
+            ].includes(key),
+        ),
+      )
       : options || {};
 
   // DEBUG: Log filtered options
@@ -278,7 +278,7 @@ export async function streamText(props: {
   );
 
   const streamParams = {
-    model: provider.getModelInstance({
+    model: await provider.getModelInstance({
       model: modelDetails.name,
       serverEnv,
       apiKeys,

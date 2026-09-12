@@ -99,10 +99,11 @@ export const InspectorPanel = ({ selectedElement, isVisible, onClose }: Inspecto
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-3 py-2 text-sm capitalize ${activeTab === tab
+            className={`px-3 py-2 text-sm capitalize ${
+              activeTab === tab
                 ? 'border-b-2 border-blue-500 text-blue-500'
                 : 'text-octotask-elements-textSecondary hover:text-octotask-elements-textPrimary'
-              }`}
+            }`}
           >
             {tab}
           </button>

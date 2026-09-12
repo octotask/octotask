@@ -1,4 +1,11 @@
-import type { ActionType, OctotaskAction, OctotaskActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
+import type {
+  ActionType,
+  OctotaskAction,
+  OctotaskActionData,
+  FileAction,
+  ShellAction,
+  SupabaseAction,
+} from '~/types/actions';
 import type { OctotaskArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';

@@ -219,10 +219,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       deploy: latestDeployment
         ? {
-          id: latestDeployment.id,
-          state: latestDeployment.state,
-          url: latestDeployment.url ? `https://${latestDeployment.url}` : `https://${projectData.name}.vercel.app`,
-        }
+            id: latestDeployment.id,
+            state: latestDeployment.state,
+            url: latestDeployment.url ? `https://${latestDeployment.url}` : `https://${projectData.name}.vercel.app`,
+          }
         : null,
     });
   } catch (error) {

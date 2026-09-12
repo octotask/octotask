@@ -1,4 +1,3 @@
-import type { DesignScheme } from '~/types/design-scheme';
 import type { SupabaseCredentials } from '~/types/supabase';
 
 export interface SupabasePromptState {

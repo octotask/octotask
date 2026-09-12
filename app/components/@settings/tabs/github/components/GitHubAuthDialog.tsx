@@ -101,8 +101,9 @@ export function GitHubAuthDialog({ isOpen, onClose, onSuccess }: GitHubAuthDialo
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
                     disabled={isConnecting}
-                    placeholder={`Enter your GitHub ${tokenType === 'classic' ? 'personal access token' : 'fine-grained token'
-                      }`}
+                    placeholder={`Enter your GitHub ${
+                      tokenType === 'classic' ? 'personal access token' : 'fine-grained token'
+                    }`}
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
                       'bg-octotask-elements-background-depth-1',

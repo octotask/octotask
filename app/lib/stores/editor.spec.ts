@@ -7,7 +7,7 @@ describe('EditorStore', () => {
       getFile: () => ({ isLocked: false }),
     } as any);
 
-    const initialFiles = {
+    const initialFiles: any = {
       '/src/index.ts': {
         type: 'file',
         content: 'console.log(1);',
@@ -49,7 +49,7 @@ describe('EditorStore', () => {
         content: 'export const x = 1;',
         isBinary: false,
       },
-    });
+    } as any);
 
     expect(store.documents.get()['/src/index.ts']).toMatchObject({
       value: 'console.log(2);',

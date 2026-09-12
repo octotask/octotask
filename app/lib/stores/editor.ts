@@ -33,7 +33,7 @@ export class EditorStore {
   }
 
   setDocuments(files: FileMap) {
-    const previousDocuments = this.documents.value;
+    const previousDocuments = this.documents.get() ?? {};
     const nextDocuments: EditorDocuments = { ...previousDocuments };
     let hasChanges = false;
 
@@ -57,16 +57,16 @@ export class EditorStore {
       const previousDocument = previousDocuments[filePath];
       const nextDocument: EditorDocument = previousDocument
         ? {
-            ...previousDocument,
-            value: dirent.content,
-            filePath,
-            isBinary: dirent.isBinary,
-          }
+          ...previousDocument,
+          value: dirent.content,
+          filePath,
+          isBinary: dirent.isBinary,
+        }
         : {
-            value: dirent.content,
-            filePath,
-            isBinary: dirent.isBinary,
-          };
+          value: dirent.content,
+          filePath,
+          isBinary: dirent.isBinary,
+        };
 
       const documentChanged =
         !previousDocument ||

@@ -482,7 +482,7 @@ export class WorkbenchStore {
       closed: false,
       type,
       runner: new ActionRunner(
-        webcontainer,
+        getWebContainer(),
         () => this.octotaskTerminal,
         (alert) => {
           if (this.#reloadedMessages.has(messageId)) {
@@ -562,7 +562,7 @@ export class WorkbenchStore {
     }
 
     if (data.action.type === 'file') {
-      const wc = await webcontainer;
+      const wc = await getWebContainer();
       const fullPath = path.join(wc.workdir, data.action.filePath);
 
       /*

@@ -65,7 +65,7 @@ const DEFAULT_SPRING_ANIMATION = {
   mass: 1.25,
 };
 
-export interface SpringAnimation extends Partial<typeof DEFAULT_SPRING_ANIMATION> { }
+export interface SpringAnimation extends Partial<typeof DEFAULT_SPRING_ANIMATION> {}
 
 export type Animation = ScrollBehavior | SpringAnimation;
 
@@ -85,41 +85,41 @@ export interface StickToBottomOptions extends SpringAnimation {
 export type ScrollToBottomOptions =
   | ScrollBehavior
   | {
-    animation?: Animation;
+      animation?: Animation;
 
-    /**
-     * Whether to wait for any existing scrolls to finish before
-     * performing this one. Or if a millisecond is passed,
-     * it will wait for that duration before performing the scroll.
-     *
-     * @default false
-     */
-    wait?: boolean | number;
+      /**
+       * Whether to wait for any existing scrolls to finish before
+       * performing this one. Or if a millisecond is passed,
+       * it will wait for that duration before performing the scroll.
+       *
+       * @default false
+       */
+      wait?: boolean | number;
 
-    /**
-     * Whether to prevent the user from escaping the scroll,
-     * by scrolling up with their mouse.
-     */
-    ignoreEscapes?: boolean;
+      /**
+       * Whether to prevent the user from escaping the scroll,
+       * by scrolling up with their mouse.
+       */
+      ignoreEscapes?: boolean;
 
-    /**
-     * Only scroll to the bottom if we're already at the bottom.
-     *
-     * @default false
-     */
-    preserveScrollPosition?: boolean;
+      /**
+       * Only scroll to the bottom if we're already at the bottom.
+       *
+       * @default false
+       */
+      preserveScrollPosition?: boolean;
 
-    /**
-     * The extra duration in ms that this scroll event should persist for.
-     * (in addition to the time that it takes to get to the bottom)
-     *
-     * Not to be confused with the duration of the animation -
-     * for that you should adjust the animation option.
-     *
-     * @default 0
-     */
-    duration?: number | Promise<void>;
-  };
+      /**
+       * The extra duration in ms that this scroll event should persist for.
+       * (in addition to the time that it takes to get to the bottom)
+       *
+       * Not to be confused with the duration of the animation -
+       * for that you should adjust the animation option.
+       *
+       * @default 0
+       */
+      duration?: number | Promise<void>;
+    };
 
 export type ScrollToBottom = (scrollOptions?: ScrollToBottomOptions) => Promise<boolean> | boolean;
 export type StopScroll = () => void;

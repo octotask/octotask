@@ -247,7 +247,9 @@ const ToolResultsList = memo(({ toolInvocations, toolCallAnnotations, theme }: T
                 </div>
                 <div className="text-octotask-elements-textSecondary text-xs mb-1">
                   Description:{' '}
-                  <span className="text-octotask-elements-textPrimary font-semibold">{annotation?.toolDescription}</span>
+                  <span className="text-octotask-elements-textPrimary font-semibold">
+                    {annotation?.toolDescription}
+                  </span>
                 </div>
                 <div className="text-octotask-elements-textSecondary text-xs mb-1">Parameters:</div>
                 <div className="bg-[#FAFAFA] dark:bg-[#0A0A0A] p-3 rounded-md">

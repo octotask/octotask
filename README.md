@@ -1,4 +1,4 @@
-# octotask.diy
+# OctoTask
 
 Welcome to **OctoTask**, the definitive open-source platform for AI-assisted high-performance development. Engineered for professionals and built for the community, OctoTask empowers you to harness the world's most sophisticated LLMs to architect, deploy, and scale complex web applications directly within your browser.
 

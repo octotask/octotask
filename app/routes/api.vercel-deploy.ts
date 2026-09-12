@@ -219,10 +219,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       deploy: latestDeployment
         ? {
-            id: latestDeployment.id,
-            state: latestDeployment.state,
-            url: latestDeployment.url ? `https://${latestDeployment.url}` : `https://${projectData.name}.vercel.app`,
-          }
+          id: latestDeployment.id,
+          state: latestDeployment.state,
+          url: latestDeployment.url ? `https://${latestDeployment.url}` : `https://${projectData.name}.vercel.app`,
+        }
         : null,
     });
   } catch (error) {
@@ -263,7 +263,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // If no projectId provided, create a new project
     if (!targetProjectId) {
-      const projectName = `octotask-diy-${chatId}-${Date.now()}`;
+      const projectName = `octotask-${chatId}-${Date.now()}`;
       const createProjectResponse = await fetch('https://api.vercel.com/v9/projects', {
         method: 'POST',
         headers: {
@@ -310,7 +310,7 @@ export async function action({ request }: ActionFunctionArgs) {
         };
       } else {
         // If project doesn't exist, create a new one
-        const projectName = `octotask-diy-${chatId}-${Date.now()}`;
+        const projectName = `octotask-${chatId}-${Date.now()}`;
         const createProjectResponse = await fetch('https://api.vercel.com/v9/projects', {
           method: 'POST',
           headers: {

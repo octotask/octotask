@@ -47,7 +47,7 @@ export function VercelDeploymentLink() {
 
         // Find project by matching the chat number in the name
         const project = projects.find(
-          (p: { name: string | string[] }) => p.name.includes(`octotask-diy-${chatNumber}`),
+          (p: { name: string | string[] }) => p.name.includes(`octotask-${chatNumber}`),
         );
 
         if (project) {

@@ -43,7 +43,12 @@ export function useNetlifyDeploy() {
         type: 'standalone',
       });
 
-      const deployArtifact = workbenchStore.artifacts.get()[deploymentId];
+      const artifacts = workbenchStore.artifacts.get();
+      const deployArtifact = artifacts[deploymentId];
+
+      if (!deployArtifact) {
+        throw new Error('Deploy artifact not found');
+      }
 
       // Notify that build is starting
       deployArtifact.runner.handleDeployAction('building', 'running', { source: 'netlify' });

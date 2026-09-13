@@ -16,12 +16,12 @@ const providerEnvKeyStatusCache: Record<string, boolean> = {};
 
 const apiKeyMemoizeCache: { [k: string]: Record<string, string> } = {};
 
-export function getApiKeysFromCookies() {
+export function getApiKeysFromCookies(): Record<string, string> {
   const storedApiKeys = Cookies.get('apiKeys');
   let parsedKeys: Record<string, string> = {};
 
   if (storedApiKeys) {
-    parsedKeys = apiKeyMemoizeCache[storedApiKeys];
+    parsedKeys = apiKeyMemoizeCache[storedApiKeys] ?? {};
 
     if (!parsedKeys) {
       parsedKeys = apiKeyMemoizeCache[storedApiKeys] = JSON.parse(storedApiKeys);
@@ -50,8 +50,9 @@ export const APIKeyManager: React.FC<APIKeyManagerProps> = ({ provider, apiKey, 
 
   const checkEnvApiKey = useCallback(async () => {
     // Check cache first
-    if (providerEnvKeyStatusCache[provider.name] !== undefined) {
-      setIsEnvKeySet(providerEnvKeyStatusCache[provider.name]);
+    const cached = providerEnvKeyStatusCache[provider.name];
+    if (cached !== undefined) {
+      setIsEnvKeySet(cached);
       return;
     }
 

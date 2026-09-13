@@ -20,6 +20,13 @@
     "resolveJsonModule": true,
     "target": "ESNext",
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
     "allowJs": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
@@ -28,6 +35,27 @@
     "paths": {
       "~/*": [
         "./app/*"
+      ],
+      "@/services/*": [
+        "./app/services/*"
+      ],
+      "@/stores/*": [
+        "./app/stores/*"
+      ],
+      "@/hooks/*": [
+        "./app/hooks/*"
+      ],
+      "@/utils/*": [
+        "./app/utils/*"
+      ],
+      "@/types/*": [
+        "./app/types/*"
+      ],
+      "@/components/*": [
+        "./app/components/*"
+      ],
+      "@/styles/*": [
+        "./app/styles/*"
       ]
     },
     // vite takes care of building everything, not tsc

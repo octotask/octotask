@@ -346,7 +346,7 @@ export const ChatImpl = memo(
       // Add image parts if any
       images.forEach((imageData) => {
         // Extract correct MIME type from the data URL
-        const mimeType = imageData.split(';')[0].split(':')[1] || 'image/jpeg';
+        const mimeType = imageData.split(';')[0]?.split(':')[1] ?? 'image/jpeg';
 
         // Create file part according to AI SDK format
         parts.push({

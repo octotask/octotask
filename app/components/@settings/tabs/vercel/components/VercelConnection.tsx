@@ -321,7 +321,7 @@ export default function VercelConnection() {
                                     {new Date(project.createdAt).toLocaleDateString()}
                                   </span>
                                 </>
-                              ) : project.latestDeployments && project.latestDeployments.length > 0 ? (
+                              ) : project.latestDeployments?.[0] ? (
                                 <>
                                   <a
                                     href={`https://${project.latestDeployments[0].url}`}

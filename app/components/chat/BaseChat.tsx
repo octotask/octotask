@@ -214,8 +214,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
         recognition.onresult = (event) => {
           const transcript = Array.from(event.results)
-            .map((result) => result[0])
-            .map((result) => result.transcript)
+            .map((result) => result?.[0])
+            .map((result) => result?.transcript)
             .join('');
 
           setTranscript(transcript);

@@ -35,7 +35,12 @@ export const reorderTabs = (
   endIndex: number,
 ): TabVisibilityConfig[] => {
   const result = Array.from(tabs);
-  const [removed] = result.splice(startIndex, 1);
+  const removed = result.splice(startIndex, 1)[0];
+
+  if (!removed) {
+    return result;
+  }
+
   result.splice(endIndex, 0, removed);
 
   // Update order property

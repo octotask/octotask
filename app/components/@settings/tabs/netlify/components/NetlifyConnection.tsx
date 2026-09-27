@@ -477,9 +477,8 @@ export default function NetlifyConnection() {
       let buildsData: NetlifyBuild[] = [];
       let lastDeployTime = '';
 
-      if (sitesData && sitesData.length > 0) {
-        const firstSite = sitesData[0];
-
+      const firstSite = sitesData[0];
+      if (firstSite) {
         // Fetch deploys
         const deploysResponse = await fetch(`https://api.netlify.com/api/v1/sites/${firstSite.id}/deploys`, {
           headers: {
@@ -493,8 +492,9 @@ export default function NetlifyConnection() {
           setDeploymentCount(deploysData.length);
 
           // Get the latest deploy time
-          if (deploysData.length > 0) {
-            lastDeployTime = deploysData[0].created_at;
+          const latestDeploy = deploysData[0];
+          if (latestDeploy) {
+            lastDeployTime = latestDeploy.created_at;
             setLastUpdated(lastDeployTime);
 
             // Fetch builds for the site
@@ -780,38 +780,42 @@ export default function NetlifyConnection() {
                               </div>
                             )}
                             <div className="flex items-center gap-2 mt-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'publish')}
-                                disabled={isActionLoading}
-                                className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
-                              >
-                                <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
-                                Publish
-                              </Button>
-                              {deploy.state === 'ready' ? (
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'lock')}
-                                  disabled={isActionLoading}
-                                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
-                                >
-                                  <LockClosedIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
-                                  Lock
-                                </Button>
-                              ) : (
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleDeploy(sites[activeSiteIndex].id, deploy.id, 'unlock')}
-                                  disabled={isActionLoading}
-                                  className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
-                                >
-                                  <LockOpenIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
-                                  Unlock
-                                </Button>
+                              {sites[activeSiteIndex] && (
+                                <>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleDeploy(sites[activeSiteIndex]!.id, deploy.id, 'publish')}
+                                    disabled={isActionLoading}
+                                    className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
+                                  >
+                                    <BuildingLibraryIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                    Publish
+                                  </Button>
+                                  {deploy.state === 'ready' ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleDeploy(sites[activeSiteIndex]!.id, deploy.id, 'lock')}
+                                      disabled={isActionLoading}
+                                      className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
+                                    >
+                                      <LockClosedIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                      Lock
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleDeploy(sites[activeSiteIndex]!.id, deploy.id, 'unlock')}
+                                      disabled={isActionLoading}
+                                      className="flex items-center gap-1 text-octotask-elements-textPrimary dark:text-octotask-elements-textPrimary"
+                                    >
+                                      <LockOpenIcon className="h-4 w-4 text-octotask-elements-item-contentAccent dark:text-octotask-elements-item-contentAccent" />
+                                      Unlock
+                                    </Button>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>

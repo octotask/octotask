@@ -1,6 +1,1 @@
-// Basic GitHub API hook placeholder
-export const useGitHubAPI = () => {
-  return {
-    // Placeholder implementation
-  };
-};
+export * from '@/hooks/useGitHubAPI';

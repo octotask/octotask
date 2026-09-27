@@ -590,8 +590,9 @@ export default function NetlifyTab() {
         allDeploysData.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
         // Set the most recent deploy time
-        if (allDeploysData.length > 0) {
-          lastDeployTime = allDeploysData[0].created_at;
+        const mostRecentDeploy = allDeploysData[0];
+        if (mostRecentDeploy) {
+          lastDeployTime = mostRecentDeploy.created_at;
           setLastUpdated(lastDeployTime);
         }
 

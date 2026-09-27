@@ -566,7 +566,7 @@ export default function VercelTab() {
                                 {new Date(project.createdAt).toLocaleDateString()}
                               </span>
                             </>
-                          ) : project.latestDeployments && project.latestDeployments.length > 0 ? (
+                          ) : project.latestDeployments?.[0] ? (
                             <>
                               <a
                                 href={`https://${project.latestDeployments[0].url}`}
@@ -630,13 +630,13 @@ export default function VercelTab() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {project.latestDeployments && project.latestDeployments.length > 0 && (
+                        {project.latestDeployments?.[0] && (
                           <div
                             className={classNames(
                               'flex items-center gap-1 px-2 py-1 rounded-full text-xs',
-                              project.latestDeployments[0].state === 'READY'
+                              project.latestDeployments[0]?.state === 'READY'
                                 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                                : project.latestDeployments[0].state === 'ERROR'
+                                : project.latestDeployments[0]?.state === 'ERROR'
                                   ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
                                   : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
                             )}
@@ -644,14 +644,14 @@ export default function VercelTab() {
                             <div
                               className={classNames(
                                 'w-2 h-2 rounded-full',
-                                project.latestDeployments[0].state === 'READY'
+                                project.latestDeployments[0]?.state === 'READY'
                                   ? 'bg-green-500'
-                                  : project.latestDeployments[0].state === 'ERROR'
+                                  : project.latestDeployments[0]?.state === 'ERROR'
                                     ? 'bg-red-500'
                                     : 'bg-yellow-500',
                               )}
                             />
-                            {project.latestDeployments[0].state}
+                            {project.latestDeployments[0]?.state}
                           </div>
                         )}
                         {project.framework && (

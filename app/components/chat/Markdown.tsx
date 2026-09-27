@@ -106,6 +106,7 @@ export const Markdown = memo(
             firstChild &&
             firstChild.type === 'element' &&
             firstChild.tagName === 'code' &&
+            firstChild.children[0] &&
             firstChild.children[0].type === 'text'
           ) {
             const { className, language: _ignoredLanguage, ...rest } = firstChild.properties as Record<string, unknown>;
@@ -115,7 +116,7 @@ export const Markdown = memo(
                 ? (rawLanguage as BundledLanguage | SpecialLanguage)
                 : 'plaintext';
 
-            return <CodeBlock code={firstChild.children[0].value} language={language} {...rest} />;
+            return <CodeBlock code={firstChild.children[0]?.value ?? ''} language={language} {...rest} />;
           }
 
           return <pre {...rest}>{children}</pre>;

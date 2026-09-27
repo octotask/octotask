@@ -67,8 +67,8 @@ export function DataVisualization({ chats }: DataVisualizationProps) {
 
         if (message.role === 'assistant') {
           const providerMatch = message.content.match(/provider:\s*([\w-]+)/i);
-          const provider = providerMatch ? providerMatch[1] : 'unknown';
-          apiUsage[provider] = (apiUsage[provider] || 0) + 1;
+          const provider = providerMatch?.[1] ?? 'unknown';
+          apiUsage[provider] = (apiUsage[provider] ?? 0) + 1;
         }
       });
     });
@@ -76,7 +76,7 @@ export function DataVisualization({ chats }: DataVisualizationProps) {
     const sortedDates = Object.keys(chatDates).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
     const sortedChatsByDate: Record<string, number> = {};
     sortedDates.forEach((date) => {
-      sortedChatsByDate[date] = chatDates[date];
+      sortedChatsByDate[date] = chatDates[date] ?? 0;
     });
 
     setChatsByDate(sortedChatsByDate);
@@ -136,7 +136,7 @@ export function DataVisualization({ chats }: DataVisualizationProps) {
     ];
 
     // Get the base color for this index
-    const color = baseColors[index % baseColors.length].base;
+    const color = baseColors[index % baseColors.length]?.base ?? '#6366f1';
 
     // Parse color and generate variations with appropriate opacity
     let r = 0,
@@ -148,9 +148,15 @@ export function DataVisualization({ chats }: DataVisualizationProps) {
     const rgbaMatch = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([0-9.]+)\)/);
 
     if (rgbMatch) {
-      [, r, g, b] = rgbMatch.map(Number);
+      const [, rStr, gStr, bStr] = rgbMatch;
+      r = Number(rStr);
+      g = Number(gStr);
+      b = Number(bStr);
     } else if (rgbaMatch) {
-      [, r, g, b] = rgbaMatch.map(Number);
+      const [, rStr, gStr, bStr] = rgbaMatch;
+      r = Number(rStr);
+      g = Number(gStr);
+      b = Number(bStr);
     } else if (color.startsWith('#')) {
       // Handle hex format
       const hex = color.slice(1);

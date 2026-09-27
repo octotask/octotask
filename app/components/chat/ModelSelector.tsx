@@ -7,7 +7,7 @@ import { LOCAL_PROVIDERS } from '~/lib/stores/settings';
 
 // Fuzzy search utilities
 const levenshteinDistance = (str1: string, str2: string): number => {
-  const matrix = [];
+  const matrix: number[][] = [];
 
   for (let i = 0; i <= str2.length; i++) {
     matrix[i] = [i];
@@ -18,16 +18,21 @@ const levenshteinDistance = (str1: string, str2: string): number => {
   }
 
   for (let i = 1; i <= str2.length; i++) {
+    matrix[i] ??= [];
     for (let j = 1; j <= str1.length; j++) {
       if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+        matrix[i][j] = matrix[i - 1]?.[j - 1] ?? 0;
       } else {
-        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+        matrix[i][j] = Math.min(
+          (matrix[i - 1]?.[j - 1] ?? 0) + 1,
+          (matrix[i]?.[j - 1] ?? 0) + 1,
+          (matrix[i - 1]?.[j] ?? 0) + 1,
+        );
       }
     }
   }
 
-  return matrix[str2.length][str1.length];
+  return matrix[str2.length]?.[str1.length] ?? 0;
 };
 
 const fuzzyMatch = (query: string, text: string): { score: number; matches: boolean } => {
